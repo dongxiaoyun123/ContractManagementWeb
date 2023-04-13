@@ -58,7 +58,7 @@ const actions = {
           // 角色编号，固定就好
           sessionStorage.setItem("RoleCode", result.RoleCode);
           sessionStorage.setItem("RoleName", result.RoleName);
-          sessionStorage.setItem("loginName", result.loginName);
+          // sessionStorage.setItem("loginName", result.loginName);
           sessionStorage.setItem("userid", result.userid);
           sessionStorage.setItem("User_RealName", result.User_RealName);
         }
@@ -75,7 +75,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       GetUserInfo().then(response => {
         if (response.result) {
-          const { RoleCode, UserAccess_token, User_RealName, User_ID } = response.result
+          const { RoleCode, UserAccess_token, User_RealName, User_ID, RoleName } = response.result
           // const { roles } = result
           // const { roles, name, avatar, introduction } = result
           // roles must be a non-empty array
@@ -98,6 +98,13 @@ const actions = {
           commit('SET_TOKEN', UserAccess_token)
           // commit('SET_MenuPermissions', MenuPermissions)
           if (roleArray.length != 0) { resolve(roleArray) }
+          debugger
+          sessionStorage.setItem("RoleName", RoleName);
+          sessionStorage.setItem("token", UserAccess_token);
+          sessionStorage.setItem("RoleCode", RoleCode);
+          // sessionStorage.setItem("loginName", result.loginName);
+          sessionStorage.setItem("userid", User_ID);
+          sessionStorage.setItem("User_RealName", User_RealName);
         } else { reject("") }
       }).catch(error => {
         reject("")

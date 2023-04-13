@@ -29,8 +29,7 @@
                   <el-form-item class="whereFormClass" label="合同类型">
                     <el-select v-model="ContractType" class="timeClass" filterable placeholder="合同类型" clearable="">
                       <el-option v-for="item in GetContractTypeArray" :key="item.Code" :label="item.Name"
-                                 :value="item.Code"
-                      />
+                        :value="item.Code" />
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -39,29 +38,27 @@
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="开始时间">
                     <el-date-picker v-model="BeginTime" class="timeClass" style="width:100% ;" type="date"
-                                    placeholder="合同开始时间"
-                    />
+                      placeholder="合同开始时间" />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="结束时间">
                     <el-date-picker v-model="EndTime" class="timeClass" style="width:100% ;" type="date"
-                                    placeholder="合同结束时间"
-                    />
+                      placeholder="合同结束时间" />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="添加时间">
                     <el-date-picker v-model="ContractSignTime" style="width:100% ;" class="rangeTimeClass"
-                                    type="daterange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间"
-                                    :picker-options="pickerOptions" clearable="" @input="datetimeChange"
-                    />
+                      type="daterange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间"
+                      :picker-options="pickerOptions" clearable="" @input="datetimeChange" />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item label="添加人员">
                     <el-select v-model="CreateUserId" class="timeClass" filterable placeholder="添加人员" clearable="">
-                      <el-option v-for="item in UserList" :key="item.UserID" :label="item.UserName" :value="item.UserID" />
+                      <el-option v-for="item in UserList" :key="item.UserID" :label="item.UserName"
+                        :value="item.UserID" />
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -112,9 +109,8 @@
                   出
                 </el-button>
                 <el-button type="text" style="margin-left: 10px;"
-                           :icon="isActive ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
-                           @click="collapseClick"
-                >{{ isActive ? "收起" : "展开" }}</el-button>
+                  :icon="isActive ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
+                  @click="collapseClick">{{ isActive ? "收起" : "展开" }}</el-button>
               </el-button-group>
             </el-col>
           </el-row>
@@ -123,17 +119,64 @@
     </el-card>
     <el-card class="CardTableClass">
       <el-table ref="multipleTable" v-loading="loading" :data="ContractData" fit :cell-style="isRed"
-                @selection-change="TableSelect" @row-click="toggleSelection"
-      >
+        @selection-change="TableSelect" @row-click="toggleSelection">
         <el-table-column v-if="fixedLeftShow" key="checked" type="selection" width="50" fixed="left" />
         <el-table-column v-else key="checkedFalse" type="selection" width="50" />
-        <el-table-column v-if="fixedLeftShow" key="ContractCode" prop="ContractCode" label="合同编号" width="160" fixed="left"
-                         show-overflow-tooltip
-        />
-        <el-table-column v-else key="ContractCodeFalse" prop="ContractCode" label="合同编号" width="160"
-                         show-overflow-tooltip
-        />
-        <el-table-column v-if="fixedLeftShow" key="AuditStatusName" prop="AuditStatusName" label="审核状态" width="120" sortable fixed="left">
+        <el-table-column v-if="fixedLeftShow" key="ContractCode" prop="ContractCode" label="合同编号" width="200" fixed="left"
+          show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ scope.row.ContractCode }}</span>
+            <el-button v-if="scope.row.ContractCode" size="mini" style="padding:4px 0 4px 5px" type="text"
+              icon="el-icon-document-copy" @click="SecondClick(scope.row.ContractCode)"></el-button>
+          </template>
+        </el-table-column>
+        <el-table-column v-else key="ContractCodeFalse" prop="ContractCode" label="合同编号" width="200"
+          show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ scope.row.ContractCode }}</span>
+            <el-button v-if="scope.row.ContractCode" size="mini" style="padding:4px 0 4px 5px" type="text"
+              icon="el-icon-document-copy" @click="SecondClick(scope.row.ContractCode)"></el-button>
+          </template>
+        </el-table-column>
+        <el-table-column v-if="fixedLeftShow" key="AuditStatusName" prop="AuditStatusName" label="审核状态" width="120"
+           fixed="left">
+          <template slot-scope="{}" slot="header">
+            <span>审核状态</span>
+            <el-tooltip class="item" effect="dark" placement="top" style="margin-left: 5px;margin-bottom: 0.2rem">
+              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
+              <div slot="content">
+                <div style="display: flex;  align-items: center;">
+                  <span slot="reference" style="margin: 0 10px 0 6px;" class="SecondPartyNameClass">
+                    <div>
+                      <el-tag effect="dark" type="danger">
+                        录入-未送审
+                      </el-tag>
+                    </div>
+                    <div>
+                      <el-tag effect="dark">
+                        审核中
+                      </el-tag>
+                    </div>
+                    <div>
+                      <el-tag effect="dark" type="warning">
+                        审核失败
+                      </el-tag>
+                    </div>
+                    <div>
+                      <el-tag effect="dark" type="success">
+                        审核成功
+                      </el-tag>
+                    </div>
+                    <div style="margin-bottom: 0;">
+                      <el-tag effect="dark" type="info">
+                        作废
+                      </el-tag>
+                    </div>
+                  </span>
+                </div>
+              </div>
+            </el-tooltip>
+          </template>
           <template slot-scope="scope">
             <div :style="tableTagClass">
               <el-tag v-if="scope.row.AuditStatus == 1" :key="scope.row.AuditStatus" effect="plain" type="danger">
@@ -230,23 +273,20 @@
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
-                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
-      />
+      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]" :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
+        @current-change="handleCurrentChange" />
     </el-card>
 
     <!-- 添加合同弹出页面 -->
-    <el-dialog :visible.sync="detailAddDialogVisible" top="5vh" width="50%" :lock-scroll="false"
-               :append-to-body="true" @close="detailAddDialogVisibleClosed"
-    >
+    <el-dialog :visible.sync="detailAddDialogVisible" top="5vh" width="50%" :lock-scroll="false" :append-to-body="true"
+      @close="detailAddDialogVisibleClosed">
       <!-- 上面两个属性用来重置滚动条 -->
       <div slot="title" class="dialog-title">
         <span>添加供应商合同</span>
       </div>
       <el-form ref="addContractsRef" :model="addSupplierForm" :rules="addContractsRules" label-width="120px"
-               class="formClass"
-      >
+        class="formClass">
 
         <el-row>
           <el-col :span="12">
@@ -295,17 +335,14 @@
           <el-col :span="12">
             <el-form-item label="乙方公司" prop="SupplierCmpanyBCode">
               <el-select v-model="addSupplierForm.SupplierCmpanyBCode" class="CompanySelectClass" filterable
-                         placeholder="乙方公司" clearable=""
-              >
+                placeholder="乙方公司" clearable="">
                 <el-option v-for="item in SupplierCmpanyBList" :key="item.SupplierCmpanyBCode"
-                           :label="item.SupplierCmpanyBName" :value="item.SupplierCmpanyBCode"
-                />
+                  :label="item.SupplierCmpanyBName" :value="item.SupplierCmpanyBCode" />
               </el-select>
               <div class="CompanyClass">
                 <el-tooltip class="item" effect="dark" content="添加乙方公司" placement="top-start">
                   <el-button style="font-size: 20px;" type="text" icon="el-icon-circle-plus-outline" circle
-                             @click="AddSupplierCmpanyB"
-                  />
+                    @click="AddSupplierCmpanyB" />
                 </el-tooltip>
               </div>
             </el-form-item>
@@ -328,14 +365,12 @@
             <el-col :span="24">
               <el-form-item label="附件上传">
                 <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
-                           accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
-                           :on-exceed="handleExceedAdd" :on-remove="AttachmentCodeRemove" :auto-upload="false"
-                           :file-list="fileList" :on-change="handleChange"
-                >
+                  accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
+                  :on-exceed="handleExceedAdd" :on-remove="AttachmentCodeRemove" :auto-upload="false"
+                  :file-list="fileList" :on-change="handleChange">
                   <el-button slot="trigger" type="primary">选取文件</el-button>
                   <el-button style="margin-left: 10px;" type="success" :loading="uploadServerLoading"
-                             @click="submitUpload"
-                  >上传到服务器</el-button>
+                    @click="submitUpload">上传到服务器</el-button>
                   <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过500kb</div>
                   <div slot="tip" class="el-upload__tip">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
                 </el-upload>
@@ -353,14 +388,12 @@
       </el-form>
     </el-dialog>
     <el-dialog :visible.sync="updateDialogVisible" top="5vh" :append-to-body="true" width="50%"
-               @close="detailUpdateDialogVisibleClosed"
-    >
+      @close="detailUpdateDialogVisibleClosed">
       <div slot="title" class="dialog-title">
         <span>编辑供应商合同</span>
       </div>
       <el-form ref="updateContractsRef" :model="updateSupplierFrom" :rules="addContractsRules" label-width="120px"
-               class="formClass"
-      >
+        class="formClass">
 
         <el-row>
           <el-col :span="12">
@@ -378,8 +411,7 @@
           <el-col :span="12">
             <el-form-item label="公司名称" prop="CompanyId">
               <el-select v-model="updateSupplierFrom.CompanyId" :disabled="ConCompany" filterable placeholder="合同类型"
-                         clearable=""
-              >
+                clearable="">
                 <el-option v-for="item in DicCategoryList" :key="item.Id" :label="item.Name" :value="item.Id" />
               </el-select>
             </el-form-item>
@@ -408,17 +440,14 @@
           <el-col :span="12">
             <el-form-item label="乙方公司" prop="SupplierCmpanyBCode">
               <el-select v-model="updateSupplierFrom.SupplierCmpanyBCode" class="CompanySelectClass" filterable
-                         placeholder="乙方公司" clearable=""
-              >
+                placeholder="乙方公司" clearable="">
                 <el-option v-for="item in SupplierCmpanyBList" :key="item.SupplierCmpanyBCode"
-                           :label="item.SupplierCmpanyBName" :value="item.SupplierCmpanyBCode"
-                />
+                  :label="item.SupplierCmpanyBName" :value="item.SupplierCmpanyBCode" />
               </el-select>
               <div class="CompanyClass">
                 <el-tooltip class="item" effect="dark" content="添加乙方公司" placement="top-start">
                   <el-button style="font-size: 20px;" type="text" icon="el-icon-circle-plus-outline" circle
-                             @click="AddSupplierCmpanyB"
-                  />
+                    @click="AddSupplierCmpanyB" />
                 </el-tooltip>
               </div>
             </el-form-item>
@@ -451,14 +480,12 @@
             <el-col :span="24">
               <el-form-item label="附件上传">
                 <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
-                           accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
-                           :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
-                           :file-list="fileListUpload" :on-change="handleChangeUpdate"
-                >
+                  accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
+                  :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
+                  :file-list="fileListUpload" :on-change="handleChangeUpdate">
                   <el-button slot="trigger" type="primary">选取文件</el-button>
                   <el-button style="margin-left: 10px;" type="success" :loading="uploadServerLoading"
-                             @click="submitUploadUpdate"
-                  >上传到服务器</el-button>
+                    @click="submitUploadUpdate">上传到服务器</el-button>
                   <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过5M</div>
                   <div slot="tip" class="el-upload__tip">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
                   <div slot="tip" class="el-upload__tip">下面为新上传的文件</div>
@@ -822,11 +849,25 @@ export default {
     this.GetUserInfo();
   },
   methods: {
+    SecondClick(ContractCode) {
+      this.copys("合同编号", ContractCode);
+    },
+    //复制通用方法
+    copys(title, option) {
+      var input = document.createElement("input"); // 创建input对象
+      input.value = option; // 设置复制内容
+      document.body.appendChild(input); // 添加临时实例
+      input.select(); // 选择实例内容
+      document.execCommand("Copy"); // 执行复制
+      document.body.removeChild(input); // 删除临时实例
+      this.$message.success("已成功复制" + title + "：" + option);
+    },
+
     // 点击当前行数据进行选中或取消复选框
     toggleSelection(row, column, event) {
-      if (column.label != "操作")
-        // 通过ref绑定后这里使用$refs.table来操作bom元素
-        { this.$refs.multipleTable.toggleRowSelection(row); }
+      if (column.label != "操作" && column.label != "合同编号")
+      // 通过ref绑定后这里使用$refs.table来操作bom元素
+      { this.$refs.multipleTable.toggleRowSelection(row); }
     },
     // 添加
     AddSupplierCmpanyB() {
@@ -892,7 +933,7 @@ export default {
     // 弹出修改审核状态窗口
     auditStatusCheck() {
       if (!this.Id) {
-        this.$message.info("请勾选要审核的供应商合同数据！");
+        this.$message.warning("请勾选要审核的供应商合同数据！");
         return;
       }
       // 默认一个审核状态吧，录入-未送审
@@ -902,7 +943,7 @@ export default {
     // 送审
     async auditStatusAction() {
       if (!this.Id) {
-        this.$message.info("请勾选要送审的数据！");
+        this.$message.warning("请勾选要送审的数据！");
         return;
       }
       const confirmResult = await this.$confirm(
@@ -1000,7 +1041,7 @@ export default {
         formData.append('files', item.raw)
       })
       if (this.fileList == 0) {
-        this.$message.info("请选择要上传到服务器的文件");
+        this.$message.warning("请选择要上传到服务器的文件");
         return
       }
       this.uploadServerLoading = true;
@@ -1045,7 +1086,7 @@ export default {
         formData.append('files', item.raw)
       })
       if (this.fileListUpload == 0) {
-        this.$message.info("请选择要上传到服务器的文件");
+        this.$message.warning("请选择要上传到服务器的文件");
         return
       }
       this.uploadServerLoading = true;
@@ -1113,14 +1154,14 @@ export default {
           this.$nextTick(() => {
             const isError = document.getElementsByClassName("is-error");
             if (isError.length != 0) {
- isError[0].scrollIntoView({
+              isError[0].scrollIntoView({
                 // 滚动到指定节点
                 // 值有start,center,end，nearest，当前显示在视图区域中间
                 block: "center",
                 // 值有auto、instant,smooth，缓动动画（当前是慢速的）
                 behavior: "smooth",
               });
-}
+            }
             return;
           });
           return;
@@ -1133,7 +1174,7 @@ export default {
               });
               if (flag.length == 0) {
                 this.LoadingAdd = false;
-                this.$message.info("文件上传完成或者修改需要点击一下上传服务器");
+                this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
                 return;
               }
             }
@@ -1147,7 +1188,7 @@ export default {
 
               if (flag.length == 0) {
                 this.LoadingAdd = false;
-                this.$message.info("文件上传完成或者修改需要点击一下上传服务器");
+                this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
                 return;
               }
             }
@@ -1185,14 +1226,14 @@ export default {
       this.detailAddDialogVisible = true;
       const isError = document.getElementsByClassName("scrollClass");
       if (isError.length != 0) {
- isError[0].scrollIntoView({
+        isError[0].scrollIntoView({
           // 滚动到指定节点
           // 值有start,center,end，nearest，当前显示在视图区域中间
           block: "center",
           // 值有auto、instant,smooth，缓动动画（当前是慢速的）
           behavior: "smooth",
         });
-}
+      }
     },
     // 获取全部合同类型
     GetContractTypeList() {
@@ -1227,14 +1268,14 @@ export default {
           this.$nextTick(() => {
             const isError = document.getElementsByClassName("is-error");
             if (isError.length != 0) {
- isError[0].scrollIntoView({
+              isError[0].scrollIntoView({
                 // 滚动到指定节点
                 // 值有start,center,end，nearest，当前显示在视图区域中间
                 block: "center",
                 // 值有auto、instant,smooth，缓动动画（当前是慢速的）
                 behavior: "smooth",
               });
-}
+            }
             return;
           });
           return;
@@ -1248,7 +1289,7 @@ export default {
 
               if (flag.length == 0) {
                 this.LoadingUpdate = false;
-                this.$message.info("文件上传完成或者修改需要点击一下上传服务器");
+                this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
                 return;
               }
             }
@@ -1262,7 +1303,7 @@ export default {
 
               if (flag.length == 0) {
                 this.LoadingUpdate = false;
-                this.$message.info("文件上传完成或者修改需要点击一下上传服务器");
+                this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
                 return;
               }
             }

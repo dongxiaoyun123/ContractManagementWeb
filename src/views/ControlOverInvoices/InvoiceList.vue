@@ -56,8 +56,7 @@
               <el-form-item class="whereFormClass" label="发票状态">
                 <el-select v-model="IvState" class="timeClass" filterable placeholder="发票状态" clearable>
                   <el-option v-for="item in InvoiceStatusList" :key="item.Code" :class="item.Class" :label="item.Name"
-                             :value="item.Code"
-                  >
+                    :value="item.Code">
                     <el-tag v-if="item.Code == 0" effect="plain" type="danger">未开</el-tag>
                     <el-tag v-if="item.Code == 1" effect="plain" type="success">已开</el-tag>
                     <el-tag v-if="item.Code == 5" effect="plain" type="info">作废</el-tag>
@@ -69,8 +68,7 @@
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item class="whereFormClass" label="应收月份">
                 <el-date-picker v-model="SMonth" style="width:100% ;" class="timeClass" type="month" placeholder="选择月"
-                                format="MM"
-                />
+                  format="MM" />
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
@@ -105,18 +103,13 @@
           </el-table-column> -->
         <!-- <el-table-column type="selection" width="40"> </el-table-column> -->
         <el-table-column v-if="fixedLeftShow" prop="CompanyName" label="公司名称" min-width="220" fixed="left"
-                         show-overflow-tooltip
-        />
-        <el-table-column v-else prop="CompanyName" label="公司名称" min-width="220"
-                         show-overflow-tooltip
-        />
+          show-overflow-tooltip />
+        <el-table-column v-else prop="CompanyName" label="公司名称" min-width="220" show-overflow-tooltip />
         <el-table-column v-if="fixedLeftShow" prop="InvoiceHeader" label="发票抬头" min-width="220" fixed="left"
-                         show-overflow-tooltip
-        />
-        <el-table-column v-else prop="InvoiceHeader" label="发票抬头" min-width="220"
-                         show-overflow-tooltip
-        />
-        <el-table-column v-if="fixedLeftShow" prop="InvoiceAmount" label="发票金额" fixed="left" min-width="100" show-overflow-tooltip sortable="">
+          show-overflow-tooltip />
+        <el-table-column v-else prop="InvoiceHeader" label="发票抬头" min-width="220" show-overflow-tooltip />
+        <el-table-column v-if="fixedLeftShow" prop="InvoiceAmount" label="发票金额" fixed="left" min-width="100"
+          show-overflow-tooltip sortable="">
           <template slot-scope="scope">
             <span v-format="'¥#,##0.00'">{{ scope.row.InvoiceAmount }}</span>
           </template>
@@ -127,6 +120,22 @@
           </template>
         </el-table-column>
         <el-table-column prop="InvoiceTypeStr" label="发票类型" min-width="150" show-overflow-tooltip>
+          <template slot-scope="{}" slot="header">
+            <span>发票类型</span>
+            <el-tooltip class="item" effect="dark" placement="top" style="margin-left: 5px;margin-bottom: 0.2rem">
+              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
+              <div slot="content">
+                <div style="display: flex;  align-items: center;">
+                  <span slot="reference" style="margin-right: 10px;" class="SecondPartyNameClass">
+                    <div> <i class="dotClass" style="background-color: #13ce66" />{{ "\xa0\xa0" }}增值税专用发票<br /></div>
+                    <div><i class="dotClass" style="background-color: #ffba00" />{{ "\xa0\xa0" }}增值税普通发票<br /></div>
+                    <div style="margin-bottom: 0;"><i class="dotClass" style="background-color: #ff4949" />{{ "\xa0\xa0"
+                    }}增值税电子普通发票<br /></div>
+                  </span>
+                </div>
+              </div>
+            </el-tooltip>
+          </template>
           <template slot-scope="scope">
             <div style="display: flex;  align-items: center;">
               <span slot="reference" style="margin-right: 8px;">
@@ -139,6 +148,22 @@
           </template>
         </el-table-column>
         <el-table-column prop="IvStateStr" label="发票状态" min-width="100">
+          <template slot-scope="{}" slot="header">
+            <span>发票状态</span>
+            <el-tooltip class="item" effect="dark" placement="top" style="margin-left: 5px;margin-bottom: 0.2rem">
+              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
+              <div slot="content">
+                <div style="display: flex;  align-items: center;">
+                  <span slot="reference" style="margin: 0 10px 0 6px;" class="SecondPartyNameClass">
+                    <div> <el-tag  key="未开" effect="dark" type="danger" >未开</el-tag></div>
+                    <div><el-tag  key="已开" effect="dark" type="success">已开</el-tag></div>
+                    <div><el-tag  key="作废" effect="dark" type="info">作废</el-tag></div>
+                    <div style="margin-bottom: 0;"><el-tag  key="退回" effect="dark" type="warning">退回</el-tag></div>
+                  </span>
+                </div>
+              </div>
+            </el-tooltip>
+          </template>
           <template slot-scope="scope">
             <el-tag v-if="scope.row.IvState == 0" effect="plain" type="danger">未开</el-tag>
             <el-tag v-if="scope.row.IvState == 1" effect="plain" type="success">已开</el-tag>
@@ -163,31 +188,26 @@
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
-                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
-      />
+      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]" :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
+        @current-change="handleCurrentChange" />
     </el-card>
 
     <el-dialog :visible.sync="updateDialogVisible" :lock-scroll="false" width="60%"
-               @close="detailUpdateDialogVisibleClosed"
-    >
+      @close="detailUpdateDialogVisibleClosed">
       <div slot="title" class="dialog-title">
         <span>编辑发票信息</span>
       </div>
       <el-form ref="updateInvoiceRef" :model="updateInvoiceFrom" :rules="updateContractsRules" label-width="100px"
-               class="formClass"
-      >
+        class="formClass">
         <el-row>
           <el-col :span="12">
             <el-form-item label="公司" prop="CompanyId">
               <el-select v-model="updateInvoiceFrom.CompanyId" style="width:100% ;" filterable placeholder="公司名称" remote
-                         reserve-keyword :remote-method="remoteMethod" disabled
-                         @visible-change="clearselectCorporationDatas" @change="changeCompanyId"
-              >
+                reserve-keyword :remote-method="remoteMethod" disabled @visible-change="clearselectCorporationDatas"
+                @change="changeCompanyId">
                 <el-option v-for="item in selectCorporationDatas" :key="item.value" :label="item.label"
-                           :value="item.value"
-                />
+                  :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -207,8 +227,7 @@
             <el-form-item label="发票类型" prop="InvoiceType">
               <el-select v-model="updateInvoiceFrom.InvoiceType" class="timeClass" filterable placeholder="发票类型" disabled>
                 <el-option v-for="item in InvoiceTypeList" :key="item.Code" :class="item.Class" :label="item.Name"
-                           :value="item.Code"
-                />
+                  :value="item.Code" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -241,8 +260,7 @@
           <el-col :span="12">
             <el-form-item label="申开人" prop="ApplyPerson">
               <el-select v-model="updateInvoiceFrom.ApplyPerson" filterable allow-create default-first-option
-                         placeholder="申开人" disabled
-              >
+                placeholder="申开人" disabled>
                 <el-option v-for="item in ApplyPersonList" :key="item.Code" :label="item" :value="item" />
               </el-select>
             </el-form-item>
@@ -250,8 +268,7 @@
           <el-col :span="12">
             <el-form-item label="开票人" prop="IssuingPerson">
               <el-select v-model="updateInvoiceFrom.IssuingPerson" filterable allow-create default-first-option
-                         placeholder="开票人" disabled
-              >
+                placeholder="开票人" disabled>
                 <el-option v-for="item in IssuingPersonList" :key="item.Code" :label="item" :value="item" />
               </el-select>
             </el-form-item>
@@ -261,11 +278,9 @@
           <el-col :span="12">
             <el-form-item label="发票状态" prop="IvState">
               <el-select v-model="updateInvoiceFrom.IvState" :disabled="disabledFlag" filterable placeholder="发票状态"
-                         @change="ivStateChange"
-              >
+                @change="ivStateChange">
                 <el-option v-for="item in InvoiceStatusList" :key="item.Code" :class="item.Class" :label="item.Name"
-                           :value="item.Code"
-                />
+                  :value="item.Code" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -535,14 +550,14 @@ export default {
           this.$nextTick(() => {
             const isError = document.getElementsByClassName("is-error");
             if (isError.length != 0) {
- isError[0].scrollIntoView({
+              isError[0].scrollIntoView({
                 // 滚动到指定节点
                 // 值有start,center,end，nearest，当前显示在视图区域中间
                 block: "center",
                 // 值有auto、instant,smooth，缓动动画（当前是慢速的）
                 behavior: "smooth",
               });
-}
+            }
             return;
           });
           return;
@@ -759,7 +774,11 @@ export default {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  display: block;
+  display: inline-block;
+}
+
+.SecondPartyNameClass div {
+  margin-bottom: 10px;
 }
 </style>
 

@@ -25,6 +25,7 @@
     "echarts": "4.2.1",
     "element-china-area-data": "^5.0.2",
     "element-ui": "^2.15.12",
+    "fake-progress": "^1.0.4",
     "file-saver": "2.0.1",
     "fuse.js": "3.4.4",
     "js-cookie": "2.2.0",

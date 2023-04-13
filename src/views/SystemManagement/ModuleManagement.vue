@@ -38,7 +38,7 @@
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
+      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
                      :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
                      @size-change="handleSizeChange" @current-change="handleCurrentChange"
       />

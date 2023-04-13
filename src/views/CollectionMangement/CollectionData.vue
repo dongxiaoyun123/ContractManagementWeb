@@ -8,59 +8,65 @@
         </div>
         <el-row>
           <el-row>
-            <el-col v-if="IfUser == '3'" :xs="24" :sm="12" :md="12" :lg="5" :xl="5">
+            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item label="回款状态">
                 <el-select v-model="States" class="comentClass" filterable placeholder="回款状态" clearable="" collapse-tags>
                   <el-option v-for="item in PaymentCollectionStateArray" :key="item.Code" :label="item.Name"
-                             :value="item.Code"
-                  >
+                    :value="item.Code">
                     <template slot-scope="scope">
                       <!-- <el-tag effect="plain" key="全部"  type="info" v-if="item.Code == 0">全部</el-tag> -->
                       <el-tag v-if="item.Code == 1" key="未回款" effect="plain" type="danger">未回款</el-tag>
                       <el-tag v-if="item.Code == 2" key="已回款" effect="plain" type="success">已回款</el-tag>
+                      <el-tag v-if="item.Code == 3" key="有余额" effect="plain">有余额</el-tag>
                     </template>
                   </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="5" :xl="5">
+            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item label="公司名称">
                 <el-input v-model="Condition" clearable placeholder="公司名称" />
               </el-form-item>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="5" :xl="5">
+            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item label="到账时间">
-                <el-date-picker v-model="PaymentDate" style="width:100% ;" class="comentClass" type="daterange"
-                                range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions"
-                                clearable="" @input="datetimeChange"
-                />
+                <el-date-picker v-model="PaymentDate" class="comentClass" type="daterange" range-separator="至"
+                  start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" clearable=""
+                  @input="datetimeChange" />
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+              <el-form-item label="收款公司" prop="SecondPartyName">
+                <el-select v-model="SecondPartyName" class="comentClass" filterable placeholder="收款公司" clearable="">
+                  <el-option v-for="item in DicCategoryList" :key="item.Id" :label="item.Name" :value="item.Id" />
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="colRight">
-              <el-button-group style="margin-left: 1.3rem;">
+              <el-button-group style="margin-left: 1.3rem;margin-bottom: 18px;">
                 <el-button type="primary" icon="el-icon-search" @click="GetAdmin_PermissionSearch">查 询
                 </el-button>
-                <el-button v-if="StatesShow" type="success" icon="el-icon-edit" @click="UpdateDialog">
-                  回 款</el-button>
+                <!-- <el-button v-if="StatesShow" type="success" icon="el-icon-edit" @click="UpdateDialog">
+                  回 款</el-button> -->
                 <el-dropdown trigger="click" style="margin-left: 0;" @command="
                   (command) => {
                     handleButtonCommand(command);
                   }
-                "
-                >
-                  <el-button type="warning">
+                ">
+                  <el-button type="success">
                     更 多<i class="el-icon-arrow-down el-icon--right" />
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item v-if="IfUser == '3'" command="a" icon="el-icon-download">模板下载{{ "\xa0" }}
+                    <el-dropdown-item :disabled="IfUser != '3'" command="a" icon="el-icon-download">模板下载{{ "\xa0" }}
                     </el-dropdown-item>
-                    <el-dropdown-item v-if="IfUser == '3'" command="b" icon="el-icon-upload2">上传文件 {{ "\xa0" }}
+                    <el-dropdown-item :disabled="IfUser != '3'" command="b" icon="el-icon-upload2">上传文件 {{ "\xa0" }}
                     </el-dropdown-item>
-                    <el-dropdown-item v-if="StatesShow" command="c" icon="el-icon-document" :loading="ExportLoading">导出数据
+                    <el-dropdown-item :disabled="!StatesShow" command="c" icon="el-icon-document"
+                      :loading="ExportLoading">导出数据
                       {{ "\xa0" }}</el-dropdown-item>
                     <!-- <el-dropdown-item command="d" v-if="StatesShow" icon="el-icon-edit">改为已回款
                     </el-dropdown-item> -->
-                    <el-dropdown-item v-if="IfUser == '3'" command="e" icon="el-icon-delete">批量撤回 {{ "\xa0" }}
+                    <el-dropdown-item :disabled="IfUser != '3'" command="e" icon="el-icon-delete">批量撤回 {{ "\xa0" }}
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -84,30 +90,76 @@
               </el-tooltip>
             </el-col>
           </el-row>
-          <div style="margin-left: 1.3rem;">
-            <el-tooltip v-if="totalMoney > 0" class="item" :content="descriptionMoney" placement="bottom">
-              <h5 :style="formShow" style="width: 350px;color: #ff4949;margin: 1px 0px;">当前查询数据总金额：<span
-                v-format="'¥#,##0.00'"
-              >{{
-                totalMoney
-              }}</span></h5>
-            </el-tooltip>
-            <h5 v-else :style="formShow" style="width: 350px;color: #ff4949;margin: 1px 0px;">当前查询数据总金额：<span
-              v-format="'¥#,##0.00'"
-            >{{
-              totalMoney
-            }}</span></h5>
-          </div>
+          <el-descriptions style="margin-left: 1.3rem;" class="margin-top" :column="descriptionColumn" border>
+            <el-descriptions-item v-for="item in TotalSecondPartyNameList" :labelStyle="DescriptionStyle">
+              <template slot="label">
+                <i class="el-icon-money"></i>
+                {{ item.SecondPartyName }}
+              </template>
+              <div>
+                <el-tooltip v-if="item.Sum > 0" class="item" :content="item.SumDetail" placement="bottom">
+                  <span style="font-weight: bold;" v-format="'¥#,##0.00'">{{
+                    item.Sum
+                  }}</span>
+                </el-tooltip>
+                <span style="font-weight: bold;" v-else v-format="'¥#,##0.00'">{{
+                  item.Sum
+                }}</span>
+              </div>
+
+            </el-descriptions-item>
+          </el-descriptions>
         </el-row>
       </el-form>
     </el-card>
     <el-card class="CardTableClass">
-      <el-table ref="multipleTable" v-loading="loading" :data="CollectionList" fit
-                :cell-style="showBackground" @selection-change="TableSelect" @row-click="toggleSelection"
-      >
+      <el-table ref="multipleTable" v-loading="loading" :data="CollectionList" fit :cell-style="showBackground"
+        @selection-change="TableSelect" @row-click="toggleSelection">
         <el-table-column type="selection" width="50" />
         <el-table-column prop="EnterPriseName" label="公司名称" min-width="200" show-overflow-tooltip />
-        <el-table-column prop="SecondPartyName" label="收款公司" min-width="100" show-overflow-tooltip />
+        <el-table-column prop="SecondPartyName" label="收款公司" min-width="100" show-overflow-tooltip>
+          <template slot-scope="{}" slot="header">
+            <span>收款公司</span>
+            <el-tooltip class="item" effect="dark" placement="top" style="margin-left: 5px;margin-bottom: 0.2rem">
+              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
+              <div slot="content">
+                <div style="display: flex;  align-items: center;">
+                  <span slot="reference" style="margin-right: 10px;" class="SecondPartyNameClass">
+                    <div> <i class="dotClass" style="background-color: #EB2F96" />{{ "\xa0\xa0" }}格信诺诚<br /></div>
+                    <div><i class="dotClass" style="background-color: #1890FF" />{{ "\xa0\xa0" }}格锐智诚<br /></div>
+                    <div><i class="dotClass" style="background-color: #304156" />{{ "\xa0\xa0" }}人保直投<br /></div>
+                    <div> <i class="dotClass" style="background-color: #212121" />{{ "\xa0\xa0" }}点米科技<br /></div>
+                    <div> <i class="dotClass" style="background-color: #11A983" />{{ "\xa0\xa0" }}其他保司直投<br /></div>
+                    <div> <i class="dotClass" style="background-color: #13C2C2" />{{ "\xa0\xa0" }}格锐博金<br /></div>
+                    <div> <i class="dotClass" style="background-color: #6959CD" />{{ "\xa0\xa0" }}马鞍山格信<br /></div>
+                    <div> <i class="dotClass" style="background-color: #F5222D" />{{ "\xa0\xa0" }}南京公司<br /></div>
+                    <div> <i class="dotClass" style="background-color: #ffba00" />{{ "\xa0\xa0" }}格锐商业<br /></div>
+                    <div style="margin-bottom: 0;"> <i class="dotClass" style="background-color: #FA8C16" />{{ "\xa0\xa0"
+                    }}安欣智诚</div>
+                  </span>
+                </div>
+              </div>
+            </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+            <div style="display: flex;  align-items: center;">
+              <span slot="reference" style="margin-right: 8px;">
+                <i v-if="scope.row.SecondPartyName == '格信诺诚'" class="dotClass" style="background-color: #EB2F96" />
+                <i v-if="scope.row.SecondPartyName == '格锐智诚'" class="dotClass" style="background-color: #1890FF" />
+                <i v-if="scope.row.SecondPartyName == '人保直投'" class="dotClass" style="background-color: #304156" />
+                <i v-if="scope.row.SecondPartyName == '点米科技'" class="dotClass" style="background-color: #212121" />
+                <i v-if="scope.row.SecondPartyName == '其他保司直投'" class="dotClass" style="background-color: #11A983" />
+                <i v-if="scope.row.SecondPartyName == '格锐博金'" class="dotClass" style="background-color: #13C2C2" />
+                <i v-if="scope.row.SecondPartyName == '马鞍山格信'" class="dotClass" style="background-color: #6959CD" />
+                <i v-if="scope.row.SecondPartyName == '南京公司'" class="dotClass" style="background-color: #F5222D" />
+                <i v-if="scope.row.SecondPartyName == '格锐商业'" class="dotClass" style="background-color: #ffba00" />
+                <i v-if="scope.row.SecondPartyName == '安欣智诚'" class="dotClass" style="background-color: #FA8C16" />
+              </span>
+              {{ scope.row.SecondPartyName }}
+            </div>
+          </template>
+
+        </el-table-column>
         <el-table-column prop="AmountMoney" label="金额" min-width="100" sortable="">
           <template slot-scope="scope">
             <span v-format="'¥#,##0.00'">{{ scope.row.AmountMoney }}</span>
@@ -122,6 +174,21 @@
           </template>
         </el-table-column>
         <el-table-column prop="States" label="回款状态" min-width="100">
+          <template slot-scope="{}" slot="header">
+            <span>回款状态</span>
+            <el-tooltip class="item" effect="dark" placement="top" style="margin-left: 5px;margin-bottom: 0.2rem">
+              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
+              <div slot="content">
+                <div style="display: flex;  align-items: center;">
+                  <span slot="reference" style="margin: 0 10px 0 6px;" class="SecondPartyNameClass">
+                    <div> <el-tag  key="未回款" effect="dark" type="danger" >未回款</el-tag></div>
+                    <div><el-tag  key="已回款" effect="dark" type="success">已回款</el-tag></div>
+                    <div style="margin-bottom: 0;"><el-tag  key="有余额" effect="dark">有余额</el-tag></div>
+                  </span>
+                </div>
+              </div>
+            </el-tooltip>
+          </template>
           <template slot-scope="scope">
             <el-tag v-if="scope.row.States == 1" key="未回款" effect="plain" type="danger">未回款</el-tag>
             <el-tag v-if="scope.row.States == 2" key="已回款" effect="plain" type="success">已回款</el-tag>
@@ -139,8 +206,9 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column v-if="IfUser == '3'" prop="User_Name" label="收取人" min-width="100" />
-        <el-table-column v-if="IfUser == '3'" prop="CollectionTime" label="收取时间" min-width="170">
+        <el-table-column prop="Remark" label="备注" align="left" min-width="250" show-overflow-tooltip />
+        <el-table-column prop="User_Name" label="收取人" min-width="100" />
+        <el-table-column prop="CollectionTime" label="收取时间" min-width="170">
           <template slot-scope="scope">
             <div v-if="scope.row.CollectionTime">
               <i class="el-icon-time" />
@@ -148,18 +216,118 @@
             </div>
           </template>
         </el-table-column>
+        <el-table-column label="操作" fixed="right" width="220" v-if="StatesShow">
+          <template slot-scope="scope">
+            <el-button v-if="scope.row.States != 2" icon="el-icon-refresh-left" type="text" size="mini" @click="
+              UpdateDialog(scope.row)
+            ">回款</el-button>
+            <el-button icon="el-icon-view" type="text" size="mini" @click="
+              ShowDialog(scope.row)
+            ">详情</el-button>
+            <el-button icon="el-icon-edit" type="text" size="mini" @click="
+              UpdateDetailDialog(scope.row.InsProductPayCode, scope.row.Remark)
+            ">修改</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
-                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
-      />
+      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100, 500]" :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
+        @current-change="handleCurrentChange" />
     </el-card>
+    <el-dialog title="回款" :visible.sync="updateDialogVisible" top="5vh" width="70%">
+      <el-descriptions v-if="ClickRow" class="margin-top" :column="3" border>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-office-building"></i>
+            收款公司
+          </template>
+          {{ ClickRow.SecondPartyName }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-office-building"></i>
+            公司名称
+          </template>
+          {{ ClickRow.EnterPriseName }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-date"></i>
+            到账时间
+          </template>
+          <el-badge is-dot class="itemClass">{{ ClickRow.PaymentDate }}</el-badge>
 
-    <el-dialog title="修改回款状态" :visible.sync="updateDialogVisible" width="30%">
-      <el-form ref="updateRef" :model="updateCollectionFrom" label-width="80px">
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-money"></i>
+            总金额
+          </template>
+          <span style="font-weight:bolder;">{{ ClickRow.AmountMoney }}</span>
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-money"></i>
+            剩余金额
+          </template>
+          <span style="color: #ff4949;font-weight: bolder;">{{ ClickRow.RemainingAmount }}</span>
+          <el-tag type="success" style="margin-left:20px">输入本次回款金额会自动计算临时剩余金额</el-tag>
+        </el-descriptions-item>
+      </el-descriptions>
+      <el-divider></el-divider>
+      <el-table :data="CollectionOrderData" border :span-method="rowSpanMethod" v-loading="CollectionLoading"
+        @cell-click="CollectionOrderClick" :cell-style="showCollection">
+        <el-table-column type="index" width="50">
+        </el-table-column>
+        <el-table-column label="通道名称" prop="ChName" width="100"></el-table-column>
+        <el-table-column label="合同方名称" prop="ConName" show-overflow-tooltip min-width="90"></el-table-column>
+        <el-table-column label="付款方名称" prop="CorpName" show-overflow-tooltip min-width="90"></el-table-column>
+        <el-table-column label="账单月份" prop="OrderDateStr" width="80"></el-table-column>
+        <el-table-column label="账单应收" prop="ShouldInAmt" width="90">
+          <template slot-scope="scope">
+            <span v-format="'¥#,##0.00'">{{ scope.row.ShouldInAmt }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="实际应缴" prop="ServShouldIn" width="95">
+          <template slot-scope="{}" slot="header">
+            <span>实际应缴</span>
+            <el-tooltip class="item" effect="dark" placement="top" style="margin-left: 5px;margin-bottom: 0.2rem">
+              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
+              <div slot="content">
+                <p>便捷操作：</p>
+                <p>本次回款金额为空：点击实际应缴会自动填充（本次回款金额）列。</p>
+                <p>本次回款金额不为空：（本次回款金额）列无变动。</p>
+              </div>
+            </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+            <span v-format="'¥#,##0.00'">{{ scope.row.ServShouldIn }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="回款金额" prop="ServReceive" width="90">
+          <template slot-scope="scope">
+            <span v-format="'¥#,##0.00'">{{ scope.row.ServReceive }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="本次回款金额" prop="ServReceiveNew" width="120">
+          <template slot-scope="scope">
+            <el-input size="mini" v-model="scope.row.ServReceiveNew" placeholder="金额" clearable
+              @input="handleChange(scope.row)" />
+          </template>
+        </el-table-column>
+        <el-table-column label="回款状态" prop="ReceiveState" width="90">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.ReceiveState == 0" effect="plain" type="danger">未回款</el-tag>
+            <el-tag v-if="scope.row.ReceiveState == 2" effect="plain">部分回款</el-tag>
+            <el-tag v-if="scope.row.ReceiveState == 5" effect="plain" type="warning">挂账</el-tag>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-divider></el-divider>
+      <el-form ref="updateRef" :model="updateCollectionFrom" label-width="40px">
         <el-form-item label="备注">
-          <el-input v-model="updateCollectionFrom.Remark" type="textarea" :rows="3" placeholder="例如：2022年6月补充医疗" />
+          <el-input v-model="updateCollectionFrom.Remark" type="textarea" :rows="3" />
         </el-form-item>
       </el-form>
       <el-divider />
@@ -177,9 +345,8 @@
         </el-form-item>
         <el-form-item label="文 件">
           <el-upload ref="upload" :action="actionUrl" :on-preview="handlePreview" :on-remove="handleRemove"
-                     :on-success="fileUploadSuccess" :on-error="fileUploadFail" :on-change="fileChange" :file-list="fileList"
-                     :limit="1" :auto-upload="false" :headers="myHeaders"
-          >
+            :on-success="fileUploadSuccess" :on-error="fileUploadFail" :on-change="fileChange" :file-list="fileList"
+            :limit="1" :auto-upload="false" :headers="myHeaders">
             <el-button slot="trigger" type="primary" class="buttonM">选取文件</el-button>
           </el-upload>
         </el-form-item>
@@ -191,6 +358,22 @@
         </el-row>
       </el-form>
     </el-dialog>
+    <el-dialog title="修改备注" :visible.sync="updateDetailDialogVisible" width="30%">
+      <el-form ref="updateRef" :model="updateCollectionDetailFrom" label-width="80px">
+        <el-form-item label="备注">
+          <el-input v-model="updateCollectionDetailFrom.Remark" type="textarea" :rows="3" placeholder="" />
+        </el-form-item>
+        <el-divider />
+        <el-row class="buttonCenter">
+          <el-col>
+            <el-button v-loading.fullscreen.lock="LoadingDetailUpdate" type="primary" @click="saveDetailUpdate">确
+              定</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-dialog>
+    <ComponentsDialog :visible="dialogVisible" :ClickRow="ClickRow" @CloseDialog="CloseComponentsDialog">
+    </ComponentsDialog>
   </div>
 </template>
 
@@ -200,19 +383,36 @@ import {
   UpdateData,
   GetAdmin_PermissionExport,
   DeleteCollectionData,
+  GetCollectionOrderNyName,
+  UpdateDataRemark,
 } from "@/api/CollectionMangement";
+import {
+  GetDicCategoryC,
+} from "@/api/SystemManagement";
+import { cutOutNum } from '@/utils/decimals'
 import axios from "axios";
 import { showLoading, hideLoading } from "@/common/loading";
+import ComponentsDialog from "./Components"
+import moment from 'moment';
+
 export default {
-  components: {},
+  components: { ComponentsDialog },
   data() {
     return {
-      formShow: '',
-      totalMoney: 0,
-      descriptionMoney: '',
+      LoadingDetailUpdate: false,
+      CollectionLoading: false,
+      dialogVisible: false,
+      CollectionOrderData: [],
+      ClickRow: null,
+      ClickRowOld: null,
+      DescriptionStyle: 'width:170px',
+      SecondPartyName: '',
+      DicCategoryList: [],
+      descriptionColumn: 3,
+      TotalSecondPartyNameList: [],
       multipleSelection: [],
-      colRight: 12,
-      tipWidth: 2,
+      colRight: 20,
+      tipWidth: 4,
       ExportLoading: false,
       uploadLoading: false,
       accessKeyId: "",
@@ -243,9 +443,14 @@ export default {
       },
       total: 0,
       updateDialogVisible: false,
+      updateDetailDialogVisible: false,
       importDialogVisible: false,
       CollectionList: [],
       updateCollectionFrom: {
+        InsProductPayCode: "",
+        Remark: "",
+      },
+      updateCollectionDetailFrom: {
         InsProductPayCode: "",
         Remark: "",
       },
@@ -262,7 +467,7 @@ export default {
         // { Code: 0, Name: "全部" },
         { Code: 1, Name: "未回款" },
         { Code: 2, Name: "已回款" },
-        // { Code: 3, Name: "有余额" },
+        { Code: 3, Name: "有余额" },
       ],
       // 判断选中的数据回款状态是否都是未回款，只要有一个是已回款，那么这个状态为true
       collectionStateFlag: false,
@@ -355,99 +560,145 @@ export default {
         process.env.VUE_APP_BASE_API + "/CollectionMangement/UploadFiles?Flag=" + newValue;
     },
   },
-  created() { },
+  created() {
+    this.PaymentDate = [moment().subtract(1, 'months').startOf('month').format("YYYY-MM-DD"), moment().format('YYYY-MM-DD')];
+  },
   // 加载完成后执行调取回款数据接口
   mounted() {
     switch (sessionStorage.getItem("RoleName")) {
       case "超级管理员":
         this.IfUser = "3";
         this.StatesShow = true;
-        if (document.body.clientWidth >= 1200) {
-          this.colRight = 7;
-          this.tipWidth = 2;
-        } else if (document.body.clientWidth >= 768) {
-          this.colRight = 9;
-          this.tipWidth = 3;
-        } else {
-          this.colRight = 20;
-          this.tipWidth = 4;
-        }
-        // 上方表单距下方间距
-        if (document.body.clientWidth < 768) {
-          this.formShow = 'margin-top: 18px;';
-        } else {
-          this.formShow = 'margin-top: 0;';
-        }
         break;
       case "总客服":
       case "财务":
         this.IfUser = "3";
         this.StatesShow = false;
-        if (document.body.clientWidth >= 1200) {
-          this.colRight = 7;
-          this.tipWidth = 2;
-        } else if (document.body.clientWidth >= 768) {
-          this.colRight = 9;
-          this.tipWidth = 3;
-        } else {
-          this.colRight = 20;
-          this.tipWidth = 4;
-        }
-        // 上方表单距下方间距
-        if (document.body.clientWidth < 768) {
-          this.formShow = 'margin-top: 18px;';
-        } else {
-          this.formShow = 'margin-top: 0;';
-        }
         break;
       case "HRO":
       case "客服":
         this.IfUser = "1";
         this.StatesShow = true;
-        if (document.body.clientWidth >= 1200) {
-          this.colRight = 11;
-          this.tipWidth = 3;
-        } else if (document.body.clientWidth >= 768) {
-          this.colRight = 21;
-          this.tipWidth = 3;
-        } else {
-          this.colRight = 20;
-          this.tipWidth = 4;
-        }
-        // 上方表单距下方间距
-        if (document.body.clientWidth < 1200) {
-          this.formShow = 'margin-top: 18px;';
-        } else {
-          this.formShow = 'margin-top: 0;';
-        }
         break;
       default:
         this.IfUser = "1";
         this.StatesShow = true;
-        if (document.body.clientWidth >= 1200) {
-          this.colRight = 11;
-          this.tipWidth = 3;
-        } else if (document.body.clientWidth >= 768) {
-          this.colRight = 21;
-          this.tipWidth = 3;
-        } else {
-          this.colRight = 20;
-          this.tipWidth = 4;
-        }
-        // 上方表单距下方间距
-        if (document.body.clientWidth < 1200) {
-          this.formShow = 'margin-top: 18px;';
-        } else {
-          this.formShow = 'margin-top: 0;';
-        }
         break;
     }
-
+    this.GetDicCategoryC();
     this.GetAdmin_Permission();
     this.actionUrl =
       process.env.VUE_APP_BASE_API + "/CollectionMangement/UploadFiles?Flag=" + this.Flag;
   },
   methods: {
+    // 保存修改
+    saveDetailUpdate() {
+      this.LoadingDetailUpdate = true;
+      UpdateDataRemark(
+        this.updateCollectionDetailFrom.InsProductPayCode,
+        this.updateCollectionDetailFrom.Remark
+      ).then((res) => {
+        if (res.success) {
+          this.updateDetailDialogVisible = false;
+          this.$message.success("操作成功");
+          this.GetAdmin_Permission();
+        } else {
+          this.$message.error(res.resultMessage);
+        }
+        this.LoadingDetailUpdate = false;
+      });
+    },
+    // 绑定填写备注弹出窗口
+    UpdateDetailDialog(InsProductPayCode, Remark) {
+      this.updateCollectionDetailFrom.InsProductPayCode = InsProductPayCode;
+      this.updateCollectionDetailFrom.Remark = Remark;
+      this.updateDetailDialogVisible = true;
+    },
+    //为要复制的单元格填充背景颜色
+    showCollection({ row, column }) {
+      debugger
+      if (column.label == "实际应缴") {
+        return {
+          backgroundColor: "#F0F9EB",
+        };
+      } else {
+        return {
+          backgroundColor: "#FFFFFF",
+        };
+      }
+    },
+    //点击单元格时触发
+    CollectionOrderClick(row, column, cell, event) {
+      if (column.label == "实际应缴" && !row.ServReceiveNew) {
+        row.ServReceiveNew = row.ServShouldIn;
+        this.handleChange(row);
+      }
+    },
+    ShowDialog(row) {
+      this.ClickRow = Object.assign({}, row); // 创建新的对象副本;
+      this.dialogVisible = true;
+    },
+    CloseComponentsDialog() {
+      this.dialogVisible = false;
+    },
+
+    handleChange(row) {
+      //验证输入是否金额，如果不是直接返回
+      row.ServReceiveNew = /^\d+\.?\d{0,2}$/.test(row.ServReceiveNew) ?
+        row.ServReceiveNew :
+        (row.ServReceiveNew.indexOf('.') == -1 ?
+          "" :
+          cutOutNum(parseFloat(row.ServReceiveNew)));
+
+      this.RecalculateMoney();
+      // //临时金额，判断剩余金额-当前输入金额是否>=0
+      // let remainingAmount = this.ClickRow.RemainingAmount - row.ServReceiveNew;
+      //如果该行的实际应缴减去回款金额小于当前输入金额或者临时金额小于零，那么证明输入金额不合法
+      if (parseFloat((row.ServShouldIn - row.ServReceive).toFixed(2)) < parseFloat(row.ServReceiveNew) || parseFloat(this.ClickRow.RemainingAmount) < 0) {
+        row.ServReceiveNew = "";
+        this.$message.warning("金额输入不合理，请重新输入");
+      }
+      this.RecalculateMoney();
+      return;
+    },
+    RecalculateMoney() {
+      let totalInputMoney = 0;
+      this.CollectionOrderData.forEach((item) => {
+        totalInputMoney += item.ServReceiveNew ? parseFloat(item.ServReceiveNew) : 0;
+      })
+      this.ClickRow.RemainingAmount = (this.ClickRowOld.RemainingAmount - totalInputMoney).toFixed(2);
+    },
+    rowSpanMethod({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex === 1) {
+        // 合并第一列的相同行
+        if (rowIndex === 0 || row.ChName !== this.CollectionOrderData[rowIndex - 1].ChName) {
+          const rowspan = this.CollectionOrderData.filter(item => item.ChName === row.ChName).length;
+          return { rowspan, colspan: 1 };
+        } else {
+          return { rowspan: 0, colspan: 0 };
+        }
+      } else if (columnIndex === 2) {
+        // 合并第一列的相同行
+        if (rowIndex === 0 || row.ConID !== this.CollectionOrderData[rowIndex - 1].ConID) {
+          const rowspan = this.CollectionOrderData.filter(item => item.ConID === row.ConID).length;
+          return { rowspan, colspan: 1 };
+        } else {
+          return { rowspan: 0, colspan: 0 };
+        }
+      }
+      else if (columnIndex === 3) {
+        // 合并第一列的相同行
+        if (rowIndex === 0 || row.CorpID !== this.CollectionOrderData[rowIndex - 1].CorpID) {
+          const rowspan = this.CollectionOrderData.filter(item => item.CorpID === row.CorpID).length;
+          return { rowspan, colspan: 1 };
+        } else {
+          return { rowspan: 0, colspan: 0 };
+        }
+      }
+      else {
+        return { rowspan: 1, colspan: 1 };
+      }
+    },
     datetimeChange(time) {
       // 强制刷新
       this.$forceUpdate();
@@ -464,9 +715,6 @@ export default {
         case "c":
           this.ExportCollection();
           break;
-        // case "d":
-        //   this.UpdateDialog();
-        //   break;
         case "e":
           this.batchDelete();
           break;
@@ -474,9 +722,10 @@ export default {
     },
 
     // 点击当前行数据进行选中或取消复选框
-    toggleSelection(row) {
-      // 通过ref绑定后这里使用$refs.table来操作bom元素
-      this.$refs.multipleTable.toggleRowSelection(row);
+    toggleSelection(row, column, eventow) {
+      if (column.label != "操作")
+        // 通过ref绑定后这里使用$refs.table来操作bom元素
+        this.$refs.multipleTable.toggleRowSelection(row);
     },
     Options() {
       this.$notify({
@@ -517,16 +766,28 @@ export default {
     },
     // 保存修改
     saveUpdate() {
-      this.LoadingUpdate = true;
-      UpdateData(
-        this.updateCollectionFrom.InsProductPayCode,
-        this.updateCollectionFrom.Remark
-      ).then((res) => {
+      // this.LoadingUpdate = true;
+      debugger
+      if (this.ClickRowOld.RemainingAmount == this.ClickRow.RemainingAmount) {
+        this.$message.info("无修改");
+        return;
+      }
+      let changedData = [];
+      this.CollectionOrderData.forEach((item) => {
+        if (item.ServReceiveNew)
+          changedData.push(item);
+      })
+      let parameters = {
+        InsProductPayCode: this.ClickRow.InsProductPayCode,//选中的回款编号
+        RemainingAmount: this.ClickRow.RemainingAmount,//剩余金额
+        ChangedData: changedData,//输入金额的数据
+        Remark: this.updateCollectionFrom.Remark,//修改备注
+      }
+      UpdateData(parameters).then((res) => {
         if (res.success) {
           this.updateDialogVisible = false;
           this.$message.success("操作成功");
-          this.updateCollectionFrom.InsProductPayCode = "";
-          this.GetAdmin_Permission();
+          this.GetAdmin_PermissionSearch();
         } else {
           this.$message.error(res.resultMessage);
         }
@@ -550,22 +811,39 @@ export default {
       this.importDialogVisible = true;
     },
     // 绑定填写备注弹出窗口
-    UpdateDialog() {
-      if (!this.updateCollectionFrom.InsProductPayCode) {
-        this.$message.info("请勾选要修改的数据！");
+    UpdateDialog(row) {
+      if (row.States == 2) {
+        this.$message.warning("不能选择已回款的数据！");
         return;
       }
+      this.ClickRow = Object.assign({}, row); // 创建新的对象副本;
+      this.ClickRowOld = Object.assign({}, row); // 创建新的对象副本;
+      this.CollectionLoading = true;
+      GetCollectionOrderNyName(
+        row.EnterPriseName,
+      ).then((res) => {
+        if (res.success) {
+          // this.CollectionOrderData = res.result;
+          this.CollectionOrderData = res.result.map(v => {
+            this.$set(v, 'ServReceiveNew', "");
+            return v
+          });
+        } else {
+          this.CollectionOrderData = [];
+        }
+        this.CollectionLoading = false;
+      });
       this.updateCollectionFrom.Remark = "";
       this.updateDialogVisible = true;
     },
     // 批量删除（永久删除）
     async batchDelete() {
       if (!this.updateCollectionFrom.InsProductPayCode) {
-        this.$message.info("请勾选要修改的数据！");
+        this.$message.warning("请勾选要修改的数据！");
         return;
       }
       if (this.collectionStateFlag) {
-        this.$message.info("不能撤回已回款的数据，请检查");
+        this.$message.warning("不能撤回已回款的数据，请检查");
         return;
       }
       const confirmResult = await this.$confirm(
@@ -578,7 +856,7 @@ export default {
         }
       ).catch((err) => err);
       if (confirmResult !== "confirm") {
-        return this.$message.info("已取消操作");
+        return this.$message.warning("已取消操作");
       }
       showLoading();
       DeleteCollectionData(this.updateCollectionFrom.InsProductPayCode).then((res) => {
@@ -612,25 +890,23 @@ export default {
         this.PaymentDateEnd = '';
       }
       GetAdmin_Permission(
-        this.IfUser,
         this.Condition,
         this.States,
         this.PaymentDateBegin,
         this.PaymentDateEnd,
         '', '',
+        this.SecondPartyName,
         this.queryInfo.pagenum,
         this.queryInfo.pagesize
       ).then((res) => {
         if (res.success) {
           this.CollectionList = res.result.list;
           this.total = res.result.totalNumber;
-          this.totalMoney = res.result1 ? res.result1 : 0;
-          this.descriptionMoney = res.result2;
+          this.TotalSecondPartyNameList = res.result1;
         } else {
           this.CollectionList = [];
           this.total = 0;
-          this.totalMoney = 0;
-          this.descriptionMoney = '';
+          this.TotalSecondPartyNameList = [];
         }
         this.updateCollectionFrom.InsProductPayCode = "";
         this.loading = false;
@@ -647,12 +923,12 @@ export default {
         this.PaymentDateEnd = '';
       }
       GetAdmin_PermissionExport(
-        this.IfUser,
         this.Condition,
         this.States,
         this.PaymentDateBegin,
         this.PaymentDateEnd,
-        '', ''
+        '', '',
+        this.SecondPartyName,
       ).then(
         (res) => {
           if (res.success) {
@@ -733,82 +1009,23 @@ export default {
         document.body.removeChild(elink);
       });
     },
+    // 获取乙方公司数据
+    GetDicCategoryC() {
+      GetDicCategoryC("", 1, 100000).then((res) => {
+        if (res.success) {
+          this.DicCategoryList = res.result.list;
+        } else {
+          this.DicCategoryList = [];
+        }
+      });
+    },
+
     fixedShowMethod(newVal) {
-      switch (sessionStorage.getItem("RoleName")) {
-        case "超级管理员":
-          if (newVal >= 1200) {
-            this.colRight = 7;
-            this.tipWidth = 2;
-          } else if (newVal >= 768) {
-            this.colRight = 9;
-            this.tipWidth = 3;
-          } else {
-            this.colRight = 20;
-            this.tipWidth = 4;
-          }
-          // 上方表单距下方间距
-          if (newVal < 768) {
-            this.formShow = 'margin-top: 18px;';
-          } else {
-            this.formShow = 'margin-top: 0;';
-          }
-          break;
-        case "总客服":
-        case "财务":
-          if (newVal >= 1200) {
-            this.colRight = 7;
-            this.tipWidth = 2;
-          } else if (newVal >= 768) {
-            this.colRight = 9;
-            this.tipWidth = 3;
-          } else {
-            this.colRight = 20;
-            this.tipWidth = 4;
-          }
-          // 上方表单距下方间距
-          if (newVal < 768) {
-            this.formShow = 'margin-top: 18px;';
-          } else {
-            this.formShow = 'margin-top: 0;';
-          }
-          break;
-        case "HRO":
-        case "客服":
-          if (newVal >= 1200) {
-            this.colRight = 11;
-            this.tipWidth = 3;
-          } else if (newVal >= 768) {
-            this.colRight = 21;
-            this.tipWidth = 3;
-          } else {
-            this.colRight = 20;
-            this.tipWidth = 4;
-          }
-          // 上方表单距下方间距
-          if (newVal < 1200) {
-            this.formShow = 'margin-top: 18px;';
-          } else {
-            this.formShow = 'margin-top: 0;';
-          }
-          break;
-        default:
-          if (newVal >= 1200) {
-            this.colRight = 11;
-            this.tipWidth = 3;
-          } else if (newVal >= 768) {
-            this.colRight = 21;
-            this.tipWidth = 3;
-          } else {
-            this.colRight = 20;
-            this.tipWidth = 4;
-          }
-          // 上方表单距下方间距
-          if (newVal < 1200) {
-            this.formShow = 'margin-top: 18px;';
-          } else {
-            this.formShow = 'margin-top: 0;';
-          }
-          break;
+      if (newVal < 768) {
+        this.descriptionColumn = 1;
+      }
+      else {
+        this.descriptionColumn = 3;
       }
     }
   },
@@ -833,5 +1050,20 @@ export default {
   font-size: 12px;
   color: #FFFFFF;
   background-color: #303133;
+}
+
+.itemClass {
+  margin-top: 0.3vh;
+}
+
+.dotClass {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.SecondPartyNameClass div {
+  margin-bottom: 10px;
 }
 </style>

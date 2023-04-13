@@ -50,7 +50,7 @@
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
+      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
                      :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
                      @size-change="handleSizeChange" @current-change="handleCurrentChange"
       />
@@ -406,7 +406,7 @@ export default {
         formData.append('files', item.raw)
       })
       if (!formData) {
-        this.$message.info("请选择要上传到服务器的文件");
+        this.$message.warning("请选择要上传到服务器的文件");
       }
       this.addCompanyNameAForm.FileList = [];
       Uploads(formData).then(response => {
@@ -451,7 +451,7 @@ export default {
         formData.append('files', item.raw)
       })
       if (!formData) {
-        this.$message.info("请选择要上传到服务器的文件");
+        this.$message.warning("请选择要上传到服务器的文件");
       }
       this.updateCompanyNameAForm.FileList = [];
       Uploads(formData).then(response => {
@@ -534,7 +534,7 @@ export default {
             });
             if (flag.length == 0) {
               this.LoadingAdd = false;
-              this.$message.info("文件上传完成或者修改需要点击一下上传服务器");
+              this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
               return;
             }
           }
@@ -547,7 +547,7 @@ export default {
             });
             if (flag.length == 0) {
               this.LoadingUpdate = false;
-              this.$message.info("文件上传完成或者修改需要点击一下上传服务器");
+              this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
               return;
             }
           }
@@ -588,7 +588,7 @@ export default {
             });
             if (flag.length == 0) {
               this.LoadingUpdate = false;
-              this.$message.info("文件上传完成或者修改需要点击一下上传服务器");
+              this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
               return;
             }
           }
@@ -601,7 +601,7 @@ export default {
             });
             if (flag.length == 0) {
               this.LoadingUpdate = false;
-              this.$message.info("文件上传完成或者修改需要点击一下上传服务器");
+              this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
               return;
             }
           }

@@ -10,18 +10,16 @@
           <el-row>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item label="到账时间">
-                <el-date-picker v-model="PaymentDate" style="width:100% ;" class="rangeTimeClass" type="daterange"
-                                range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions"
-                                clearable="" @input="datetimeChange"
-                />
+                <el-date-picker v-model="PaymentDate" style="width:100% ;" class="comentClass" type="daterange"
+                  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions"
+                  clearable="" @input="datetimeChange" />
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item label="收取时间">
-                <el-date-picker v-model="CollectionTime" style="width:100% ;" class="rangeTimeClass"
-                                type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-                                :picker-options="pickerOptions" clearable="" @input="datetimeChange"
-                />
+                <el-date-picker v-model="CollectionTime" style="width:100% ;" class="comentClass" type="daterange"
+                  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions"
+                  clearable="" @input="datetimeChange" />
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
@@ -30,7 +28,14 @@
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-button-group style="margin-left: 1.3rem;">
+              <el-form-item label="收款公司" prop="SecondPartyName">
+                <el-select v-model="SecondPartyName" class="comentClass" filterable placeholder="收款公司" clearable="">
+                  <el-option v-for="item in DicCategoryList" :key="item.Id" :label="item.Name" :value="item.Id" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+              <el-button-group style="margin-left: 1.3rem;margin-bottom: 18px;">
                 <el-button type="primary" icon="el-icon-search" @click="GetAdmin_PermissionSearch">查
                   询</el-button>
                 <el-button type="success" icon="el-icon-download" :loading="ExportLoading" @click="ExportCollection">导出数据
@@ -40,16 +45,24 @@
           </el-row>
         </el-row>
       </el-form>
-      <div :style="formShow" style="margin-left: 1.3rem;">
-        <el-tooltip v-if="totalMoney > 0" class="item" :content="descriptionMoney" placement="bottom">
-          <h5 style="width: 350px;color: #FF4949;margin: 1px 0px;">当前查询数据总金额：<span v-format="'¥#,##0.00'">{{
-            totalMoney
-          }}</span></h5>
-        </el-tooltip>
-        <h5 v-else style="width: 350px;color: #FF4949;margin: 1px 0px;">当前查询数据总金额：<span v-format="'¥#,##0.00'">{{
-          totalMoney
-        }}</span></h5>
-      </div>
+      <el-descriptions style="margin-left: 1.3rem;" class="margin-top" :column="descriptionColumn" border>
+        <el-descriptions-item v-for="item in TotalSecondPartyNameList" labelStyle="width:170px">
+          <template slot="label">
+            <i class="el-icon-money"></i>
+            {{ item.SecondPartyName }}
+          </template>
+          <div>
+            <el-tooltip v-if="item.Sum > 0" class="item" :content="item.SumDetail" placement="bottom">
+              <span style="color: #ff4949;" v-format="'¥#,##0.00'">{{
+                item.Sum
+              }}</span>
+            </el-tooltip>
+            <span style="color: #ff4949;" v-else v-format="'¥#,##0.00'">{{
+              item.Sum
+            }}</span>
+          </div>
+        </el-descriptions-item>
+      </el-descriptions>
     </el-card>
     <el-card class="CardTableClass">
       <el-table v-loading="loading" highlight-current-row :data="CollectionList" fit>
@@ -85,28 +98,31 @@
           </template>
         </el-table-column>
         <el-table-column prop="Remark" label="备注" align="left" min-width="250" show-overflow-tooltip />
-        <el-table-column v-if="StatesShow && fixedLeftShow" label="操作" fixed="right" width="120">
+        <el-table-column v-if="StatesShow && fixedLeftShow" label="操作" fixed="right" width="150">
           <template slot-scope="scope">
             <el-button icon="el-icon-edit" type="text" size="mini" @click="
               UpdateDialog(scope.row.InsProductPayCode, scope.row.Remark)
-            "
-            >修改备注</el-button>
+            ">修改</el-button>
+            <el-button icon="el-icon-view" type="text" size="mini" @click="
+              ShowDialog(scope.row)
+            ">详情</el-button>
           </template>
         </el-table-column>
-        <el-table-column v-else-if="StatesShow && !fixedLeftShow" label="操作" width="120">
+        <el-table-column v-else-if="StatesShow && !fixedLeftShow" label="操作" width="150">
           <template slot-scope="scope">
             <el-button icon="el-icon-edit" type="text" size="mini" @click="
               UpdateDialog(scope.row.InsProductPayCode, scope.row.Remark)
-            "
-            >修改备注</el-button>
+            ">修改</el-button>
+            <el-button icon="el-icon-view" type="text" size="mini" @click="
+              ShowDialog(scope.row)
+            ">详情</el-button>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
-                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
-      />
+      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]" :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
+        @current-change="handleCurrentChange" />
     </el-card>
 
     <el-dialog title="修改备注" :visible.sync="updateDialogVisible" width="30%">
@@ -123,6 +139,8 @@
         </el-row>
       </el-form>
     </el-dialog>
+    <ComponentsDialog :visible="dialogVisible" :ClickRow="ClickRow" @CloseDialog="CloseComponentsDialog">
+    </ComponentsDialog>
   </div>
 </template>
 
@@ -132,16 +150,25 @@ import {
   UpdateDataRemark,
   GetAdmin_PermissionExport,
 } from "@/api/CollectionMangement";
+import {
+  GetDicCategoryC,
+} from "@/api/SystemManagement";
+import ComponentsDialog from "./Components"
 import moment from "moment"; // 导入模块
 moment.locale("zh-cn"); // 设置语言 或 moment.lang('zh-cn');
 export default {
-  components: {},
+  components: { ComponentsDialog },
   data() {
     return {
+      DicCategoryList: [],
+      ClickRow: null,
+      dialogVisible: false,
+      SecondPartyName: '',
+      descriptionColumn: 3,
+      TotalSecondPartyNameList: [],
       fixedLeftShow: true,
       formShow: '',
       totalMoney: 0,
-      descriptionMoney: '',
       PaymentDate: [],
       PaymentDateBegin: "",
       PaymentDateEnd: "",
@@ -258,9 +285,12 @@ export default {
       this.fixedShowMethod(newVal);
     },
   },
-  created() { },
+  created() {
+    this.PaymentDate = [moment().subtract(1, 'months').startOf('month').format("YYYY-MM-DD"), moment().format('YYYY-MM-DD')];
+  },
   // 加载完成后执行调取回款数据接口
   mounted() {
+    this.GetDicCategoryC();
     this.fixedShowMethod(document.body.clientWidth);
     switch (sessionStorage.getItem("RoleCode")) {
       case "25302854-7FBE-F189-3AF2-784BBADE7F15":
@@ -273,6 +303,23 @@ export default {
     this.GetAdmin_Permission();
   },
   methods: {
+    ShowDialog(row) {
+      this.ClickRow = Object.assign({}, row); // 创建新的对象副本;
+      this.dialogVisible = true;
+    },
+    CloseComponentsDialog() {
+      this.dialogVisible = false;
+    },
+    // 获取乙方公司数据
+    GetDicCategoryC() {
+      GetDicCategoryC("", 1, 100000).then((res) => {
+        if (res.success) {
+          this.DicCategoryList = res.result.list;
+        } else {
+          this.DicCategoryList = [];
+        }
+      });
+    },
     datetimeChange(time) {
       // 强制刷新
       this.$forceUpdate();
@@ -341,19 +388,18 @@ export default {
         this.PaymentDateEnd,
         this.CollectionTimeBegin,
         this.CollectionTimeEnd,
+        this.SecondPartyName,
         this.queryInfo.pagenum,
         this.queryInfo.pagesize
       ).then((res) => {
         if (res.success) {
           this.CollectionList = res.result.list;
           this.total = res.result.totalNumber;
-          this.totalMoney = res.result1 ? res.result1 : 0;
-          this.descriptionMoney = res.result2;
+          this.TotalSecondPartyNameList = res.result1;
         } else {
           this.CollectionList = [];
           this.total = 0;
-          this.totalMoney = 0;
-          this.descriptionMoney = '';
+          this.TotalSecondPartyNameList = [];
         }
         this.loading = false;
       });
@@ -382,24 +428,30 @@ export default {
         this.PaymentDateBegin,
         this.PaymentDateEnd,
         this.CollectionTimeBegin,
-        this.CollectionTimeEnd).then(
-          (res) => {
-            if (res.success) {
-              window.location.href = res.result;
-            } else {
-              this.CollectionList = [];
-              this.total = 0;
-            }
-            this.ExportLoading = false;
+        this.CollectionTimeEnd,
+        this.SecondPartyName
+      ).then(
+        (res) => {
+          if (res.success) {
+            window.location.href = res.result;
+          } else {
+            this.CollectionList = [];
+            this.total = 0;
           }
-        );
+          this.ExportLoading = false;
+        }
+      );
     },
     fixedShowMethod(newVal) {
       // 上方表单距下方间距
       if (newVal < 768) {
+        this.descriptionColumn = 1;
+
         this.formShow = 'margin-top: 18px;';
         this.fixedLeftShow = false;
       } else {
+        this.descriptionColumn = 3;
+
         this.formShow = 'margin-top: 0;';
         this.fixedLeftShow = true;
       }
@@ -424,7 +476,7 @@ export default {
   margin-top: 20px;
 }
 
-.rangeTimeClass {
+.comentClass {
   width: 100%;
 }
 </style>

@@ -28,7 +28,7 @@
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
+      <el-pagination  background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
                      :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
                      @size-change="handleSizeChange" @current-change="handleCurrentChange"
       />
@@ -62,7 +62,7 @@
           <el-input v-model="UpdateDicCategoryCFrom.Name" />
         </el-form-item>
         <el-form-item label="合同编号前缀" prop="Remarks">
-          <el-input v-model="UpdateDicCategoryCFrom.Remarks" maxlength="4" minlength="4" @input="completeUpdate" />
+          <el-input disabled="" v-model="UpdateDicCategoryCFrom.Remarks" maxlength="4" minlength="4" @input="completeUpdate" />
         </el-form-item>
         <el-form-item label="排序">
           <el-input-number v-model="UpdateDicCategoryCFrom.Sort" precision="0" :min="1" />

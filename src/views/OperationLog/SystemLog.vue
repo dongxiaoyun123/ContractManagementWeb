@@ -21,7 +21,9 @@
               <el-tag v-if="item.Name == '修改数据'" effect="plain" type="warning">修改数据</el-tag>
               <el-tag v-if="item.Name == '删除数据'" effect="plain" type="danger">删除数据</el-tag>
               <el-tag v-if="item.Name == '导入数据'" effect="plain" type="success">导入数据</el-tag>
-              <el-tag v-if="item.Name == '导出数据'" effect="plain" type="info">导出数据</el-tag>
+              <el-tag v-if="item.Name == '导出数据'" effect="plain" type="info"
+                style="border-color: #13C2C2;color: #13C2C2;">导出数据</el-tag>
+              <el-tag v-if="item.Name == '错误数据'" effect="plain" style="border-color: #6959CD;color:#6959CD">错误数据</el-tag>
             </el-option>
           </el-select>
         </el-col>
@@ -51,7 +53,10 @@
             <el-tag v-if="scope.row.MenuDescription == '修改数据'" effect="plain" type="warning">修改数据</el-tag>
             <el-tag v-if="scope.row.MenuDescription == '删除数据'" effect="plain" type="danger">删除数据</el-tag>
             <el-tag v-if="scope.row.MenuDescription == '导入数据'" effect="plain" type="success">导入数据</el-tag>
-            <el-tag v-if="scope.row.MenuDescription == '导出数据'" effect="plain" type="info">导出数据</el-tag>
+            <el-tag v-if="scope.row.MenuDescription == '导出数据'" effect="plain" type="info"
+              style="border-color: #13C2C2;color: #13C2C2;">导出数据</el-tag>
+            <el-tag v-if="scope.row.MenuDescription == '错误数据'" effect="plain"
+              style="border-color: #6959CD;color:#6959CD">错误数据</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="CreateUserName" label="创建人" width="120" />
@@ -66,10 +71,9 @@
         <el-table-column show-overflow-tooltip prop="Description" label="描述" />
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
-                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
-      />
+      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]" :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
+        @current-change="handleCurrentChange" />
     </el-card>
   </div>
 </template>
@@ -133,6 +137,13 @@ export default {
           tab: "el-icon-download",
           color: "#909399",
         },
+        {
+          Code: "错误数据",
+          Name: "错误数据",
+          tab: "el-icon-error",
+          color: "#6959CD",
+        },
+
       ],
     };
   },
@@ -288,5 +299,4 @@ export default {
 
 .el-table .import {
   background: #f0f9eb;
-}
-</style>
+}</style>

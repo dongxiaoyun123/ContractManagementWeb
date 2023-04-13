@@ -1,27 +1,28 @@
 import request from '@/utils/request'
 // 获取回款数据列表
-export function GetAdmin_Permission(IfUser, Condition, States, PaymentDateBegin, PaymentDateEnd, CollectionTimeBegin, CollectionTimeEnd, PageIndex, PageSize) {
+export function GetAdmin_Permission(Condition, States, PaymentDateBegin, PaymentDateEnd, CollectionTimeBegin, CollectionTimeEnd, SecondPartyName, PageIndex, PageSize) {
   States = States || 0;
   return request({
-    url: '/CollectionMangement/GetAdmin_Permission?IfUser=' + IfUser + '&Condition=' + Condition + '&States=' + States +
-      '&PaymentDateBegin=' + PaymentDateBegin + '&PaymentDateEnd=' + PaymentDateEnd + '&CollectionTimeBegin=' + CollectionTimeBegin + '&CollectionTimeEnd=' + CollectionTimeEnd + '&PageIndex=' + PageIndex + '&PageSize=' + PageSize,
+    url: '/CollectionMangement/GetAdmin_Permission?Condition=' + Condition + '&States=' + States +
+      '&PaymentDateBegin=' + PaymentDateBegin + '&PaymentDateEnd=' + PaymentDateEnd + '&CollectionTimeBegin=' + CollectionTimeBegin + '&CollectionTimeEnd=' + CollectionTimeEnd + '&SecondPartyName=' + SecondPartyName + '&PageIndex=' + PageIndex + '&PageSize=' + PageSize,
     method: 'post',
   });
 }
 // 导出回款数据
-export function GetAdmin_PermissionExport(IfUser, Condition, States, PaymentDateBegin, PaymentDateEnd, CollectionTimeBegin, CollectionTimeEnd) {
+export function GetAdmin_PermissionExport(Condition, States, PaymentDateBegin, PaymentDateEnd, CollectionTimeBegin, CollectionTimeEnd, SecondPartyName) {
   States = States || 0;
   return request({
-    url: '/CollectionMangement/GetAdmin_PermissionExport?IfUser=' + IfUser + '&Condition=' + Condition + '&States=' + States +
-      '&PaymentDateBegin=' + PaymentDateBegin + '&PaymentDateEnd=' + PaymentDateEnd + '&CollectionTimeBegin=' + CollectionTimeBegin + '&CollectionTimeEnd=' + CollectionTimeEnd + '&PageIndex=1' + '&PageSize=100000',
+    url: '/CollectionMangement/GetAdmin_PermissionExport?Condition=' + Condition + '&States=' + States +
+      '&PaymentDateBegin=' + PaymentDateBegin + '&PaymentDateEnd=' + PaymentDateEnd + '&CollectionTimeBegin=' + CollectionTimeBegin + '&CollectionTimeEnd=' + CollectionTimeEnd + '&SecondPartyName=' + SecondPartyName + '&PageIndex=1' + '&PageSize=100000',
     method: 'post',
   });
 }
 // 修改回款数据
-export function UpdateData(InsProductPayCode, Remark) {
+export function UpdateData(parameter) {
   return request({
-    url: '/CollectionMangement/UpdateData?InsProductPayCode=' + InsProductPayCode + '&Remark=' + Remark,
+    url: '/CollectionMangement/UpdateData',
     method: 'post',
+    data: parameter
   });
 }
 
@@ -29,6 +30,15 @@ export function UpdateData(InsProductPayCode, Remark) {
 export function UpdateDataRemark(InsProductPayCode, Remark) {
   return request({
     url: '/CollectionMangement/UpdateDataRemark?InsProductPayCode=' + InsProductPayCode + '&Remark=' + Remark,
+    method: 'post',
+  });
+}
+
+
+// 根据回款公司名称获取账单
+export function GetCollectionOrderNyName(EnterPriseName) {
+  return request({
+    url: '/CollectionMangement/GetCollectionOrderNyName?EnterPriseName=' + EnterPriseName,
     method: 'post',
   });
 }
@@ -262,9 +272,9 @@ export function GetContractOrder(ContractCode, ContractName, CompanyName, Invoic
   });
 }
 
-export function GetContractNameList() {
+export function GetContractNameList(where, id) {
   return request({
-    url: '/CollectionMangement/GetContractNameList',
+    url: '/CollectionMangement/GetContractNameList?where=' + where + "&Id=" + id,
     method: 'post'
   });
 }
@@ -398,6 +408,12 @@ export function DeleteCollectionData(InsProductPayCode) {
 export function PlaceFileMethod(ContractDetailCode) {
   return request({
     url: '/CollectionMangement/PlaceFileMethod?ContractDetailCode=' + ContractDetailCode,
+    method: 'post',
+  });
+}
+export function GetCollectionOrderNyId(InsProductPayCode) {
+  return request({
+    url: '/CollectionMangement/GetCollectionOrderNyId?InsProductPayCode=' + InsProductPayCode,
     method: 'post',
   });
 }

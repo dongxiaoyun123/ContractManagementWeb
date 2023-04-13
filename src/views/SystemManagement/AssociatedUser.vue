@@ -50,7 +50,7 @@
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
+      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
                      :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
                      @size-change="handleSizeChange" @current-change="handleCurrentChange"
       />
@@ -128,7 +128,7 @@ export default {
     // 保存修改
     saveUpdate(Flag) {
       if (!this.UserStr) {
-        this.$message.info("请勾选要修改的用户！");
+        this.$message.warning("请勾选要修改的用户！");
         return;
       }
       if (Flag) this.ExportLoading1 = true;
