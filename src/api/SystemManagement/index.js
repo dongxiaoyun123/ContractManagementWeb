@@ -80,9 +80,9 @@ export function BindRole_Permissions(model) {
 }
 
 // 获取用户列表
-export function GetAdmin_User(DepartmentCode, PositionStatus, User_RealName, PageIndex, PageSize) {
+export function GetAdmin_User(DepartmentCode, PositionStatus, User_RealName, RoleCode, PageIndex, PageSize) {
   return request({
-    url: '/SystemManagement/GetAdmin_User?DepartmentCode=' + DepartmentCode + '&PositionStatus=' + PositionStatus + '&User_RealName=' + User_RealName + '&PageIndex=' + PageIndex + '&PageSize=' + PageSize,
+    url: '/SystemManagement/GetAdmin_User?DepartmentCode=' + DepartmentCode + '&PositionStatus=' + PositionStatus + '&User_RealName=' + User_RealName + '&RoleCode=' + RoleCode + '&PageIndex=' + PageIndex + '&PageSize=' + PageSize,
     method: 'post',
   });
 }

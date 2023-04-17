@@ -1662,6 +1662,10 @@
         </el-table-column>
       </el-table>
     </el-dialog>
+    <div v-if="isShowProgress" class="popContainer">
+      <el-progress :percentage="parseInt(fakes.progress * 100)" :text-inside="true" :stroke-width="24"
+        :color="customColors" style="top: 30%; left: 28%; width: 44%"></el-progress>
+    </div>
   </div>
 </template>
 
@@ -1708,6 +1712,7 @@ import moment from "moment"; // 导入模块
 moment.locale("zh-cn"); // 设置语言 或 moment.lang('zh-cn');
 import draggable from 'vuedraggable'
 import collapse from '../../assets/js/collapse'
+import FakeProgress from 'fake-progress';
 let geocoder;
 export default {
   inject: ['reload'],
@@ -1777,28 +1782,16 @@ export default {
       }
     };
     return {
+      isShowProgress: false,
+      fakes: new FakeProgress({
+        timeConstant: 10000,
+        autoStart: false
+      }),
       size: 'small',
       ArchivedType: '',
       ArchivedTypeList: [],
       placeFileLoading: false,
       CompanyRelationList: [],
-      gridData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }],
       OldContractAmount: null,
       CorporationDatasParent: [],
       selectCorporationDatasParent: [],
@@ -3898,6 +3891,8 @@ export default {
     // 导出数据
     exportContracts() {
       this.ExportLoading = true;
+      this.isShowProgress = true;
+      this.fakes.start();
       // let begin = "";
       // let end = "";
       // if (this.ContractRangeTime && this.ContractRangeTime.length > 0) {
@@ -3945,6 +3940,15 @@ export default {
         1,
         100000
       ).then((res) => {
+        this.fakes.end();
+          //初始化进度条
+          setTimeout(() => {
+            this.fakes = new FakeProgress({
+              timeConstant: 10000,
+              autoStart: false
+            });
+            this.isShowProgress = false;
+          }, 800)
         if (res.success) {
           window.location.href = res.result;
         } else {
@@ -4774,5 +4778,15 @@ export default {
 .companyNameTransition-leave-to {
   opacity: 0;
   transform: translate(-50px, 50px) scale(0.3);
+}
+/*遮罩层*/
+.popContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999999;
+  background: rgba(0, 0, 0, 0.6);
 }
 </style>

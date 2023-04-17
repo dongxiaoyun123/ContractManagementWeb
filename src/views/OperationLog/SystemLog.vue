@@ -24,6 +24,7 @@
               <el-tag v-if="item.Name == '导出数据'" effect="plain" type="info"
                 style="border-color: #13C2C2;color: #13C2C2;">导出数据</el-tag>
               <el-tag v-if="item.Name == '错误数据'" effect="plain" style="border-color: #6959CD;color:#6959CD">错误数据</el-tag>
+              <el-tag v-if="item.Name == '撤回数据'" effect="plain" style="border-color: #212121;color:#212121">撤回数据</el-tag>
             </el-option>
           </el-select>
         </el-col>
@@ -57,6 +58,8 @@
               style="border-color: #13C2C2;color: #13C2C2;">导出数据</el-tag>
             <el-tag v-if="scope.row.MenuDescription == '错误数据'" effect="plain"
               style="border-color: #6959CD;color:#6959CD">错误数据</el-tag>
+              <el-tag v-if="scope.row.MenuDescription == '撤回数据'" effect="plain"
+              style="border-color: #212121;color:#212121">撤回数据</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="CreateUserName" label="创建人" width="120" />
@@ -143,7 +146,12 @@ export default {
           tab: "el-icon-error",
           color: "#6959CD",
         },
-
+        {
+          Code: "撤回数据",
+          Name: "撤回数据",
+          tab: "el-icon-error",
+          color: "#212121",
+        },
       ],
     };
   },

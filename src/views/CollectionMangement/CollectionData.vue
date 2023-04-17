@@ -61,8 +61,7 @@
                     </el-dropdown-item>
                     <el-dropdown-item :disabled="IfUser != '3'" command="b" icon="el-icon-upload2">上传文件 {{ "\xa0" }}
                     </el-dropdown-item>
-                    <el-dropdown-item :disabled="!StatesShow" command="c" icon="el-icon-document"
-                      :loading="ExportLoading">导出数据
+                    <el-dropdown-item :disabled="!StatesShow" command="c" icon="el-icon-document">导出数据
                       {{ "\xa0" }}</el-dropdown-item>
                     <!-- <el-dropdown-item command="d" v-if="StatesShow" icon="el-icon-edit">改为已回款
                     </el-dropdown-item> -->
@@ -165,6 +164,12 @@
             <span v-format="'¥#,##0.00'">{{ scope.row.AmountMoney }}</span>
           </template>
         </el-table-column>
+        <el-table-column prop="RemainingAmount" label="余额" min-width="100" sortable="">
+          <template slot-scope="scope">
+            <span v-format="'¥#,##0.00'" style="color:#13C2C2 ;">{{ scope.row.RemainingAmount }}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column prop="PaymentDate" label="到账时间" min-width="110">
           <template slot-scope="scope">
             <div v-if="scope.row.PaymentDate">
@@ -181,9 +186,9 @@
               <div slot="content">
                 <div style="display: flex;  align-items: center;">
                   <span slot="reference" style="margin: 0 10px 0 6px;" class="SecondPartyNameClass">
-                    <div> <el-tag  key="未回款" effect="dark" type="danger" >未回款</el-tag></div>
-                    <div><el-tag  key="已回款" effect="dark" type="success">已回款</el-tag></div>
-                    <div style="margin-bottom: 0;"><el-tag  key="有余额" effect="dark">有余额</el-tag></div>
+                    <div> <el-tag key="未回款" effect="dark" type="danger">未回款</el-tag></div>
+                    <div><el-tag key="已回款" effect="dark" type="success">已回款</el-tag></div>
+                    <div style="margin-bottom: 0;"><el-tag key="有余额" effect="dark">有余额</el-tag></div>
                   </span>
                 </div>
               </div>
@@ -206,7 +211,6 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="Remark" label="备注" align="left" min-width="250" show-overflow-tooltip />
         <el-table-column prop="User_Name" label="收取人" min-width="100" />
         <el-table-column prop="CollectionTime" label="收取时间" min-width="170">
           <template slot-scope="scope">
@@ -216,6 +220,7 @@
             </div>
           </template>
         </el-table-column>
+        <el-table-column prop="Remark" label="备注" align="left" min-width="250" show-overflow-tooltip />
         <el-table-column label="操作" fixed="right" width="220" v-if="StatesShow">
           <template slot-scope="scope">
             <el-button v-if="scope.row.States != 2" icon="el-icon-refresh-left" type="text" size="mini" @click="
@@ -231,9 +236,9 @@
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100, 500]" :page-size="queryInfo.pagesize"
-        layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
-        @current-change="handleCurrentChange" />
+      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100, 500]"
+        :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
     <el-dialog title="回款" :visible.sync="updateDialogVisible" top="5vh" width="70%">
       <el-descriptions v-if="ClickRow" class="margin-top" :column="3" border>
@@ -372,8 +377,12 @@
         </el-row>
       </el-form>
     </el-dialog>
-    <ComponentsDialog :visible="dialogVisible" :ClickRow="ClickRow" @CloseDialog="CloseComponentsDialog">
+    <ComponentsDialog :visible="dialogVisible" :ClickRow="ClickRow" @CloseDialog="CloseComponentsDialog" @CloseDialogReflesh="RenovateDataDialog">
     </ComponentsDialog>
+    <div v-if="isShowProgress" class="popContainer">
+      <el-progress :percentage="parseInt(fakes.progress * 100)" :text-inside="true" :stroke-width="24"
+        :color="customColors" style="top: 30%; left: 28%; width: 44%"></el-progress>
+    </div>
   </div>
 </template>
 
@@ -394,11 +403,22 @@ import axios from "axios";
 import { showLoading, hideLoading } from "@/common/loading";
 import ComponentsDialog from "./Components"
 import moment from 'moment';
-
+import FakeProgress from 'fake-progress';
 export default {
   components: { ComponentsDialog },
   data() {
     return {
+      fakes: new FakeProgress({
+        timeConstant: 10000,
+        autoStart: false
+      }),
+      customColors: [
+        { color: '#ff4949', percentage: 20 },
+        { color: '#ffba00', percentage: 40 },
+        { color: '#5cb87a', percentage: 60 },
+        { color: '#1989fa', percentage: 80 },
+        { color: '#6f7ad3', percentage: 100 }
+      ],
       LoadingDetailUpdate: false,
       CollectionLoading: false,
       dialogVisible: false,
@@ -413,7 +433,6 @@ export default {
       multipleSelection: [],
       colRight: 20,
       tipWidth: 4,
-      ExportLoading: false,
       uploadLoading: false,
       accessKeyId: "",
       accessKeySecret: "",
@@ -549,6 +568,7 @@ export default {
           },
         ],
       },
+      isShowProgress: false,
     };
   },
   watch: {
@@ -641,7 +661,11 @@ export default {
     CloseComponentsDialog() {
       this.dialogVisible = false;
     },
-
+    //撤回操作并刷新页面
+    RenovateDataDialog(){
+      this.dialogVisible = false;
+      this.GetAdmin_Permission();
+    },
     handleChange(row) {
       //验证输入是否金额，如果不是直接返回
       row.ServReceiveNew = /^\d+\.?\d{0,2}$/.test(row.ServReceiveNew) ?
@@ -914,7 +938,8 @@ export default {
     },
     // 导出数据
     ExportCollection() {
-      this.ExportLoading = true;
+      this.isShowProgress = true;
+      this.fakes.start();
       if (this.PaymentDate && this.PaymentDate.length > 0) {
         this.PaymentDateBegin = this.$moment(this.PaymentDate[0]).format("YYYY-MM-DD");
         this.PaymentDateEnd = this.$moment(this.PaymentDate[1]).format("YYYY-MM-DD");
@@ -931,13 +956,21 @@ export default {
         this.SecondPartyName,
       ).then(
         (res) => {
+          this.fakes.end();
+          //初始化进度条
+          setTimeout(() => {
+            this.fakes = new FakeProgress({
+              timeConstant: 10000,
+              autoStart: false
+            });
+            this.isShowProgress = false;
+          }, 800)
           if (res.success) {
             window.location.href = res.result;
           } else {
             this.CollectionList = [];
             this.total = 0;
           }
-          this.ExportLoading = false;
         }
       );
     },
@@ -1065,5 +1098,16 @@ export default {
 
 .SecondPartyNameClass div {
   margin-bottom: 10px;
+}
+
+/*遮罩层*/
+.popContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999999;
+  background: rgba(0, 0, 0, 0.6);
 }
 </style>

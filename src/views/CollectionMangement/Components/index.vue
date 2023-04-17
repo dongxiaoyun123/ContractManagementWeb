@@ -74,20 +74,31 @@
                 <el-input v-else disabled="" v-model="Remark" type="textarea" :rows="3" />
             </el-form-item>
         </el-form>
+        <el-divider />
+        <el-row v-if="CancelShow" style="text-align:center;">
+            <el-col :span="24">
+                <el-button :disabled="DisabledShow" :loading="CancelLoading" type="danger"
+                    @click="CancelSubmit">全部撤回</el-button>
+            </el-col>
+        </el-row>
     </el-dialog>
 </template>
   
 <script>
 import {
-    GetCollectionOrderNyId
+    GetCollectionOrderNyId,
+    UpdateDataCancel
 } from "@/api/CollectionMangement";
 export default {
     data() {
         return {
+            CancelLoading: false,
             ChildVisible: false,
             loading: false,
             CollectionOrderData: [],
-            Remark:''
+            Remark: '',
+            CancelShow: false,
+            DisabledShow: true,
         }
     },
     props: {
@@ -110,6 +121,17 @@ export default {
             deep: true,  // 可以深度检测到 obj 对象的属性值的变化
         },
     },
+    mounted() {
+        switch (sessionStorage.getItem("RoleName")) {
+            case "超级管理员":
+            case "总客服":
+                this.CancelShow = true;
+                break;
+            default:
+                this.CancelShow = false;
+                break;
+        }
+    },
     methods: {
         //根据回款编号和账单编号获取账单
         GetCollectionOrderNyId() {
@@ -118,6 +140,10 @@ export default {
                 this.loading = false;
                 if (res.success) {
                     this.CollectionOrderData = res.result;
+                    if (this.CollectionOrderData.length != 0)
+                        this.DisabledShow = false;
+                    else
+                        this.DisabledShow = true;
                 }
                 else {
                     this.CollectionOrderData = [];
@@ -127,6 +153,35 @@ export default {
         cancel() {
             this.ChildVisible = false;
             this.$emit('CloseDialog');
+        },
+        cancelRefleshData() {
+            this.ChildVisible = false;
+            this.$emit('CloseDialogReflesh');
+        },
+        //全部撤回
+        async CancelSubmit() {
+            const confirmResult = await this.$confirm(
+                "此操作将撤回此条数据的全部账单回款数据, 是否继续?",
+                "提示",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                }
+            ).catch((err) => err);
+            if (confirmResult !== "confirm") {
+                return this.$message.warning("已取消操作");
+            }
+            this.CancelLoading = true;
+            UpdateDataCancel(this.ClickRow.InsProductPayCode).then((res) => {
+                this.CancelLoading = false;
+                if (res.success) {
+                    this.$message.success("操作成功！");
+                    this.cancelRefleshData();
+                } else {
+                    return this.$message.error(res.resultMessage);
+                }
+            });
         },
         rowSpanMethod({ row, column, rowIndex, columnIndex }) {
             if (columnIndex === 1) {

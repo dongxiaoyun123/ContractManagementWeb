@@ -139,7 +139,7 @@
           </template>
         </el-table-column>
         <el-table-column v-if="fixedLeftShow" key="AuditStatusName" prop="AuditStatusName" label="审核状态" width="120"
-           fixed="left">
+          fixed="left">
           <template slot-scope="{}" slot="header">
             <span>审核状态</span>
             <el-tooltip class="item" effect="dark" placement="top" style="margin-left: 5px;margin-bottom: 0.2rem">
@@ -273,9 +273,9 @@
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]" :page-size="queryInfo.pagesize"
-        layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
-        @current-change="handleCurrentChange" />
+      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
+        :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
 
     <!-- 添加合同弹出页面 -->
@@ -556,6 +556,11 @@
         </el-row>
       </el-form>
     </el-dialog>
+
+    <div v-if="isShowProgress" class="popContainer">
+      <el-progress :percentage="parseInt(fakes.progress * 100)" :text-inside="true" :stroke-width="24"
+        :color="customColors" style="top: 30%; left: 28%; width: 44%"></el-progress>
+    </div>
   </div>
 </template>
 
@@ -584,12 +589,25 @@ import moment from "moment"; // 导入模块
 moment.locale("zh-cn"); // 设置语言 或 moment.lang('zh-cn');
 import { showLoading, hideLoading } from "@/common/loading";
 import collapse from '../../assets/js/collapse'
+import FakeProgress from 'fake-progress';
 export default {
   components: {
     collapse
   },
   data() {
     return {
+      isShowProgress: false,
+      fakes: new FakeProgress({
+        timeConstant: 10000,
+        autoStart: false
+      }),
+      customColors: [
+        { color: '#ff4949', percentage: 20 },
+        { color: '#ffba00', percentage: 40 },
+        { color: '#5cb87a', percentage: 60 },
+        { color: '#1989fa', percentage: 80 },
+        { color: '#6f7ad3', percentage: 100 }
+      ],
       formShow: 'margin-bottom:"0"',
       fixedLeftShow: false,
       fixedRightShow: 'right',
@@ -1379,6 +1397,8 @@ export default {
     // 导出数据
     exportSupplier() {
       this.ExportLoading = true;
+      this.isShowProgress = true;
+      this.fakes.start();
       if (this.ContractSignTime && this.ContractSignTime.length > 0) {
         this.BeginSignTime = this.$moment(this.ContractSignTime[0]).format("YYYY-MM-DD");
         this.EndSignTime = this.$moment(this.ContractSignTime[1]).format("YYYY-MM-DD");
@@ -1400,6 +1420,15 @@ export default {
         this.BeginTime,
         this.EndTime,
       ).then((res) => {
+        this.fakes.end();
+        //初始化进度条
+        setTimeout(() => {
+          this.fakes = new FakeProgress({
+            timeConstant: 10000,
+            autoStart: false
+          });
+          this.isShowProgress = false;
+        }, 800)
         if (res.success) {
           window.location.href = res.result;
         } else {
@@ -1526,6 +1555,17 @@ export default {
 .CompanySelectClass {
   float: left;
   width: calc(100% - 60px)
+}
+
+/*遮罩层*/
+.popContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999999;
+  background: rgba(0, 0, 0, 0.6);
 }
 </style>
 

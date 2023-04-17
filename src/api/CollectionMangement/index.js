@@ -417,3 +417,10 @@ export function GetCollectionOrderNyId(InsProductPayCode) {
     method: 'post',
   });
 }
+
+export function UpdateDataCancel(InsProductPayCode) {
+  return request({
+    url: '/CollectionMangement/UpdateDataCancel?InsProductPayCode=' + InsProductPayCode,
+    method: 'post',
+  });
+}
