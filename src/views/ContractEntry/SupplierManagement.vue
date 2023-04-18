@@ -118,7 +118,7 @@
       </el-form>
     </el-card>
     <el-card class="CardTableClass">
-      <el-table ref="multipleTable" v-loading="loading" :data="ContractData" fit :cell-style="isRed"
+      <el-table class="tableCheckClass" ref="multipleTable" v-loading="loading" :data="ContractData" fit :cell-style="isRed"
         @selection-change="TableSelect" @row-click="toggleSelection">
         <el-table-column v-if="fixedLeftShow" key="checked" type="selection" width="50" fixed="left" />
         <el-table-column v-else key="checkedFalse" type="selection" width="50" />
@@ -556,10 +556,9 @@
         </el-row>
       </el-form>
     </el-dialog>
-
     <div v-if="isShowProgress" class="popContainer">
-      <el-progress :percentage="parseInt(fakes.progress * 100)" :text-inside="true" :stroke-width="24"
-        :color="customColors" style="top: 30%; left: 28%; width: 44%"></el-progress>
+      <el-progress type="circle" :percentage="parseInt(fakes.progress * 100)" :stroke-width="9" :color="customColors"
+        style="top: 30%; left: calc(50vw - 58px);color:white"></el-progress>
     </div>
   </div>
 </template>
@@ -1566,6 +1565,9 @@ export default {
   bottom: 0;
   z-index: 999999;
   background: rgba(0, 0, 0, 0.6);
+}
+::v-deep .el-progress__text {
+  color: white !important;
 }
 </style>
 

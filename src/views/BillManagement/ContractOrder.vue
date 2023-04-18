@@ -97,7 +97,7 @@
       </el-form>
     </el-card>
     <el-card class="CardTableClass">
-      <el-table ref="multipleTable" v-loading="loading" :data="ContractData" fit :cell-style="isRed"
+      <el-table class="tableCheckClass" ref="multipleTable" v-loading="loading" :data="ContractData" fit :cell-style="isRed"
         @selection-change="TableSelect" @row-click="toggleSelection">
         <el-table-column v-if="fixedLeftShow" key="column" type="selection" width="50" fixed="left" />
         <el-table-column v-else key="columnFalse" type="selection" width="50" />
@@ -830,8 +830,8 @@ export default {
       ],
       // 添加合同正则验证
       addContractOrderRules: {
-        Id: [
-          { required: true, message: "请选择合同名称", trigger: "change" },
+        ContractCode: [
+          { required: true, message: "请选择合同", trigger: "change" },
         ],
         // CompanyId: [
         //     { required: true, message: "请选择公司名称", trigger: "change" },
@@ -914,7 +914,6 @@ export default {
   },
   methods: {
     handleChangeAdd(CustomAmount, index) {
-      debugger
       //验证输入是否金额，如果不是直接返回
       this.addContractOrderForm.domains[index].CustomAmount = /^\d+\.?\d{0,2}$/.test(CustomAmount) ?
         CustomAmount :

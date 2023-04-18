@@ -21,7 +21,7 @@
       </el-row>
     </el-card>
     <el-card class="CardTableClass">
-      <el-table ref="multipleTable" v-loading="loading" :data="CollectionList" fit
+      <el-table class="tableCheckClass" ref="multipleTable" v-loading="loading" :data="CollectionList" fit
                 :cell-style="isRed" @selection-change="TableSelect" @row-click="toggleSelection"
       >
         <!-- :row-class-name="tableRowClassName" -->

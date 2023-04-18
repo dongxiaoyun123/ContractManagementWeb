@@ -98,7 +98,6 @@ const actions = {
           commit('SET_TOKEN', UserAccess_token)
           // commit('SET_MenuPermissions', MenuPermissions)
           if (roleArray.length != 0) { resolve(roleArray) }
-          debugger
           sessionStorage.setItem("RoleName", RoleName);
           sessionStorage.setItem("token", UserAccess_token);
           sessionStorage.setItem("RoleCode", RoleCode);

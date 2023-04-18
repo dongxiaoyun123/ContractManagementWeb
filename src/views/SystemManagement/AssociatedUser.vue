@@ -20,7 +20,7 @@
       </el-row>
     </el-card>
     <el-card class="CardTableClass">
-      <el-table ref="multipleTable" v-loading="loading" :data="BindingUserList" fit
+      <el-table class="tableCheckClass" ref="multipleTable" v-loading="loading" :data="BindingUserList" fit
                 :cell-style="isRed" @selection-change="TableSelect" @row-click="toggleSelection"
       >
         <el-table-column type="selection" width="50" />

@@ -46,8 +46,6 @@
               <el-button-group style="margin-left: 1.3rem;margin-bottom: 18px;">
                 <el-button type="primary" icon="el-icon-search" @click="GetAdmin_PermissionSearch">查 询
                 </el-button>
-                <!-- <el-button v-if="StatesShow" type="success" icon="el-icon-edit" @click="UpdateDialog">
-                  回 款</el-button> -->
                 <el-dropdown trigger="click" style="margin-left: 0;" @command="
                   (command) => {
                     handleButtonCommand(command);
@@ -57,15 +55,15 @@
                     更 多<i class="el-icon-arrow-down el-icon--right" />
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :disabled="IfUser != '3'" command="a" icon="el-icon-download">模板下载{{ "\xa0" }}
+                    <el-dropdown-item :disabled="IfUser" command="a" icon="el-icon-download">模板下载{{ "\xa0" }}
                     </el-dropdown-item>
-                    <el-dropdown-item :disabled="IfUser != '3'" command="b" icon="el-icon-upload2">上传文件 {{ "\xa0" }}
+                    <el-dropdown-item :disabled="IfUser" command="b" icon="el-icon-upload2">上传文件 {{ "\xa0" }}
                     </el-dropdown-item>
                     <el-dropdown-item :disabled="!StatesShow" command="c" icon="el-icon-document">导出数据
                       {{ "\xa0" }}</el-dropdown-item>
                     <!-- <el-dropdown-item command="d" v-if="StatesShow" icon="el-icon-edit">改为已回款
                     </el-dropdown-item> -->
-                    <el-dropdown-item :disabled="IfUser != '3'" command="e" icon="el-icon-delete">批量撤回 {{ "\xa0" }}
+                    <el-dropdown-item :disabled="IfUser" command="e" icon="el-icon-delete">批量撤回 {{ "\xa0" }}
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -112,7 +110,7 @@
       </el-form>
     </el-card>
     <el-card class="CardTableClass">
-      <el-table ref="multipleTable" v-loading="loading" :data="CollectionList" fit :cell-style="showBackground"
+      <el-table class="tableCheckClass" ref="multipleTable" v-loading="loading" :data="CollectionList" fit :cell-style="showBackground"
         @selection-change="TableSelect" @row-click="toggleSelection">
         <el-table-column type="selection" width="50" />
         <el-table-column prop="EnterPriseName" label="公司名称" min-width="200" show-overflow-tooltip />
@@ -221,7 +219,20 @@
           </template>
         </el-table-column>
         <el-table-column prop="Remark" label="备注" align="left" min-width="250" show-overflow-tooltip />
-        <el-table-column label="操作" fixed="right" width="220" v-if="StatesShow">
+        <el-table-column label="操作" fixed="right" width="220" v-if="fixedLeftShow">
+          <template slot-scope="scope">
+            <el-button v-if="scope.row.States != 2" icon="el-icon-refresh-left" type="text" size="mini" @click="
+              UpdateDialog(scope.row)
+            ">回款</el-button>
+            <el-button icon="el-icon-view" type="text" size="mini" @click="
+              ShowDialog(scope.row)
+            ">详情</el-button>
+            <el-button icon="el-icon-edit" type="text" size="mini" @click="
+              UpdateDetailDialog(scope.row.InsProductPayCode, scope.row.Remark)
+            ">修改</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="220" v-else>
           <template slot-scope="scope">
             <el-button v-if="scope.row.States != 2" icon="el-icon-refresh-left" type="text" size="mini" @click="
               UpdateDialog(scope.row)
@@ -377,11 +388,12 @@
         </el-row>
       </el-form>
     </el-dialog>
-    <ComponentsDialog :visible="dialogVisible" :ClickRow="ClickRow" @CloseDialog="CloseComponentsDialog" @CloseDialogReflesh="RenovateDataDialog">
+    <ComponentsDialog :visible="dialogVisible" :ClickRow="ClickRow" @CloseDialog="CloseComponentsDialog"
+      @CloseDialogReflesh="RenovateDataDialog">
     </ComponentsDialog>
     <div v-if="isShowProgress" class="popContainer">
-      <el-progress :percentage="parseInt(fakes.progress * 100)" :text-inside="true" :stroke-width="24"
-        :color="customColors" style="top: 30%; left: 28%; width: 44%"></el-progress>
+      <el-progress type="circle" :percentage="parseInt(fakes.progress * 100)" :stroke-width="9" :color="customColors"
+        style="top: 30%; left: calc(50vw - 58px);color:white"></el-progress>
     </div>
   </div>
 </template>
@@ -408,6 +420,7 @@ export default {
   components: { ComponentsDialog },
   data() {
     return {
+      fixedLeftShow: true,
       fakes: new FakeProgress({
         timeConstant: 10000,
         autoStart: false
@@ -449,7 +462,7 @@ export default {
       PaymentDate: [], // 到账时间查询字段
       PaymentDateBegin: "",
       PaymentDateEnd: "",
-      IfUser: "",
+      IfUser: false,
       LoadingUpdate: false,
       CustomerName: "",
       mobile_phone: "",
@@ -585,23 +598,24 @@ export default {
   },
   // 加载完成后执行调取回款数据接口
   mounted() {
+    this.fixedShowMethod(this.$store.getters.clientWidth);
     switch (sessionStorage.getItem("RoleName")) {
       case "超级管理员":
-        this.IfUser = "3";
+      case "总客服":
+        this.IfUser = false;
         this.StatesShow = true;
         break;
-      case "总客服":
       case "财务":
-        this.IfUser = "3";
+        this.IfUser = false;
         this.StatesShow = false;
         break;
       case "HRO":
       case "客服":
-        this.IfUser = "1";
+        this.IfUser = true;
         this.StatesShow = true;
         break;
       default:
-        this.IfUser = "1";
+        this.IfUser = true;
         this.StatesShow = true;
         break;
     }
@@ -636,7 +650,7 @@ export default {
     },
     //为要复制的单元格填充背景颜色
     showCollection({ row, column }) {
-      debugger
+      
       if (column.label == "实际应缴") {
         return {
           backgroundColor: "#F0F9EB",
@@ -662,7 +676,7 @@ export default {
       this.dialogVisible = false;
     },
     //撤回操作并刷新页面
-    RenovateDataDialog(){
+    RenovateDataDialog() {
       this.dialogVisible = false;
       this.GetAdmin_Permission();
     },
@@ -791,7 +805,7 @@ export default {
     // 保存修改
     saveUpdate() {
       // this.LoadingUpdate = true;
-      debugger
+      
       if (this.ClickRowOld.RemainingAmount == this.ClickRow.RemainingAmount) {
         this.$message.info("无修改");
         return;
@@ -1054,11 +1068,14 @@ export default {
     },
 
     fixedShowMethod(newVal) {
+      
       if (newVal < 768) {
         this.descriptionColumn = 1;
+        this.fixedLeftShow = false;
       }
       else {
         this.descriptionColumn = 3;
+        this.fixedLeftShow = true;
       }
     }
   },
@@ -1109,5 +1126,9 @@ export default {
   bottom: 0;
   z-index: 999999;
   background: rgba(0, 0, 0, 0.6);
+}
+
+::v-deep .el-progress__text {
+  color: white !important;
 }
 </style>
