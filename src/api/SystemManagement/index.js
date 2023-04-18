@@ -121,7 +121,6 @@ export function DeleteAdmin_User(User_ID) {
   });
 }
 export function UpdatePasswordCommit(model) {
-  debugger
   return request({
     url: '/SystemManagement/UpdatePasswordCommit',
     method: 'post',
