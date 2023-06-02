@@ -17,10 +17,18 @@ export function GetAdmin_PermissionExport(Condition, States, PaymentDateBegin, P
     method: 'post',
   });
 }
-// 修改回款数据
+// 修改回款数据（客服）
 export function UpdateData(parameter) {
   return request({
     url: '/CollectionMangement/UpdateData',
+    method: 'post',
+    data: parameter
+  });
+}
+// 修改回款数据(其它角色)
+export function UpdateOtherData(parameter) {
+  return request({
+    url: '/CollectionMangement/UpdateOtherData',
     method: 'post',
     data: parameter
   });
@@ -35,7 +43,7 @@ export function UpdateDataRemark(InsProductPayCode, Remark) {
 }
 
 
-// 根据回款公司名称获取账单
+// 根据回款公司名称获取账单(客服)
 export function GetCollectionOrderNyName(EnterPriseName) {
   return request({
     url: '/CollectionMangement/GetCollectionOrderNyName?EnterPriseName=' + EnterPriseName,
@@ -43,6 +51,13 @@ export function GetCollectionOrderNyName(EnterPriseName) {
   });
 }
 
+// 根据回款公司名称获取账单（其他人员）
+export function GetOtherOrder(EnterPriseName) {
+  return request({
+    url: '/CollectionMangement/GetOtherOrder?EnterPriseName=' + EnterPriseName,
+    method: 'post',
+  });
+}
 // 获取所有客服数据
 export function GetCustomerServiceManagementList(PageIndex, PageSize) {
   return request({
@@ -315,24 +330,24 @@ export function GetCustomAmountByOrder(OrderCode) {
 }
 
 // 获取供应商列表
-export function GetSupplierData(ContractCode, ContractName, ComName, ContractType, BeginTime, EndTime, BeginSignTime, EndSignTime, CreateUserId, AuditStatus, PageIndex, PageSize) {
+export function GetSupplierData(ContractCode, ContractName, ComName, ContractType, BeginTime, EndTime, BeginSignTime, EndSignTime, CreateUserId, AuditStatus, ArchivedType, SupplierCmpanyBCode, PageIndex, PageSize) {
   BeginTime = !BeginTime ? "" : BeginTime;
   EndTime = !EndTime ? "" : EndTime;
   return request({
     url: '/CollectionMangement/GetSupplierData?ContractCode=' + ContractCode + '&ContractName=' + ContractName + '&ComName=' + ComName +
       '&ContractType=' + ContractType + '&BeginTime=' + BeginTime + '&EndTime=' + EndTime + '&BeginSignTime=' + BeginSignTime + '&EndSignTime=' + EndSignTime +
-      '&CreateUserId=' + CreateUserId + '&AuditStatus=' + AuditStatus + '&PageIndex=' + PageIndex + '&PageSize=' + PageSize,
+      '&CreateUserId=' + CreateUserId + '&AuditStatus=' + AuditStatus + '&ArchivedType=' + ArchivedType + '&SupplierCmpanyBCode=' + SupplierCmpanyBCode + '&PageIndex=' + PageIndex + '&PageSize=' + PageSize,
     method: 'post',
   });
 }
 // 导出供应商
-export function GetSupplierDataExport(ContractCode, ContractName, ComName, ContractType, BeginSignTime, EndSignTime, CreateUserId, AuditStatus, BeginTime, EndTime) {
+export function GetSupplierDataExport(ContractCode, ContractName, ComName, ContractType, BeginSignTime, EndSignTime, CreateUserId, AuditStatus, BeginTime, EndTime, ArchivedType, SupplierCmpanyBCode) {
   BeginTime = !BeginTime ? "" : BeginTime;
   EndTime = !EndTime ? "" : EndTime;
   return request({
     url: '/CollectionMangement/GetSupplierDataExport?ContractCode=' + ContractCode + '&ContractName=' + ContractName + '&ComName=' + ComName +
       '&ContractType=' + ContractType + '&BeginTime=' + BeginTime + '&EndTime=' + EndTime + '&BeginSignTime=' + BeginSignTime + '&EndSignTime=' + EndSignTime +
-      '&CreateUserId=' + CreateUserId + '&AuditStatus=' + AuditStatus + '&PageIndex=1' + '&PageSize=100000',
+      '&CreateUserId=' + CreateUserId + '&AuditStatus=' + AuditStatus + '&ArchivedType=' + ArchivedType + '&SupplierCmpanyBCode=' + SupplierCmpanyBCode + '&PageIndex=1' + '&PageSize=100000',
     method: 'post',
   });
 }
@@ -417,10 +432,34 @@ export function GetCollectionOrderNyId(InsProductPayCode) {
     method: 'post',
   });
 }
-
+export function GetOtherOrderById(InsProductPayCode) {
+  return request({
+    url: '/CollectionMangement/GetOtherOrderById?InsProductPayCode=' + InsProductPayCode,
+    method: 'post',
+  });
+}
 export function UpdateDataCancel(InsProductPayCode) {
   return request({
     url: '/CollectionMangement/UpdateDataCancel?InsProductPayCode=' + InsProductPayCode,
+    method: 'post',
+  });
+}
+export function UpdateDataOtherCancel(InsProductPayCode) {
+  return request({
+    url: '/CollectionMangement/UpdateDataOtherCancel?InsProductPayCode=' + InsProductPayCode,
+    method: 'post',
+  });
+}
+
+export function GetParameter() {
+  return request({
+    url: '/CollectionMangement/GetParameter',
+    method: 'post',
+  });
+}
+export function PlaceFileMethodSupplier(SupplierId) {
+  return request({
+    url: '/CollectionMangement/PlaceFileMethodSupplier?SupplierId=' + SupplierId,
     method: 'post',
   });
 }

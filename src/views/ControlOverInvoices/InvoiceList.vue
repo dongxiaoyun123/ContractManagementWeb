@@ -9,8 +9,8 @@
         <el-row>
           <el-row>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item class="whereFormClass" label="发票类型">
-                <el-select v-model="InvoiceType" class="timeClass" filterable placeholder="发票类型" clearable>
+              <el-form-item class="whereFormClass" label="发票种类">
+                <el-select v-model="InvoiceType" class="timeClass" filterable placeholder="发票种类" clearable>
                   <el-option v-for="item in InvoiceTypeList" :key="item.Code" :label="item.Name" :value="item.Code">
                     <template slot-scope="scope">
                       <div style="display: flex;  align-items: center;">
@@ -119,10 +119,10 @@
             <span v-format="'¥#,##0.00'">{{ scope.row.InvoiceAmount }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="InvoiceTypeStr" label="发票类型" min-width="150" show-overflow-tooltip>
+        <el-table-column prop="InvoiceTypeStr" label="发票种类" min-width="150" show-overflow-tooltip>
           <template slot-scope="{}" slot="header">
-            <span>发票类型</span>
-            <el-tooltip class="item" effect="dark" placement="top" style="margin-left: 5px;margin-bottom: 0.2rem">
+            <span>发票种类</span>
+            <el-tooltip class="item" effect="light" placement="bottom" style="margin-left: 5px;margin-bottom: 0.2rem">
               <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
               <div slot="content">
                 <div style="display: flex;  align-items: center;">
@@ -150,15 +150,15 @@
         <el-table-column prop="IvStateStr" label="发票状态" min-width="100">
           <template slot-scope="{}" slot="header">
             <span>发票状态</span>
-            <el-tooltip class="item" effect="dark" placement="top" style="margin-left: 5px;margin-bottom: 0.2rem">
+            <el-tooltip class="item" effect="light" placement="bottom" style="margin-left: 5px;margin-bottom: 0.2rem">
               <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
               <div slot="content">
                 <div style="display: flex;  align-items: center;">
                   <span slot="reference" style="margin: 0 10px 0 6px;" class="SecondPartyNameClass">
-                    <div> <el-tag  key="未开" effect="dark" type="danger" >未开</el-tag></div>
-                    <div><el-tag  key="已开" effect="dark" type="success">已开</el-tag></div>
-                    <div><el-tag  key="作废" effect="dark" type="info">作废</el-tag></div>
-                    <div style="margin-bottom: 0;"><el-tag  key="退回" effect="dark" type="warning">退回</el-tag></div>
+                    <div> <el-tag  key="未开" effect="plain" type="danger" >未开</el-tag></div>
+                    <div><el-tag  key="已开" effect="plain" type="success">已开</el-tag></div>
+                    <div><el-tag  key="作废" effect="plain" type="info">作废</el-tag></div>
+                    <div style="margin-bottom: 0;"><el-tag  key="退回" effect="plain" type="warning">退回</el-tag></div>
                   </span>
                 </div>
               </div>
@@ -224,8 +224,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="发票类型" prop="InvoiceType">
-              <el-select v-model="updateInvoiceFrom.InvoiceType" class="timeClass" filterable placeholder="发票类型" disabled>
+            <el-form-item label="发票种类" prop="InvoiceType">
+              <el-select v-model="updateInvoiceFrom.InvoiceType" class="timeClass" filterable placeholder="发票种类" disabled>
                 <el-option v-for="item in InvoiceTypeList" :key="item.Code" :class="item.Class" :label="item.Name"
                   :value="item.Code" />
               </el-select>
@@ -315,6 +315,7 @@ import {
 import { showLoading, hideLoading } from "@/common/loading";
 import { parseTime, getDateByTimes } from "@/utils"; // 时间日期格式化成字符串
 export default {
+  name:'发票列表',
   data() {
     return {
       fixedLeftShow: true,
@@ -743,7 +744,7 @@ export default {
 }
 
 .moneyClass {
-  color: #67C23A;
+  color: #13ce66;
 }
 
 .Executing {

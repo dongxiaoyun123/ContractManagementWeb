@@ -95,7 +95,7 @@ export default {
     width: 320px;
     margin-top: 15px;
     background-color: #f0f9eb;
-    color: #67c23a;
+    color: #13ce66;
     padding: 8px 16px;
     border-radius: 4px;
     display: inline-block;

@@ -88,6 +88,7 @@ import {
 import { showLoading, hideLoading } from "@/common/loading";
 const moment = require("moment");
 export default {
+  name: '合同名称配置',
   data() {
     return {
       ContractName: "",

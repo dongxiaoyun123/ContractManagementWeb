@@ -82,6 +82,7 @@ import {
 import { showLoading, hideLoading } from "@/common/loading";
 const moment = require("moment");
 export default {
+  name: '供应商管理',
   data() {
     return {
       SupplierCmpanyBName: "",

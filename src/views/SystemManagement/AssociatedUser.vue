@@ -61,6 +61,7 @@
 <script>
 import { GetBindingUserList, UpdateStates } from "@/api/CollectionMangement";
 export default {
+  name: '关联用户',
   data() {
     return {
       formShow: '',

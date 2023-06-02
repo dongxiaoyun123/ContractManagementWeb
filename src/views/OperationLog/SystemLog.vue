@@ -22,9 +22,9 @@
               <el-tag v-if="item.Name == '删除数据'" effect="plain" type="danger">删除数据</el-tag>
               <el-tag v-if="item.Name == '导入数据'" effect="plain" type="success">导入数据</el-tag>
               <el-tag v-if="item.Name == '导出数据'" effect="plain" type="info"
-                style="border-color: #13C2C2;color: #13C2C2;">导出数据</el-tag>
-              <el-tag v-if="item.Name == '错误数据'" effect="plain" style="border-color: #6959CD;color:#6959CD">错误数据</el-tag>
-              <el-tag v-if="item.Name == '撤回数据'" effect="plain" style="border-color: #212121;color:#212121">撤回数据</el-tag>
+                style="border-color: #8BC6C6;color: #13C2C2;">导出数据</el-tag>
+              <el-tag v-if="item.Name == '错误数据'" effect="plain" style="border-color: #A29BC4;color:#6959CD">错误数据</el-tag>
+              <el-tag v-if="item.Name == '撤回数据'" effect="plain" style="border-color: #D6D8DB;color:#909399">撤回数据</el-tag>
             </el-option>
           </el-select>
         </el-col>
@@ -55,14 +55,14 @@
             <el-tag v-if="scope.row.MenuDescription == '删除数据'" effect="plain" type="danger">删除数据</el-tag>
             <el-tag v-if="scope.row.MenuDescription == '导入数据'" effect="plain" type="success">导入数据</el-tag>
             <el-tag v-if="scope.row.MenuDescription == '导出数据'" effect="plain" type="info"
-              style="border-color: #13C2C2;color: #13C2C2;">导出数据</el-tag>
+              style="border-color: #8BC6C6;color: #13C2C2;">导出数据</el-tag>
             <el-tag v-if="scope.row.MenuDescription == '错误数据'" effect="plain"
-              style="border-color: #6959CD;color:#6959CD">错误数据</el-tag>
+              style="border-color: #A29BC4;color:#6959CD">错误数据</el-tag>
               <el-tag v-if="scope.row.MenuDescription == '撤回数据'" effect="plain"
-              style="border-color: #212121;color:#212121">撤回数据</el-tag>
+              style="border-color: #D6D8DB;color:#909399">撤回数据</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="CreateUserName" label="创建人" width="120" />
+        <el-table-column prop="CreateUserName" label="操作人" width="120" />
         <el-table-column prop="CreateTimeStr" label="创建时间" width="200">
           <template slot-scope="scope">
             <div v-if="scope.row.CreateTimeStr">
@@ -89,6 +89,7 @@ import {
 import { showLoading, hideLoading } from "@/common/loading";
 const moment = require("moment");
 export default {
+  name: '系统日志',
   data() {
     return {
       buttonStyle: '',
@@ -132,7 +133,7 @@ export default {
           Code: "导入数据",
           Name: "导入数据",
           tab: "el-icon-upload",
-          color: "#67C23A",
+          color: "#13ce66",
         },
         {
           Code: "导出数据",
@@ -150,7 +151,7 @@ export default {
           Code: "撤回数据",
           Name: "撤回数据",
           tab: "el-icon-error",
-          color: "#212121",
+          color: "#909399",
         },
       ],
     };

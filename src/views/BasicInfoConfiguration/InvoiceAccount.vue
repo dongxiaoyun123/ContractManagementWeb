@@ -86,6 +86,7 @@ import {
 } from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
 export default {
+  name: '发票科目',
   data() {
     return {
       Name: "",

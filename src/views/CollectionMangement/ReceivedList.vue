@@ -139,8 +139,8 @@
         </el-row>
       </el-form>
     </el-dialog>
-    <ComponentsDialog :visible="dialogVisible" :ClickRow="ClickRow" @CloseDialog="CloseComponentsDialog">
-    </ComponentsDialog>
+    <!-- <ComponentsDialog :visible="dialogVisible" :ClickRow="ClickRow" @CloseDialog="CloseComponentsDialog">
+    </ComponentsDialog> -->
   </div>
 </template>
 
@@ -153,11 +153,12 @@ import {
 import {
   GetDicCategoryC,
 } from "@/api/SystemManagement";
-import ComponentsDialog from "./Components"
+// import ComponentsDialog from "./Components"
 import moment from "moment"; // 导入模块
 moment.locale("zh-cn"); // 设置语言 或 moment.lang('zh-cn');
 export default {
-  components: { ComponentsDialog },
+  name: 'ReceivedList',
+  // components: { ComponentsDialog },
   data() {
     return {
       DicCategoryList: [],

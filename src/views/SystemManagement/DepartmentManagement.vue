@@ -95,6 +95,7 @@ import {
 import { showLoading, hideLoading } from "@/common/loading";
 const moment = require("moment");
 export default {
+  name: '部门管理',
   data() {
     return {
       DepartmentName: "",

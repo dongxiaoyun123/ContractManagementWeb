@@ -1,73 +1,75 @@
 <template>
-  <div class="login-container">
-    <vue-particles color="#ffffff" :particle-opacity="0.7" lines-color="#ffffff" :particles-number="80" shape-type="circle"
-                   :particle-size="5" :lines-width="2" :line-linked="true" :line-opacity="0.4" :lines-distance="150" :move-speed="3"
-                   :hover-effect="true" hover-mode="grab" :click-effect="true" click-mode="push"
-    />
-    <el-form ref="loginForm" :model="loginForm" class="login-form" auto-complete="on" label-position="left"
-             :rules="loginFormRules"
-    >
-      <div class="title-container">
-        <h3 class="title">合同管理系统</h3>
-        <div class="login_header">
-          <a :class="{ active: cur == true }" @click="switchClick(true)">密码登录</a>
-          <a :class="{ active: cur == false }" @click="switchClick(false)">短信登录</a>
-        </div>
-      </div>
-      <div class="login_content">
-        <!-- 在cur==0时此板块显示 其他时候此板块不显示 -->
-        <div v-show="cur == true" class="Cbody_item">
-          <el-form-item prop="username">
-            <span class="svg-container">
-              <i class="el-icon-user" />
-            </span>
-            <el-input ref="username" v-model="loginForm.username" placeholder="请输入用户名" name="username"
-                      type="text" tabindex="1" auto-complete="on" clearable @clear="clearAll"
-            />
-          </el-form-item>
+  <div class="containerClass">
+    <vue-particles style="background: rgba(0,0,0,.4);position: absolute;min-width: 100%; min-height: 100%;"
+      color="#dedede" :particle-opacity="0.9" lines-color="#ffffff" :particles-number="80" shape-type="circle"
+      :particle-size="1" :lines-width="1" :line-linked="true" :line-opacity="1" :lines-distance="80" :move-speed="1"
+      :hover-effect="true" hover-mode="grab" :click-effect="true" click-mode="push" />
 
-          <el-form-item prop="password">
-            <span class="svg-container">
-              <i class="el-icon-unlock" />
-            </span>
-            <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType"
-                      placeholder="请输入密码" name="password" tabindex="2" auto-complete="on" show-password clearable
-            />
-            <span class="show-pwd" @click="showPwd">
-              <!-- <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" /> -->
-            </span>
-          </el-form-item>
-        </div>
-        <!-- 在cur==1时此板块显示 其他时候此板块不显示 -->
-        <div v-show="cur == false" class="Cbody_item">
-          <el-form-item prop="mobile">
-            <span class="svg-container">
-              <i class="el-icon-phone-outline" />
-            </span>
-            <el-input ref="mobile" v-model="loginForm.mobile" placeholder="请输入手机号" name="mobile" type="text"
-                      tabindex="1" auto-complete="on" clearable
-            />
-          </el-form-item>
-          <el-form-item prop="code">
-            <span class="svg-container">
-              <i class="el-icon-key" />
-            </span>
-            <el-input ref="code" v-model="loginForm.code" type="text" placeholder="请输入验证码" name="code"
-                      abindex="2" maxlength="6" auto-complete="on" onkeyup="this.value=this.value.replace(/\D/g,'')"
-                      onafterpaste="this.value=this.value.replace(/\D/g,'')" clearable style="width:205px"
-            />
-            <span class="show-pwd">
-              <el-button :loading="sending" :disabled="sendDisabled" @click="onSendSms">{{ sendButtonText
-              }}</el-button>
-            </span>
-          </el-form-item>
-        </div>
-      </div>
+    <div class="box">
+      <div class="login-box">
+        <el-form ref="loginForm" :model="loginForm" class="login-form" auto-complete="on" label-position="left"
+          :rules="loginFormRules">
+          <div class="title-container">
+            <h3 class="title">合同管理系统</h3>
+            <div class="login_header">
+              <a :class="{ active: cur == true }" @click="switchClick(true)">密码登录</a>
+              <a :class="{ active: cur == false }" @click="switchClick(false)">短信登录</a>
+            </div>
+          </div>
+          <div class="login_content">
+            <!-- 在cur==0时此板块显示 其他时候此板块不显示 -->
+            <div v-show="cur == true" class="Cbody_item">
+              <el-form-item prop="username">
+                <span class="svg-container">
+                  <i class="el-icon-user" />
+                </span>
+                <el-input ref="username" v-model="loginForm.username" placeholder="请输入用户名" name="username" type="text"
+                  tabindex="1" auto-complete="on" clearable @clear="clearAll" />
+              </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width: 100%"
-                 @click.native.prevent="handleLogin"
-      >登录</el-button>
-    </el-form>
+              <el-form-item prop="password">
+                <span class="svg-container">
+                  <i class="el-icon-unlock" />
+                </span>
+                <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType"
+                  placeholder="请输入密码" name="password" tabindex="2" auto-complete="on" show-password clearable />
+                <span class="show-pwd" @click="showPwd">
+                  <!-- <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" /> -->
+                </span>
+              </el-form-item>
+            </div>
+            <!-- 在cur==1时此板块显示 其他时候此板块不显示 -->
+            <div v-show="cur == false" class="Cbody_item">
+              <el-form-item prop="mobile">
+                <span class="svg-container">
+                  <i class="el-icon-phone-outline" />
+                </span>
+                <el-input ref="mobile" v-model="loginForm.mobile" placeholder="请输入手机号" name="mobile" type="text"
+                  tabindex="1" auto-complete="on" clearable />
+              </el-form-item>
+              <el-form-item prop="code">
+                <span class="svg-container">
+                  <i class="el-icon-key" />
+                </span>
+                <el-input ref="code" v-model="loginForm.code" type="text" placeholder="请输入验证码" name="code" abindex="2"
+                  maxlength="6" auto-complete="on" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                  onafterpaste="this.value=this.value.replace(/\D/g,'')" clearable style="width:205px" />
+                <span class="show-pwd">
+                  <el-button type="success" :loading="sending" :disabled="sendDisabled" @click="onSendSms">{{
+                    sendButtonText
+                  }}</el-button>
+                </span>
+              </el-form-item>
+            </div>
+          </div>
+          <el-button size="medium" :loading="loading" type="primary" style="width: 100%"
+            @click.native.prevent="handleLogin">登录</el-button>
+        </el-form>
+
+      </div>
+    </div>
+
+
   </div>
 </template>
 
@@ -271,86 +273,76 @@ export default {
 <style lang="scss">
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
+$bg: #ffffff;
 
-$bg: #01172c;
-$light_gray: #fff;
-$cursor: #fff;
-
-@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .login-container .el-input input {
-    color: $cursor !important;
+@supports (-webkit-mask: none) and (not (cater-color: $bg)) {
+  .containerClass .el-input input {
     border: 0;
     height: 40px;
   }
 }
 
 /* reset element-ui css */
-.login-container {
+.containerClass {
+  min-width: 100%;
+  min-height: 100%;
   background-image: url("../../assets/img/xingkong.jpg");
   overflow: hidden;
   position: absolute;
-  width: 100%;
-  height: 100%;
   background-repeat: no-repeat;
   background-size: 100% 100%;
 
   .el-input {
     display: inline-block;
     width: 89%;
+    background: transparent;
+    color: #fff;
+    border-bottom: 1px solid #fff;
 
     input {
       background: transparent !important;
-      border: 0px;
       -webkit-appearance: none;
       border-radius: 0px;
-      color: $light_gray;
-      caret-color: $cursor !important;
 
       &:-webkit-autofill {
         box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
+        // -webkit-text-fill-color: $cursor !important;
       }
     }
   }
 
   .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid #DCDFE6;
     border-radius: 5px;
-    color: #454545;
-
   }
 
-}
-</style>
-
-<style lang="scss" scoped>
-$dark_gray: #889aa4;
-$light_gray: #eee;
-
-.login-container {
-  min-width: 100%;
-  min-height: 100%;
   .login-form {
     position: absolute;
-    width: 450px;
-    max-width: 100%;
-    height: 325px;
-    left: 0;
-    right: 0;
-    top: 180px;
+    width: 444px;
+    height: 330px;
     margin: auto;
     overflow: hidden;
-    background-color: #01172c;
     padding: 57px 50px 0 50px;
     border-radius: 12px;
     opacity: 0.92;
     z-index: 100000;
   }
 
+  .login-box {
+    width: 444px;
+    height: 330px;
+    left: 3px;
+    top: 3px;
+    background: #fff;
+    border-radius: 12px;
+    position: absolute;
+    // overflow: hidden;
+    z-index: 100001;
+  }
+
   .tips {
     font-size: 14px;
-    color: #fff;
+    color: $bg;
     margin-bottom: 10px;
 
     span {
@@ -362,20 +354,17 @@ $light_gray: #eee;
 
   .svg-container {
     padding: 0 5px 0 15px;
-    color: $dark_gray;
-    // vertical-align: middle;
     width: 30px;
     display: inline-block;
   }
 
   .title-container {
     position: relative;
-    margin-top: -20px;
 
     .title {
       font-size: 20px;
-      color: $light_gray;
-      margin: 0px auto 30px auto;
+      color: #000;
+      margin: -18px auto 32px auto;
       text-align: center;
       font-weight: bold;
     }
@@ -384,15 +373,65 @@ $light_gray: #eee;
   .show-pwd {
     position: absolute;
     right: 2px;
-    top: 3px;
-    color: $dark_gray;
+    top: 4px;
+    color: $bg;
     cursor: pointer;
     user-select: none;
   }
 }
 
+.box {
+  box-sizing: border-box;
+  position: absolute;
+  width: 450px;
+  max-width: 100%;
+  height: 336px;
+  left: 0;
+  right: 0;
+  top: 180px;
+  margin: auto;
+  overflow: hidden;
+  background-color: #ffffff;
+  padding: 2px;
+  border-radius: 12px;
+  opacity: 0.92;
+  z-index: 100000;
+}
+
+.box::before,
+.box::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  z-index: 0;
+  width: 450px;
+  height: 336px;
+  background: linear-gradient(0deg,
+      transparent, transparent, #13ce66, #13ce66, #13ce66);
+  transform-origin: bottom right;
+  animation: login 5.4s linear infinite;
+}
+
+.box::after {
+  background: linear-gradient(0deg, transparent, transparent, #ff4949, #ff4949, #ff4949);
+  animation-delay: -2.7s;
+}
+
+@keyframes login {
+  0% {
+    transform: rotate(0deg)
+  }
+
+  100% {
+    transform: rotate(360deg)
+  }
+}
+</style>
+
+<style lang="scss" scoped>
 a {
-  color: #fff;
+  color: #000;
   margin: 45px;
 }
 
@@ -405,11 +444,12 @@ a {
 .Cbody_item {
   border: 0px solid #999;
   overflow: hidden;
+  background-color: #fff;
 }
 
 .active {
-  color: #ffba00;
+  color: #1890ff;
   padding-bottom: 10px;
-  border-bottom: 3px solid #ffba00;
+  border-bottom: 3px solid #1890ff;
 }
 </style>

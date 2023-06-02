@@ -525,9 +525,9 @@ export function GetCompanyNameAData() {
   });
 }
 // 根据甲方公司编号获取公司详情
-export function GetCompanyNameAFirst(BillingCode) {
+export function GetCompanyNameAFirst(ComID) {
   return request({
-    url: '/SystemManagement/GetCompanyNameAFirst?BillingCode=' + BillingCode,
+    url: '/SystemManagement/GetCompanyNameAFirst?ComID=' + ComID,
     method: 'post',
   });
 }
@@ -575,7 +575,14 @@ export function AddCompany(model) {
     data: model
   });
 }
-
+// 修改公司
+export function UpdateCompany(model) {
+  return request({
+    url: '/SystemManagement/UpdateCompany',
+    method: 'post',
+    data: model
+  });
+}
 export function GetCompanyAddress() {
   return request({
     url: '/SystemManagement/GetCompanyAddress',
@@ -709,9 +716,9 @@ export function AddCompanyRelation(ComID, CompanyrelationName) {
   });
 }
 // 删除客户曾用名
-export function DeleteCompanyRelation(CompanyrelationCode) {
+export function DeleteCompanyRelation(CompanyrelationName, ComID) {
   return request({
-    url: '/SystemManagement/DeleteCompanyRelation?CompanyrelationCode=' + CompanyrelationCode,
+    url: '/SystemManagement/DeleteCompanyRelation?CompanyrelationName=' + CompanyrelationName + '&ComID=' + ComID,
     method: 'post',
   });
 }

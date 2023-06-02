@@ -90,6 +90,7 @@ import {
 import { showLoading, hideLoading } from "@/common/loading";
 const moment = require("moment");
 export default {
+  name: '合同签约主体配置',
   data() {
     return {
       formShow: "",

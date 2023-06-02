@@ -25,7 +25,7 @@
                     <el-input v-model="CompanyName" clearable="" placeholder="公司名称" />
                   </el-form-item>
                 </el-col>
-                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                <!-- <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="发票科目">
                     <el-select v-model="InvoiceAccount" class="timeClass" filterable placeholder="发票科目" clearable="">
                       <el-option v-for="item in InvoiceAccountList" :key="item.InvoiceAccountCode"
@@ -34,8 +34,8 @@
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-                  <el-form-item class="whereFormClass" label="发票类型">
-                    <el-select v-model="InvoiceType" class="timeClass" filterable placeholder="发票类型" clearable>
+                  <el-form-item class="whereFormClass" label="发票种类">
+                    <el-select v-model="InvoiceType" class="timeClass" filterable placeholder="发票种类" clearable>
                       <el-option v-for="item in InvoiceTypeList" :key="item.Code" :class="item.Class" :label="item.Name"
                         :value="item.Code">
                         <template slot-scope="scope">
@@ -51,7 +51,7 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                </el-col>
+                </el-col> -->
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item label="申请人" prop="SaleId" class="scrollClass">
                     <el-select v-model="Applicant" class="timeClass" filterable placeholder="申请人" clearable="">
@@ -61,7 +61,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-                  <el-form-item style="margin-bottom:0px" class="whereFormClass" label="申请时间">
+                  <el-form-item class="whereFormClass" label="申请日期">
                     <el-date-picker v-model="ApplicationTime" style="width:100% ;" class="rangeTimeClass" type="daterange"
                       range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions"
                       clearable="" @input="datetimeChange" />
@@ -97,23 +97,40 @@
       </el-form>
     </el-card>
     <el-card class="CardTableClass">
-      <el-table class="tableCheckClass" ref="multipleTable" v-loading="loading" :data="ContractData" fit :cell-style="isRed"
-        @selection-change="TableSelect" @row-click="toggleSelection">
+      <el-table class="tableCheckClass" ref="multipleTable" v-loading="loading" :data="ContractData" fit
+        :cell-style="isRed" @selection-change="TableSelect" @row-click="toggleSelection">
         <el-table-column v-if="fixedLeftShow" key="column" type="selection" width="50" fixed="left" />
         <el-table-column v-else key="columnFalse" type="selection" width="50" />
-        <el-table-column v-if="fixedLeftShow" key="ContractCode" prop="ContractCode" label="合同编号" min-width="150"
-          show-overflow-tooltip fixed="left" />
-        <el-table-column v-else key="ContractCodeFalse" prop="ContractCode" label="合同编号" min-width="150"
+        <el-table-column v-if="fixedLeftShow" key="SecondContractNumberPrefix" prop="SecondContractNumberPrefix"
+          label="乙方合同编号" min-width="160" show-overflow-tooltip fixed="left" />
+        <el-table-column v-else key="ContractCodeFalse" prop="SecondContractNumberPrefix" label="乙方合同编号" min-width="160"
           show-overflow-tooltip />
-        <el-table-column v-if="fixedLeftShow" key="ContractNameStr" prop="ContractNameStr" label="合同名称" min-width="120"
-          show-overflow-tooltip fixed="left" />
-        <el-table-column v-else key="ContractNameStrFalse" prop="ContractNameStr" label="合同名称" min-width="120"
-          show-overflow-tooltip />
+        <!-- <el-table-column v-if="fixedLeftShow" key="ContractNameStr" prop="ContractNameStr" label="合同名称" min-width="120"
+          show-overflow-tooltip fixed="left" /> -->
+        <!-- <el-table-column v-else key="ContractNameStrFalse" prop="ContractNameStr" label="合同名称" min-width="120"
+          show-overflow-tooltip /> -->
         <el-table-column v-if="fixedLeftShow" key="CompanyName" prop="CompanyName" label="公司名称" min-width="200"
           show-overflow-tooltip fixed="left" />
         <el-table-column v-else key="CompanyNameFalse" prop="CompanyName" label="公司名称" min-width="200"
           show-overflow-tooltip />
-        <el-table-column prop="ContractOrderName" label="账单名称" min-width="150" show-overflow-tooltip />
+        <el-table-column v-if="fixedLeftShow" prop="ApplicationTimeStr" label="账单申请日期" min-width="130"
+          show-overflow-tooltip fixed="left">
+          <template slot-scope="scope">
+            <div v-if="scope.row.ApplicationTimeStr">
+              <i class="el-icon-time" />
+              <span style="margin-left: 6px">{{ scope.row.ApplicationTimeStr }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column v-else prop="ApplicationTimeStr" label="账单申请日期" min-width="130" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <div v-if="scope.row.ApplicationTimeStr">
+              <i class="el-icon-time" />
+              <span style="margin-left: 6px">{{ scope.row.ApplicationTimeStr }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="ContractOrderName" label="账单名称" min-width="250" show-overflow-tooltip />
         <el-table-column prop="AmountReceived" label="账单总金额" min-width="120" sortable="">
           <template slot-scope="scope">
             <span v-format="'¥#,##0.00'">{{ scope.row.AmountReceived }}</span>
@@ -121,11 +138,11 @@
         </el-table-column>
         <!-- <el-table-column prop="AmountTotal" label="合计"  min-width="100">
                     </el-table-column> -->
-        <el-table-column prop="InvoiceAccountName" label="发票科目" min-width="100" />
-        <el-table-column prop="InvoiceTypeStr" label="发票类型" min-width="140">
+        <!-- <el-table-column prop="InvoiceAccountName" label="发票科目" min-width="100" />
+        <el-table-column prop="InvoiceTypeStr" label="发票种类" min-width="140">
           <template slot-scope="{}" slot="header">
-            <span>发票类型</span>
-            <el-tooltip class="item" effect="dark" placement="top" style="margin-left: 5px;margin-bottom: 0.2rem">
+            <span>发票种类</span>
+            <el-tooltip class="item" effect="light" placement="bottom" style="margin-left: 5px;margin-bottom: 0.2rem">
               <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
               <div slot="content">
                 <div style="display: flex;  align-items: center;">
@@ -149,14 +166,30 @@
               {{ scope.row.InvoiceTypeStr }}
             </div>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column prop="IsUsed" label="账单状态" min-width="100">
           <template slot-scope="scope" class="tableRowClass">
             <span v-if="scope.row.IsUsed == 0">无效</span>
             <span v-if="scope.row.IsUsed == 1">有效</span>
           </template>
         </el-table-column>
-        <el-table-column prop="InvoiceStateStr" label="发票状态">
+        <el-table-column prop="InvoiceStateStr" label="发票状态" min-width="100">
+          <template slot-scope="{}" slot="header">
+            <span>发票状态</span>
+            <el-tooltip class="item" effect="light" placement="bottom" style="margin-left: 5px;margin-bottom: 0.2rem">
+              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
+              <div slot="content">
+                <div style="display: flex;  align-items: center;">
+                  <span slot="reference" style="margin: 0 10px 0 6px;" class="SecondPartyNameClass">
+                    <div> <el-tag key="未开" effect="plain" type="danger">未开</el-tag></div>
+                    <div><el-tag key="已送审" effect="plain">已送审</el-tag></div>
+                    <div><el-tag key="已开" effect="plain" type="success">已开</el-tag></div>
+                    <div style="margin-bottom: 0;"> <el-tag key="作废" effect="plain" type="info">作废</el-tag></div>
+                  </span>
+                </div>
+              </div>
+            </el-tooltip>
+          </template>
           <template slot-scope="scope" class="tableRowClass">
             <el-tag v-if="scope.row.InvoiceState == '0'" effect="plain" type="danger">未开</el-tag>
             <el-tag v-if="scope.row.InvoiceState == '1'" effect="plain" type="success">已开</el-tag>
@@ -164,22 +197,38 @@
             <el-tag v-if="scope.row.InvoiceState == '6'" effect="plain">已送审</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="CollectionState" label="回款状态">
-          <template slot-scope="scope" class="tableRowClass">
-            <span v-if="scope.row.CollectionState == 1">未回款</span>
-            <span v-if="scope.row.CollectionState == 2">已回款</span>
+        <el-table-column prop="CollectionState" label="回款状态" min-width="100">
+          <template slot-scope="{}" slot="header">
+            <span>回款状态</span>
+            <el-tooltip class="item" effect="light" placement="bottom" style="margin-left: 5px;margin-bottom: 0.2rem">
+              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
+              <div slot="content">
+                <div style="display: flex;  align-items: center;">
+                  <span slot="reference" style="margin-right: 10px;" class="SecondPartyNameClass">
+                    <div><i class="dotClass" style="background-color: #ff4949" />{{ "\xa0\xa0" }}未回款<br /></div>
+                    <div> <i class="dotClass" style="background-color: #13ce66" />{{ "\xa0\xa0"
+                    }}已回款</div>
+                        <div style="margin-bottom: 0;"> <i class="dotClass" style="background-color: #1890ff" />{{ "\xa0\xa0"
+                    }}部分回款</div>
+                  </span>
+                </div>
+              </div>
+            </el-tooltip>
           </template>
-
-        </el-table-column>
-        <el-table-column prop="ApplicantStr" label="申请人" width="100" show-overflow-tooltip />
-        <el-table-column prop="ApplicationTimeStr" label="申请时间" min-width="130" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <div v-if="scope.row.ApplicationTimeStr">
-              <i class="el-icon-time" />
-              <span style="margin-left: 6px">{{ scope.row.ApplicationTimeStr }}</span>
+          <template slot-scope="scope" class="tableRowClass">
+            <div style="display: flex;  align-items: center;">
+              <span slot="reference" style="margin-right: 8px;">
+                <i v-if="scope.row.CollectionState == 1" class="dotClass" style="background-color: #ff4949" />
+                <i v-if="scope.row.CollectionState == 2" class="dotClass" style="background-color: #13ce66" />
+                <i v-if="scope.row.CollectionState == 3" class="dotClass" style="background-color: #1890ff" />
+              </span>
+              <span v-if="scope.row.CollectionState == 1">未回款</span>
+              <span v-if="scope.row.CollectionState == 2">已回款</span>
+              <span v-if="scope.row.CollectionState == 3">部分回款</span>
             </div>
           </template>
         </el-table-column>
+        <el-table-column prop="ApplicantStr" label="申请人" width="100" show-overflow-tooltip />
         <el-table-column prop="OrderAbstract" label="摘要" show-overflow-tooltip min-width="250" />
         <el-table-column prop="SubmitCensorshipTimeStr" label="送审时间" width="180">
           <template slot-scope="scope">
@@ -217,9 +266,9 @@
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]" :page-size="queryInfo.pagesize"
-        layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
-        @current-change="handleCurrentChange" />
+      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
+        :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
 
     <!-- 添加合同弹出页面 -->
@@ -227,7 +276,7 @@
       @close="addDialogVisibleClosed">
       <!-- 上面两个属性用来重置滚动条 -->
       <div slot="title" class="dialog-title">
-        <span>添加合同</span>
+        <span>添加账单</span>
       </div>
       <el-form ref="addContractOrderRef" :model="addContractOrderForm" :rules="addContractOrderRules" label-width="120px"
         class="formClass">
@@ -258,7 +307,7 @@
         </el-form-item>
         <!-- 动态增减表单项 -->
         <el-row v-for="(domain, index) in addContractOrderForm.domains">
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item :key="domain.key" :label="'收款项目' + (index + 1)" :prop="'domains.' + index + '.CustomAmountName'"
               :rules="{
                 required: true, message: '收款项目不能为空', trigger: 'blur'
@@ -278,13 +327,17 @@
               <el-input v-model="domain.CustomAmount" clearable @input="handleChangeAdd(domain.CustomAmount, index)" />
             </el-form-item>
           </el-col>
-          <el-col :span="8" style="line-height:40px ;">
-            <el-button style="margin-left:10px ;" type="text" icon="el-icon-delete" circle
+          <el-col :span="4" style="line-height:100% ;">
+            <el-form-item label-width="0">
+              <el-tag style="margin-left:10px ;" v-if="domain.OrderState == 1" :disabled="true" key="未回款" effect="plain" type="danger">未回款</el-tag>
+              <el-button style="margin-left:10px ;" type="text" icon="el-icon-delete"
               @click.prevent="removeDomain(domain)" />
+            </el-form-item>
+       
           </el-col>
         </el-row>
         <el-form-item>
-          <el-button icon="el-icon-plus" class="addItemClass" @click="addDomain">新增自定义金额</el-button>
+          <el-button size="mini" icon="el-icon-plus" class="addItemClass" @click="addDomain">新增自定义金额</el-button>
         </el-form-item>
 
         <!-- <el-form-item label="合计" prop="AmountReceived">
@@ -292,7 +345,7 @@
                     </el-input>
                 </el-form-item> -->
 
-        <el-row>
+        <!-- <el-row>
           <el-col :span="12">
             <el-form-item label="发票科目" prop="InvoiceAccount">
               <el-select v-model="addContractOrderForm.InvoiceAccount" filterable placeholder="发票科目">
@@ -302,14 +355,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="发票类型" prop="InvoiceType">
-              <el-select v-model="addContractOrderForm.InvoiceType" filterable placeholder="发票类型">
+            <el-form-item label="发票种类" prop="InvoiceType">
+              <el-select v-model="addContractOrderForm.InvoiceType" filterable placeholder="发票种类">
                 <el-option v-for="item in InvoiceTypeList" :key="item.Code" :class="item.Class" :label="item.Name"
                   :value="item.Code" />
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
 
         <el-row>
           <el-col :span="12">
@@ -321,8 +374,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="申请时间" prop="ApplicationTime">
-              <el-date-picker v-model="addContractOrderForm.ApplicationTime" type="date" placeholder="申请时间" />
+            <el-form-item label="账单申请日期" prop="ApplicationTime">
+              <el-date-picker v-model="addContractOrderForm.ApplicationTime" type="date" placeholder="账单申请日期" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -365,7 +418,7 @@
     <el-dialog :visible.sync="updateDialogVisible" top="5vh" :lock-scroll="false" :append-to-body="true" width="60%"
       @close="detailUpdateDialogVisibleClosed">
       <div slot="title" class="dialog-title">
-        <span>编辑合同编号</span>
+        <span>编辑帐单</span>
       </div>
       <el-form ref="updateContractsRef" :model="updateContractOrderForm" :rules="addContractOrderRules"
         label-width="120px" class="formClass">
@@ -404,10 +457,11 @@
               :rules="{
                 required: true, message: '收款项目不能为空', trigger: 'blur'
               }">
-              <el-input v-model="domain.CustomAmountName" :disabled="!updateShow" clearable />
+              <el-input v-model="domain.CustomAmountName"
+                :disabled="!updateShow || (domain.OrderAmount != 0 && !domain.Flag)" clearable />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item :key="domain.key" :label="'金额' + (index + 1)" :prop="'domains.' + index + '.CustomAmount'"
               :rules="{
                 required: true,
@@ -416,24 +470,35 @@
                 message: '金额输入不合法（不能小于0小数位不超过2位）',
                 trigger: 'blur',
               }">
-              <el-input v-model="domain.CustomAmount" :disabled="!updateShow" clearable
-                @input="handleChangeUpdate(domain.CustomAmount, index)" />
+              <el-input v-model="domain.CustomAmount" :disabled="!updateShow || (domain.OrderAmount != 0 && !domain.Flag)"
+                clearable @input="handleChangeUpdate(domain.CustomAmount, index)" />
             </el-form-item>
           </el-col>
-          <el-col :span="8" style="line-height:40px ;">
-            <el-button :disabled="!updateShow" style="margin-left:10px ;" type="text" icon="el-icon-delete" circle
-              @click.prevent="removeDomainUpdate(domain)" />
+          <el-col :span="6">
+            <el-form-item :key="domain.key" :label="'回款金额' + (index + 1)" :prop="'domains.' + index + '.OrderAmount'">
+              <el-input v-model="domain.OrderAmount" :disabled="true" clearable
+                @input="handleChangeUpdate(domain.OrderAmount, index)" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="4" style="line-height:100% ;margin:auto">
+            <el-form-item label-width="0">
+              <el-tag style="margin-left:10px ;" v-if="domain.OrderState == 1" :disabled="true" key="未回款" effect="plain" type="danger">未回款</el-tag>
+              <el-tag style="margin-left:10px ;" v-if="domain.OrderState == 2" :disabled="true" key="已回款" effect="plain" type="success">已回款</el-tag>
+              <el-tag style="margin-left:10px ;" v-if="domain.OrderState == 3" :disabled="true" key="部分回款" effect="plain">部分回款</el-tag>
+              <el-button :disabled="!updateShow || (domain.OrderAmount != 0 && !domain.Flag)" style="margin-left:10px ;"
+              type="text" icon="el-icon-delete" @click.prevent="removeDomainUpdate(domain)" />
+            </el-form-item>
           </el-col>
         </el-row>
         <el-form-item>
-          <el-button :disabled="!updateShow" icon="el-icon-plus" class="addItemClass"
+          <el-button size="mini" :disabled="!updateShow" icon="el-icon-plus" class="addItemClass"
             @click="addDomainUpdate">新增自定义金额</el-button>
         </el-form-item>
         <!-- <el-form-item label="合计" prop="AmountReceived">
                     <el-input placeholder="先添加数据然后再添加自定义金额" v-model="updateContractOrderForm.AmountReceived" readonly>
                     </el-input>
                 </el-form-item> -->
-        <el-row>
+        <!-- <el-row>
           <el-col :span="12">
             <el-form-item label="发票科目" prop="InvoiceAccount">
               <el-select v-model="updateContractOrderForm.InvoiceAccount" :disabled="!updateShow" filterable
@@ -444,15 +509,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="发票类型" prop="InvoiceType">
+            <el-form-item label="发票种类" prop="InvoiceType">
               <el-select v-model="updateContractOrderForm.InvoiceType" :disabled="!updateShow" filterable
-                placeholder="发票类型">
+                placeholder="发票种类">
                 <el-option v-for="item in InvoiceTypeList" :key="item.Code" :class="item.Class" :label="item.Name"
                   :value="item.Code" />
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-row>
           <el-col :span="12">
             <el-form-item label="申请人" prop="Applicant">
@@ -463,9 +528,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="申请时间" prop="ApplicationTime">
+            <el-form-item label="账单申请日期" prop="ApplicationTime">
               <el-date-picker v-model="updateContractOrderForm.ApplicationTime" :disabled="!updateShow" type="date"
-                placeholder="申请时间" />
+                placeholder="账单申请日期" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -549,15 +614,15 @@
                 </el-table>
             </el-card>
         </el-dialog> -->
-    <!-- 修改审核状态弹出窗口 -->
-    <el-dialog title="修改审核状态" :visible.sync="auditStatusCheckDialog" width="30%">
+    <!-- 修改发票状态弹出窗口 -->
+    <el-dialog title="修改发票状态" :visible.sync="auditStatusCheckDialog" width="30%">
       <el-form label-width="150px">
         <el-row>
           <el-col>
             <el-alert title="选中合同条数" type="info" :description="auditStatusdescription" show-icon :closable="false" />
           </el-col>
         </el-row>
-        <el-form-item label="审核状态" style="margin-top:20px;">
+        <el-form-item label="发票状态" style="margin-top:20px;">
           <el-select v-model="InvoiceState" filterable placeholder="发票状态" clearable>
             <el-option v-for="item in InvoiceStatusList" :key="item.Code" :class="item.Class" :label="item.Name"
               :value="item.Code">
@@ -613,6 +678,7 @@ import { cutOutNum } from '@/utils/decimals'
 moment.locale("zh-cn"); // 设置语言 或 moment.lang('zh-cn');
 
 export default {
+  name:'账单列表',
   components: {
     collapse
   },
@@ -820,7 +886,7 @@ export default {
       PaymentCollectionStateArray: [
         { Code: 1, Name: "未回款" },
         { Code: 2, Name: "已回款" },
-        { Code: 3, Name: "有余额" },
+        { Code: 3, Name: "部分回款" },
       ],
       // 账单使用状态
       OrderStateArray: [
@@ -848,20 +914,20 @@ export default {
             trigger: "blur",
           },
         ],
-        AmountTotal: [
-          {
-            required: true,
-            pattern:
-              /^([0-9]\d*(\.\d{1,2})?|([0](\.([0][0-9]|[0-9]\d{0,1}))))$/,
-            message: "合计输入不合法（不能为负数小数位不超过2位）",
-            trigger: "blur",
-          },
-        ],
+        // AmountTotal: [
+        //   {
+        //     required: true,
+        //     pattern:
+        //       /^([0-9]\d*(\.\d{1,2})?|([0](\.([0][0-9]|[0-9]\d{0,1}))))$/,
+        //     message: "合计输入不合法（不能为负数小数位不超过2位）",
+        //     trigger: "blur",
+        //   },
+        // ],
         InvoiceAccount: [
-          { required: true, message: "请选择发票科目", trigger: "change" },
+          { required: false, message: "请选择发票科目", trigger: "change" },
         ],
         InvoiceType: [
-          { required: true, message: "请选择发票类型", trigger: "change" },
+          { required: false, message: "请选择发票类型", trigger: "change" },
         ],
         Applicant: [
           { required: true, message: "请选择申请人", trigger: "change" },
@@ -988,13 +1054,13 @@ export default {
         this.auditStatusCheckLoading = false;
       });
     },
-    // 弹出修改审核状态窗口
+    // 弹出修改发票状态窗口
     auditStatusCheck() {
       if (!this.OrderCodeStr) {
         this.$message.warning("请勾选要审核的数据！");
         return;
       }
-      // 默认一个审核状态吧，录入-未送审
+      // 默认一个发票状态吧，录入-未送审
       this.InvoiceState = '1';
       this.auditStatusCheckDialog = true;
     },
@@ -1059,10 +1125,10 @@ export default {
           this.OrderCodeStr.substring(0, this.OrderCodeStr.lastIndexOf(",")
           );
         this.auditStatusdescription = "选中账单中" +
-          (oneCount == 0 ? "" : "审核状态为未开的有" + oneCount + "个；") +
-          (twoCount == 0 ? "" : "审核状态为已开的有" + twoCount + "个；") +
-          (threeCount == 0 ? "" : "审核状态为作废的有" + threeCount + "个；") +
-          (fourCount == 0 ? "" : "审核状态为审核成功的有" + fourCount + "个。")
+          (oneCount == 0 ? "" : "发票状态为未开的有" + oneCount + "个；") +
+          (twoCount == 0 ? "" : "发票状态为已开的有" + twoCount + "个；") +
+          (threeCount == 0 ? "" : "发票状态为作废的有" + threeCount + "个；") +
+          (fourCount == 0 ? "" : "发票状态为审核成功的有" + fourCount + "个。")
       } else {
         this.OrderCodeStr = "";
         this.auditStatusdescription = "";
@@ -1084,7 +1150,9 @@ export default {
       this.addContractOrderForm.domains.push({
         CustomAmountName: '',
         CustomAmount: '',
-        key: Date.now()
+        OrderAmount: 0,
+        key: Date.now(),
+        OrderState:1
       });
     },
     removeDomain(item) {
@@ -1100,7 +1168,10 @@ export default {
       this.updateContractOrderForm.domains.push({
         CustomAmountName: '',
         CustomAmount: '',
-        key: Date.now()
+        OrderAmount: 0,
+        Flag: true,
+        key: Date.now(),
+        OrderState:1
       });
     },
     removeDomainUpdate(item) {
@@ -1252,6 +1323,8 @@ export default {
             this.LoadingUpdate = false;
             return;
           }
+          console.log(this.updateContractOrderForm);
+          debugger
           UpdateContractOrder(this.updateContractOrderForm).then((res) => {
             if (res.success) {
               this.$message.success("操作成功");
@@ -1318,6 +1391,7 @@ export default {
       this.updateContractOrderForm.IsUsed = item.IsUsed;
       this.updateContractOrderForm.InvoiceState = item.InvoiceState + "";
       this.updateContractOrderForm.ContractOrderName = item.ContractOrderName;
+      this.updateContractOrderForm.AmountTotal = item.AmountTotal;
       //只有未审核并且是未回款时候才可以进行修改
       if (item.InvoiceState == 0 && item.CollectionState == 1) { this.updateShow = true; } else { this.updateShow = false; }
       this.updateContractOrderForm.CollectionState = item.CollectionState;
@@ -1334,6 +1408,11 @@ export default {
     },
     // 删除信息
     async deleteDialog(item) {
+     if(item.CollectionState!=1)
+     {
+      return this.$message.info("只能删除未回款的数据，对于已经扣款的数据不能做删除操作");
+
+     }
       const confirmResult = await this.$confirm(
         "此操作将删除该条, 是否继续?",
         "提示",

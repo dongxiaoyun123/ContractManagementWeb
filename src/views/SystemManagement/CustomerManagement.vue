@@ -5,11 +5,9 @@
         <el-col :span="24">
           <el-button-group>
             <el-button type="success" icon="el-icon-circle-check" :loading="ExportLoading2"
-                       @click="UpdateStatesData(true)"
-            >批量开启</el-button>
+              @click="UpdateStatesData(true)">批量开启</el-button>
             <el-button type="danger" icon="el-icon-circle-close" :loading="ExportLoading1"
-                       @click="UpdateStatesData(false)"
-            >批量关闭</el-button>
+              @click="UpdateStatesData(false)">批量关闭</el-button>
             <!-- <el-button
               type="primary"
               @click="AddUser"
@@ -22,8 +20,7 @@
     </el-card>
     <el-card class="CardTableClass">
       <el-table class="tableCheckClass" ref="multipleTable" v-loading="loading" :data="CollectionList" fit
-                :cell-style="isRed" @selection-change="TableSelect" @row-click="toggleSelection"
-      >
+        :cell-style="isRed" @selection-change="TableSelect" @row-click="toggleSelection">
         <!-- :row-class-name="tableRowClassName" -->
         <el-table-column type="selection" width="50" />
         <el-table-column prop="User_Account" label="客服账号" width="250" />
@@ -37,9 +34,8 @@
       </el-table>
       <!-- 分页区域 -->
       <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
-                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
-      />
+        :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
   </div>
 </template>
@@ -50,6 +46,7 @@ import {
   UpdateState,
 } from "@/api/CollectionMangement";
 export default {
+  name: '客服管理',
   components: {},
   data() {
     return {
@@ -123,8 +120,8 @@ export default {
     // 点击当前行数据进行选中或取消复选框
     toggleSelection(row, column, event) {
       if (column.label != "操作")
-        // 通过ref绑定后这里使用$refs.table来操作bom元素
-        { this.$refs.multipleTable.toggleRowSelection(row); }
+      // 通过ref绑定后这里使用$refs.table来操作bom元素
+      { this.$refs.multipleTable.toggleRowSelection(row); }
     },
     TableSelect(selection) {
       this.multipleSelection = selection;
@@ -172,8 +169,8 @@ export default {
         return;
       }
       let message = "";
-      if (!flag) message = "是否批量开启客服账号？";
-      else message = "是否批量关闭客服账号？";
+      if (!flag) message = "是否批量关闭客服账号？";
+      else message = "是否批量开启客服账号？";
       const confirmResult = await this.$confirm(message, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",

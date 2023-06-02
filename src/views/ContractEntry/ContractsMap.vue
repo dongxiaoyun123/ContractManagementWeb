@@ -101,6 +101,7 @@ import {
 } from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
 export default {
+    name: '公司地图分布',
     data() {
         return {
             markerPoint: { lng: 116.4, lat: 39.9 },

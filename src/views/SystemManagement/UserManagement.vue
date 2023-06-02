@@ -15,8 +15,7 @@
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item label="角色">
-                <el-select class="FormClass" v-model="RoleCode" filterable placeholder="请选择"
-                  clearable="">
+                <el-select class="FormClass" v-model="RoleCode" filterable placeholder="请选择" clearable="">
                   <el-option v-for="item in RoleDatas" :key="item.RoleCode" :label="item.RoleName" :value="item.RoleCode"
                     :disabled="item.Disabled" />
                 </el-select>
@@ -77,11 +76,10 @@
               @click="showEditDialog(scope.row.User_ID)">编辑</el-button>
             <el-button icon="el-icon-delete" type="text" size="mini"
               @click="deleteDialog(scope.row.User_ID)">删除</el-button>
-            <el-dropdown @command="
-              (command) => {
+            <el-dropdown @command="(command) => {
                 handleCommand(command, scope.row.User_ID);
               }
-            ">
+              ">
               <el-button type="text" size="mini">
                 更多操作<i class="el-icon-arrow-down el-icon--right" />
               </el-button>
@@ -99,11 +97,10 @@
               @click="showEditDialog(scope.row.User_ID)">编辑</el-button>
             <el-button icon="el-icon-delete" type="text" size="mini"
               @click="deleteDialog(scope.row.User_ID)">删除</el-button>
-            <el-dropdown @command="
-              (command) => {
+            <el-dropdown @command="(command) => {
                 handleCommand(command, scope.row.User_ID);
               }
-            ">
+              ">
               <el-button type="text" size="mini">
                 更多操作<i class="el-icon-arrow-down el-icon--right" />
               </el-button>
@@ -234,13 +231,14 @@
       <el-divider />
       <el-row class="buttonCenter">
         <el-col>
-          <el-button v-loading.fullscreen.lock="UpdatePasswordLoading" type="primary" @click="updatePasswordCommit">确 定
+          <el-button v-loading.fullscreen.lock="UpdatePasswordLoading" type="primary" @click="updatePasswordCommitClick">确
+            定
           </el-button>
         </el-col>
       </el-row>
       <!-- <span slot="footer" class="dialog-footer">
         <el-button @click="updatePasswordVisible = false" >取 消</el-button>
-        <el-button type="primary" v-loading.fullscreen.lock="UpdatePasswordLoading" @click="updatePasswordCommit"
+        <el-button type="primary" v-loading.fullscreen.lock="UpdatePasswordLoading" @click="updatePasswordCommitClick"
           >确 定
         </el-button>
       </span> -->
@@ -264,7 +262,7 @@
     <!-- 绑定用户 -->
     <el-dialog :visible.sync="updateRoleDialogVisible1" top="5vh" width="50%">
       <div slot="title" class="dialog-title">
-        <span>用户管理</span>
+        <span>下级人员绑定</span>
       </div>
       <el-card class="box-card">
         <el-row>
@@ -291,7 +289,7 @@
       <el-card class="box-card">
         <el-row>
           <el-col :span="16">
-            <el-input v-model="filterText" placeholder="输入用户进行过滤" clearable="" />
+            <el-input v-model="filterTextExport" placeholder="输入用户进行过滤" clearable="" />
           </el-col>
           <el-col :span="8" style="text-align:right">
             <el-switch v-model="PositionStatusFlag" style="margin-top: 7px;margin-right: 40px;" active-color="#13ce66"
@@ -315,7 +313,7 @@ import {
   GetAdmin_UserFirst,
   UpdateAdmin_User,
   DeleteAdmin_User,
-  updatePasswordCommit,
+  UpdatePasswordCommit,
   GetDepartment,
   GetDicCategoryByContractType,
   GetRoleManagement,
@@ -330,6 +328,7 @@ import {
 import { showLoading, hideLoading } from "@/common/loading";
 const moment = require("moment");
 export default {
+  name: '用户管理',
   data() {
     // 自定义手机号规则
     var checkMobile = (rule, value, callback) => {
@@ -341,6 +340,7 @@ export default {
       callback(new Error("请输入合法的手机号码"));
     };
     return {
+      filterTextExport:'',
       formShow: '',
       fixedLeftShow: true,
       UserAllList: [],
@@ -536,7 +536,10 @@ export default {
     // },
 
     filterText(val) {
-      this.$refs.tree.filter(val);
+      this.$refs.tree2.filter(val);
+    },
+    filterTextExport(val) {
+      this.$refs.treeExport.filter(val);
     },
     '$store.getters.clientWidth'(newVal, oldVal) {
       this.fixedShowMethod(newVal);
@@ -813,7 +816,7 @@ export default {
       this.updatePasswordVisible = true;
     },
     // 修改密码提交验证
-    updatePasswordCommit() {
+    updatePasswordCommitClick() {
       this.UpdatePasswordLoading = true;
       // 提交请求前，表单预验证
       this.$refs.updatePasswordRef.validate(async (valid) => {
@@ -823,7 +826,9 @@ export default {
           return;
         }
         // this.addLive();
-        updatePasswordCommit(this.updatePassword).then((res) => {
+        console.log(this.updatePassword);
+        debugger
+        UpdatePasswordCommit(this.updatePassword).then((res) => {
           if (res.success) {
             this.$message.success("密码修改成功！");
             // 隐藏添加用户对话框

@@ -92,11 +92,11 @@
                      :on-exceed="handleExceedAdd" :on-remove="AttachmentCodeRemove" :auto-upload="false" :file-list="fileList"
                      :on-change="handleChange"
           >
-            <el-button slot="trigger" type="primary">选取文件</el-button>
-            <el-button style="margin-left: 10px;" type="success" :loading="uploadServerLoading"
+            <el-button plain slot="trigger" type="primary">选取文件</el-button>
+            <el-button plain style="margin-left: 10px;" type="success" :loading="uploadServerLoading"
                        @click="submitUpload"
             >上传到服务器</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span></div>
             <div slot="tip" class="el-upload__tip">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
           </el-upload>
         </el-form-item>
@@ -162,11 +162,11 @@
                      :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
                      :file-list="fileListUpload" :on-change="handleChangeUpdate"
           >
-            <el-button slot="trigger" type="primary">选取文件</el-button>
-            <el-button style="margin-left: 10px;" type="success" :loading="uploadServerLoading"
+            <el-button plain slot="trigger" type="primary">选取文件</el-button>
+            <el-button plain style="margin-left: 10px;" type="success" :loading="uploadServerLoading"
                        @click="submitUploadUpdate"
             >上传到服务器</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过5M</div>
+            <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span></div>
             <div slot="tip" class="el-upload__tip">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
             <div slot="tip" class="el-upload__tip">下面为新上传的文件</div>
           </el-upload>

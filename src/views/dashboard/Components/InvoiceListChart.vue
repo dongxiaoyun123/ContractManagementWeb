@@ -29,7 +29,7 @@ export default {
         getEchartData() {
             const option = {
                 title: {
-                    text: '近一年发票类型统计'
+                    text: '近一年发票种类统计'
                 },
                 tooltip: {
                     trigger: 'axis',

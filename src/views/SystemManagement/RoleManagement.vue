@@ -137,6 +137,7 @@ import {
 import { showLoading, hideLoading } from "@/common/loading";
 const moment = require("moment");
 export default {
+  name: '角色管理',
   data() {
     return {
       LoadingUpdate: false,

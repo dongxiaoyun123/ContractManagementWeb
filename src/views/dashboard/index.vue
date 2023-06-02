@@ -60,7 +60,7 @@
     </el-row>
     <el-backtop target=".dashboardCalss" :bottom="45">
       <el-tooltip placement="top" content="回到顶部">
-        <svg-icon style="color: #1890FF;" icon-class="BackToTop" />
+        <svg-icon style="color: #1890FF;font-size:medium;" icon-class="BackToTop" />
       </el-tooltip>
     </el-backtop>
   </div>
@@ -77,7 +77,7 @@ import InvoiceListChart from './Components/InvoiceListChart'
 import CommonSuggestions from './Components/CommonSuggestions'
 import CommonOperationLog from './Components/CommonOperationLog'
 export default {
-  name: 'Dashboard',
+  name: '首页',
   components: {
     PanelGroup,
     CollectionCountChart,
