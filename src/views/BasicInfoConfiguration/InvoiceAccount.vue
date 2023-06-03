@@ -47,7 +47,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button v-loading.fullscreen.lock="LoadingAdd" type="primary" @click="saveAdd">确 定
+            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingAdd" type="primary" @click="saveAdd">保 存
             </el-button>
           </el-col>
         </el-row>
@@ -67,7 +67,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button v-loading.fullscreen.lock="LoadingUpdate" type="primary" @click="saveUpdate">确 定
+            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingUpdate" type="primary" @click="saveUpdate">保 存
             </el-button>
           </el-col>
         </el-row>
@@ -86,7 +86,7 @@ import {
 } from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
 export default {
-  name: '发票科目',
+  name: 'InvoiceAccount',
   data() {
     return {
       Name: "",

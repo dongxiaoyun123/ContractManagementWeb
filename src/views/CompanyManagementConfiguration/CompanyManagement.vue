@@ -55,7 +55,7 @@
                   <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
                     @keyup.enter.native="handleInputConfirm(props)" @blur="handleInputConfirm(props)">
                   </el-input>
-                  <el-button v-else class="button-new-tag" size="small" @click="showInput"> + 添加所属客户之前曾用名</el-button>
+                  <el-button icon="el-icon-plus" v-else class="button-new-tag" size="small" @click="showInput"> 添加公司曾用名</el-button>
                 </div>
 
               </el-form-item>
@@ -136,7 +136,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button type="primary" :loading="LoadingAdd" @click="saveAdd">确 定</el-button>
+            <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingAdd" @click="saveAdd">保 存</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -166,7 +166,7 @@
           <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
             accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :before-remove="beforeRemove"
             :on-remove="handleRemove" :file-list="updateCompanyNameAForm.FileLists" :on-preview="AttachmentCodePreview">
-            <div slot="tip" class="el-upload__tip">之前上传的文件，可对其进行删除操作（执行确定会立马删除）</div>
+            <div slot="tip" style="margin-top:-30px" class="el-upload__tip">之前上传的文件，可对其进行删除操作（执行确定会立马删除）</div>
           </el-upload>
         </el-form-item>
         <el-form-item label="附件上传">
@@ -174,8 +174,8 @@
             accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
             :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
             :file-list="fileListUpload" :on-change="handleChangeUpdate">
-            <el-button plain slot="trigger" type="primary">选取文件</el-button>
-            <el-button plain style="margin-left: 10px;" type="success" :loading="uploadServerLoading"
+            <el-button icon="el-icon-position" plain slot="trigger" type="primary">选取文件</el-button>
+            <el-button icon="el-icon-upload2"  plain style="margin-left: 10px;" type="success" :loading="uploadServerLoading"
               @click="submitUploadUpdate">上传到服务器</el-button>
             <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span></div>
             <div slot="tip" class="el-upload__tip">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
@@ -185,7 +185,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button type="primary" :loading="LoadingUpdate || uploadServerLoading" @click="saveUpdate">修改</el-button>
+            <el-button icon="el-icon-circle-check"  type="primary" :loading="LoadingUpdate || uploadServerLoading" @click="saveUpdate">保 存</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -207,7 +207,7 @@ import {
 } from "@/api/SystemManagement";
 let geocoder;
 export default {
-  name: '客户管理',
+  name: 'CompanyManagement',
   data() {
     return {
       deleteLoading: false,
@@ -365,7 +365,6 @@ export default {
             props.row.childrenStr = props.row.childrenStr ? props.row.childrenStr : [];
             let inputValuecatch = inputValue;
             props.row.childrenStr.push(inputValuecatch);
-            debugger
           } else {
             this.$message.error(res.resultMessage);
           }

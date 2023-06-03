@@ -77,7 +77,7 @@ import InvoiceListChart from './Components/InvoiceListChart'
 import CommonSuggestions from './Components/CommonSuggestions'
 import CommonOperationLog from './Components/CommonOperationLog'
 export default {
-  name: '首页',
+  name: 'dashboard',
   components: {
     PanelGroup,
     CollectionCountChart,

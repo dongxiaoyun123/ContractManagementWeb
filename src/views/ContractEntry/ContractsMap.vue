@@ -4,7 +4,7 @@
     <el-card v-loading="mapShow">
       <el-row>
         <el-col v-if="typeParameter" class="titleClass" :span="24" style="text-align: right">
-          <el-button type="primary" @click="ReturnClick">返 回</el-button>
+          <el-button icon="el-icon-back" type="primary" @click="ReturnClick">返 回</el-button>
         </el-col>
         <el-col :span="24">
           <div class="contact">
@@ -101,7 +101,7 @@ import {
 } from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
 export default {
-    name: '公司地图分布',
+    name: 'ContractsMap',
     data() {
         return {
             markerPoint: { lng: 116.4, lat: 39.9 },

@@ -81,7 +81,7 @@
                   </div>
                 </div>
                 <el-badge value="hot" class="item">
-                  <el-button>提示</el-button>
+                  <el-button icon="el-icon-warning-outline">提示</el-button>
                 </el-badge>
               </el-tooltip>
             </el-col>
@@ -414,8 +414,7 @@
       <el-divider />
       <el-row style="text-align:center;">
         <el-col :span="24">
-          <el-button :loading="LoadingUpdate" type="primary" @click="saveUpdate">确
-            定</el-button>
+          <el-button icon="el-icon-circle-check" :loading="LoadingUpdate" type="primary" @click="saveUpdate">保 存</el-button>
         </el-col>
       </el-row>
     </el-dialog>
@@ -505,8 +504,7 @@
       <el-divider />
       <el-row style="text-align:center;">
         <el-col :span="24">
-          <el-button :loading="LoadingUpdateOther" type="primary" @click="saveUpdateOther">确
-            定</el-button>
+          <el-button icon="el-icon-circle-check" :loading="LoadingUpdateOther" type="primary" @click="saveUpdateOther">保 存</el-button>
         </el-col>
       </el-row>
     </el-dialog>
@@ -519,13 +517,13 @@
           <el-upload ref="upload" :action="actionUrl" :on-preview="handlePreview" :on-remove="handleRemove"
             :on-success="fileUploadSuccess" :on-error="fileUploadFail" :on-change="fileChange" :file-list="fileList"
             :limit="1" :auto-upload="false" :headers="myHeaders">
-            <el-button plain slot="trigger" type="primary" class="buttonM">选取文件</el-button>
+            <el-button icon="el-icon-position"   plain slot="trigger" type="primary" class="buttonM">选取文件</el-button>
           </el-upload>
         </el-form-item>
         <el-divider />
         <el-row style="text-align:center;">
           <el-col :span="24">
-            <el-button :loading="uploadLoading" type="success" @click="submitUpload">开始导入</el-button>
+            <el-button icon="el-icon-upload2"  :loading="uploadLoading" type="success" @click="submitUpload">开始导入</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -538,8 +536,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button v-loading.fullscreen.lock="LoadingDetailUpdate" type="primary" @click="saveDetailUpdate">确
-              定</el-button>
+            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingDetailUpdate" type="primary" @click="saveDetailUpdate">保 存</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -581,7 +578,7 @@ import FakeProgress from 'fake-progress';
 import { BigNumber } from 'bignumber.js';
 
 export default {
-  name: '回款数据',
+  name: 'CollectionData',
   components: { Customer,CustomerOther },
   data() {
     return {
@@ -858,7 +855,7 @@ export default {
     showCollection({ row, column }) {
       if (column.label == "实际应缴") {
         return {
-          backgroundColor: "#F0F9EB",
+          backgroundColor: "#E6F7FF",
         };
       } else {
         return {
@@ -870,7 +867,7 @@ export default {
     showCollectionOther({ row, column }) {
       if (column.label == "收款金额") {
         return {
-          backgroundColor: "#F0F9EB",
+          backgroundColor: "#E6F7FF",
         };
       } else {
         return {
@@ -1217,7 +1214,6 @@ export default {
         sendEnterPriseName,
       ).then((res) => {
         if (res.success) {
-          debugger
           this.CollectionOrderOtherData = res.result.map(v => {
             this.$set(v, 'ServReceiveNew', "");
             return v

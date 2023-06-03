@@ -46,7 +46,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button v-loading.fullscreen.lock="LoadingAdd" type="primary" @click="saveAdd">确 定
+            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingAdd" type="primary" @click="saveAdd"> 保 存
             </el-button>
           </el-col>
         </el-row>
@@ -68,7 +68,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button v-loading.fullscreen.lock="LoadingUpdate" type="primary" @click="saveUpdate">确 定
+            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingUpdate" type="primary" @click="saveUpdate"> 保 存
             </el-button>
           </el-col>
         </el-row>
@@ -88,7 +88,7 @@ import {
 import { showLoading, hideLoading } from "@/common/loading";
 const moment = require("moment");
 export default {
-  name: '合同类型配置',
+  name: 'DicCategoryManagement',
   data() {
     return {
       Name: "",

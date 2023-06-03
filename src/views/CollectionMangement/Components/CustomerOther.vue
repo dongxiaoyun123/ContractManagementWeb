@@ -79,7 +79,7 @@
         <el-divider />
         <el-row v-if="CancelShow" style="text-align:center;">
             <el-col :span="24">
-                <el-button :disabled="DisabledShow" :loading="CancelLoading" type="danger"
+                <el-button icon="el-icon-refresh-left" :disabled="DisabledShow" :loading="CancelLoading" type="danger"
                     @click="CancelSubmit">全部撤回</el-button>
             </el-col>
         </el-row>
@@ -147,7 +147,6 @@ export default {
             GetOtherOrderById(this.ClickRow.InsProductPayCode).then((res) => {
                 this.loading = false;
                 if (res.success) {
-                    debugger
                     this.CollectionOrderData = res.result;
                     if (this.CollectionOrderData.length != 0)
                         this.DisabledShow = false;

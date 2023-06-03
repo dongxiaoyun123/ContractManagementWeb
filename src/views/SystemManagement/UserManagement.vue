@@ -43,7 +43,7 @@
                 </el-button>
                 <el-button type="success" icon="el-icon-circle-plus-outline" @click="AddAdminUser">添 加
                 </el-button>
-                <el-button type="warning" icon="el-icon-s-check" @click="showManagementExportDialog">合同导出权限
+                <el-button type="warning" icon="el-icon-download" @click="showManagementExportDialog">合同导出权限
                 </el-button>
               </el-button-group>
             </el-col>
@@ -159,7 +159,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button v-loading.fullscreen.lock="LoadingAdd" type="primary" @click="saveAdd">确 定
+            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingAdd" type="primary" @click="saveAdd">保 存
             </el-button>
           </el-col>
         </el-row>
@@ -211,7 +211,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button v-loading.fullscreen.lock="LoadingUpdate" type="primary" @click="saveUpdate">确 定
+            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingUpdate" type="primary" @click="saveUpdate">保 存
             </el-button>
           </el-col>
         </el-row>
@@ -231,8 +231,7 @@
       <el-divider />
       <el-row class="buttonCenter">
         <el-col>
-          <el-button v-loading.fullscreen.lock="UpdatePasswordLoading" type="primary" @click="updatePasswordCommitClick">确
-            定
+          <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="UpdatePasswordLoading" type="primary" @click="updatePasswordCommitClick">保 存
           </el-button>
         </el-col>
       </el-row>
@@ -252,7 +251,7 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>选择合同类型进行关联</span>
-          <el-button style="float: right;" type="primary" :loading="LoadingRoleUpdate" @click="saveUserUpdate">关联
+          <el-button icon="el-icon-link" style="float: right;" type="primary" :loading="LoadingRoleUpdate" @click="saveUserUpdate">关 联
           </el-button>
         </div>
         <el-tree ref="tree1" style="height: calc(100vh - 350px); overflow-y: scroll" :data="permissionTree"
@@ -272,7 +271,7 @@
           <el-col :span="8" style="text-align:right">
             <el-switch v-model="PositionStatusFlag" style="margin-top: 7px;margin-right: 40px;" active-color="#13ce66"
               inactive-color="#ff4949" active-text="在职" inactive-text="离职" @change="changePositionStatus" />
-            <el-button style="float: right;" type="primary" :loading="LoadingRoleUpdate1" @click="saveUserUpdate1">关联
+            <el-button  icon="el-icon-link" style="float: right;" type="primary" :loading="LoadingRoleUpdate1" @click="saveUserUpdate1">关 联
             </el-button>
           </el-col>
         </el-row>
@@ -294,7 +293,7 @@
           <el-col :span="8" style="text-align:right">
             <el-switch v-model="PositionStatusFlag" style="margin-top: 7px;margin-right: 40px;" active-color="#13ce66"
               inactive-color="#ff4949" active-text="在职" inactive-text="离职" @change="changePositionStatusExport" />
-            <el-button style="float: right;" type="primary" :loading="LoadingRoleUpdate2" @click="saveUserUpdateExport">关联
+            <el-button  icon="el-icon-link" style="float: right;" type="primary" :loading="LoadingRoleUpdate2" @click="saveUserUpdateExport">关 联
             </el-button>
           </el-col>
         </el-row>
@@ -328,7 +327,7 @@ import {
 import { showLoading, hideLoading } from "@/common/loading";
 const moment = require("moment");
 export default {
-  name: '用户管理',
+  name: 'UserManagement',
   data() {
     // 自定义手机号规则
     var checkMobile = (rule, value, callback) => {
@@ -826,8 +825,6 @@ export default {
           return;
         }
         // this.addLive();
-        console.log(this.updatePassword);
-        debugger
         UpdatePasswordCommit(this.updatePassword).then((res) => {
           if (res.success) {
             this.$message.success("密码修改成功！");

@@ -139,15 +139,22 @@
                   <el-form-item class="whereFormClass" label="归档类型">
                     <el-select v-model="ArchivedType" class="timeClass" filterable placeholder="归档类型" clearable="">
                       <el-option v-for="item in ArchivedTypeList" :key="item.Code" :label="item.Name" :value="item.Code">
-                        <el-tag v-if="item.Code == 1" :key="item.Code" effect="plain" type="danger">
-                          {{ item.Name }}
-                        </el-tag>
-                        <el-tag v-if="item.Code == 2" :key="item.Code" effect="plain">
-                          {{ item.Name }}
-                        </el-tag>
-                        <el-tag v-if="item.Code == 3" :key="item.Code" effect="plain" type="success">
-                          {{ item.Name }}
-                        </el-tag>
+
+                        <div v-if="item.Code == 1">
+                          <span style="border-color: #F7C695;color:#FA8C16">
+                            待上传
+                          </span>
+                        </div>
+                        <div v-if="item.Code == 2">
+                          <span style="border-color: #A29BC4;color:#6959CD">
+                            待归档
+                          </span>
+                        </div>
+                        <div style="margin-bottom: 0;" v-if="item.Code == 3">
+                          <span style="border-color: #8BC6C6;color:#11A983">
+                            已归档
+                          </span>
+                        </div>
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -367,12 +374,12 @@
                       </span>
                     </div>
                     <div>
-                      <span  style="border-color: #A29BC4;color:#6959CD">
+                      <span style="border-color: #A29BC4;color:#6959CD">
                         待归档
                       </span>
                     </div>
                     <div style="margin-bottom: 0;">
-                      <span   style="border-color: #8BC6C6;color:#11A983">
+                      <span style="border-color: #8BC6C6;color:#11A983">
                         已归档
                       </span>
                     </div>
@@ -383,16 +390,16 @@
           </template>
           <template slot-scope="scope">
             <div :style="tableTagClass">
-              <span v-if="scope.row.ArchivedType == 1" :key="scope.$index + 'a' + scope.row.ArchivedType" 
-              style="border-color: #F7C695;color:#FA8C16">
+              <span v-if="scope.row.ArchivedType == 1" :key="scope.$index + 'a' + scope.row.ArchivedType"
+                style="border-color: #F7C695;color:#FA8C16">
                 待上传
               </span>
               <span v-if="scope.row.ArchivedType == 2" :key="scope.$index + 'b' + scope.row.ArchivedType"
-                 style="border-color: #A29BC4;color:#6959CD">
+                style="border-color: #A29BC4;color:#6959CD">
                 待归档
               </span>
-              <span v-if="scope.row.ArchivedType == 3" :key="scope.$index + 'c' + scope.row.ArchivedType" 
-                 style="border-color: #8BC6C6;color:#13C2C2">
+              <span v-if="scope.row.ArchivedType == 3" :key="scope.$index + 'c' + scope.row.ArchivedType"
+                style="border-color: #8BC6C6;color:#13C2C2">
                 已归档
               </span>
             </div>
@@ -581,8 +588,8 @@
                   更多操作<i class="el-icon-arrow-down el-icon--right" />
                 </el-button>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="a" icon="el-icon-office-building">关联公司
-                  </el-dropdown-item>
+                  <!-- <el-dropdown-item command="a" icon="el-icon-office-building">关联公司
+                  </el-dropdown-item> -->
                   <el-dropdown-item command="b" icon="el-icon-user">关联销售</el-dropdown-item>
                   <el-dropdown-item command="c" icon="el-icon-service">关联客服</el-dropdown-item>
                   <el-dropdown-item v-if="scope.row.AuditStatus == 1" command="d" icon="el-icon-delete">删除
@@ -678,11 +685,11 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label="付款方">
-                  <el-tag  :closable="addContractsForm.CompanyId + '' != item.Code + ''" @close="handleClose(item.Code)"
-                    v-for="item in PayerArray" :key="item.Code" style="margin-right: 18px;"
-                    :type="item.Type">{{ item.Name }}</el-tag>
-                    <el-divider v-if="PayerArray.length!=0" />
-                  <el-button plain  size="mini" @click="showCollectionDialog(true)"> + 关联付款方</el-button>
+                  <el-tag effect="plain" :closable="addContractsForm.CompanyId + '' != item.Code + ''" @close="handleClose(item.Code)"
+                    v-for="item in PayerArray" :key="item.Code" style="margin-right: 18px;" :type="item.Type">{{ item.Name
+                    }}</el-tag>
+                  <el-divider v-if="PayerArray.length != 0" />
+                  <el-button icon="el-icon-plus" plain size="mini" @click="showCollectionDialog(true)"> 关联付款方</el-button>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -753,62 +760,63 @@
             <!-- 动态增减表单项 -->
             <el-row v-for="(domain, index) in addContractsForm.domains">
               <el-col style="width:35px">
-                <el-form-item v-if="addContractsForm.domains.length>1 && index==0" label-width="0">
+                <el-form-item v-if="addContractsForm.domains.length > 1 && index == 0" label-width="0">
                   <span style="font-size:14px; font-weight:500;display: block;text-align: right;">（（</span>
                 </el-form-item>
                 <el-form-item v-else label-width="0">
                   <span style="font-size:14px; font-weight:500;display: block;text-align: right;">（</span>
                 </el-form-item>
               </el-col>
-                <el-col :span="5">
-                  <el-form-item label-width="85px" :key="domain.key" :label="'单价' + (index + 1)" :prop="'domains.' + index + '.UnitPrice'"
-                    :rules="{
-                      required: true,
-                      message: '合同单价不能为空',
-                      trigger: 'blur',
-                    }">
-                    <el-input v-model="domain.UnitPrice" clearable @input="handleChangeAdd" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="1">
-                  <el-form-item label-width="0">
-                    <span style="font-size:18px; font-weight:500;display: block;text-align: center;">×</span>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="5">
-                  <el-form-item label-width="85px" :key="domain.key" :label="'数量' + (index + 1)" :prop="'domains.' + index + '.Quantity'"
-                    :rules="{
-                      required: true,
-                      message: '合同数量不能为空',
-                      trigger: 'blur',
-                    }">
-                    <el-input v-model="domain.Quantity" clearable @input="handleChangeAdd" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="5">
-                  <el-form-item label="备注" prop="Remark" label-width="85px">
-                    <el-input v-model="domain.Remark" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="1" style="line-height:100% ;text-align:center">
-                  <el-button style="margin-left:10px ;font-size:14px" type="text" icon="el-icon-delete"
-                    @click.prevent="removeDomain(domain)" />
-                </el-col>
-                <el-col :span="1">
-                  <el-form-item v-if="addContractsForm.domains.length>1 && index==addContractsForm.domains.length-1" label-width="0">
-                    <span style="font-size:14px; font-weight:500;display: block;text-align: left;">））</span>
-                  </el-form-item>
-                  <el-form-item v-else label-width="0">
-                    <span style="font-size:14px; font-weight:500;display: block;text-align: left;">）</span>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="1">
-                <el-form-item label-width="0" v-if="addContractsForm.domains.length-1!=index">
+              <el-col :span="5">
+                <el-form-item label-width="85px" :key="domain.key" :label="'单价' + (index + 1)"
+                  :prop="'domains.' + index + '.UnitPrice'" :rules="{
+                    required: true,
+                    message: '合同单价不能为空',
+                    trigger: 'blur',
+                  }">
+                  <el-input v-model="domain.UnitPrice" clearable @input="handleChangeAdd" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="1">
+                <el-form-item label-width="0">
+                  <span style="font-size:18px; font-weight:500;display: block;text-align: center;">×</span>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label-width="85px" :key="domain.key" :label="'数量' + (index + 1)"
+                  :prop="'domains.' + index + '.Quantity'" :rules="{
+                    required: true,
+                    message: '合同数量不能为空',
+                    trigger: 'blur',
+                  }">
+                  <el-input v-model="domain.Quantity" clearable @input="handleChangeAdd" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label="备注" prop="Remark" label-width="85px">
+                  <el-input v-model="domain.Remark" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="1" style="line-height:100% ;text-align:center">
+                <el-button style="margin-left:10px ;font-size:14px" type="text" icon="el-icon-delete"
+                  @click.prevent="removeDomain(domain)" />
+              </el-col>
+              <el-col :span="1">
+                <el-form-item v-if="addContractsForm.domains.length > 1 && index == addContractsForm.domains.length - 1"
+                  label-width="0">
+                  <span style="font-size:14px; font-weight:500;display: block;text-align: left;">））</span>
+                </el-form-item>
+                <el-form-item v-else label-width="0">
+                  <span style="font-size:14px; font-weight:500;display: block;text-align: left;">）</span>
+                </el-form-item>
+              </el-col>
+              <el-col :span="1">
+                <el-form-item label-width="0" v-if="addContractsForm.domains.length - 1 != index">
                   <span style="font-size:14px; font-weight:500;display: block;text-align: left;">+</span>
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item >
+            <el-form-item>
               <el-button size="mini" icon="el-icon-plus" class="addItemClass" @click="addDomain">新增条目</el-button>
             </el-form-item>
             <el-row>
@@ -843,13 +851,18 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label-width="120px">
-                  <el-tag effect="plain"  type="">（（合同单价 x 合同数量）+...）x 缴费方式（年缴 x 1、月缴 x 12
-                    、次缴 x 1、半年缴 x 2、季缴 x 4） = 合同金额 </el-tag>
+                  <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD">(（合同单价 x 合同数量）+ 多个... ）x 缴费方式（年缴 x 1、月缴 x 12
+                    、次缴 x 1、半年缴 x 2、季缴 x 4） = 合同金额（自动计算）</el-tag>
                 </el-form-item>
               </el-col>
               <el-col :span="24">
                 <el-form-item label-width="120px">
-                  <el-tag effect="plain"  type="">如果单价中有一项或者多项为保留四位小数，那么合同金额（参与计算）只保留前两位小数（不进行四舍五入）</el-tag>
+                  <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD">如果单价中有一项或者多项为保留四位小数，那么合同金额（参与计算）只保留前两位小数（不进行四舍五入）</el-tag>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label-width="120px">
+                  <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD" >如果有多个项目类型请点击上方 “新增条目” 按钮自行动态添加金额条目（金额条目至少有一个）</el-tag>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -1016,9 +1029,9 @@
                     accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
                     :on-exceed="handleExceedAdd" :on-remove="AttachmentCodeRemove" :auto-upload="false"
                     :file-list="fileList" :on-change="handleChange">
-                    <el-button size="mini" plain slot="trigger" type="primary">选取文件</el-button>
-                    <el-button size="mini" plain style="margin-left: 10px;margin-bottom: 7px;" type="success" :loading="uploadServerLoading"
-                      @click="submitUpload">上传到服务器</el-button>
+                    <el-button icon="el-icon-position" size="mini" plain slot="trigger" type="primary">选取文件</el-button>
+                    <el-button icon="el-icon-upload2" size="mini" plain style="margin-left: 10px;margin-bottom: 7px;" type="success"
+                      :loading="uploadServerLoading" @click="submitUpload">上传到服务器</el-button>
                     <h3 style="margin:14px 0 10px 0 ;">注：合同或协议{{ "\xa0\xa0" }}<span
                         style="color:#ff4949 ;">双方盖章完成后</span>{{ "\xa0\xa0" }}，请上传电子版扫描件
                     </h3>
@@ -1035,8 +1048,8 @@
       <el-divider />
       <el-row class="buttonCenter">
         <el-col>
-          <el-button type="primary" :loading="LoadingAdd || uploadServerLoading" @click="addContracts">保 存</el-button>
-          <el-button type="info" @click="detailAddDialogVisibleClosed">重 置</el-button>
+          <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingAdd || uploadServerLoading" @click="addContracts">保 存</el-button>
+          <el-button icon="el-icon-refresh" type="info" @click="detailAddDialogVisibleClosed">重 置</el-button>
         </el-col>
       </el-row>
     </el-dialog>
@@ -1171,7 +1184,7 @@
                 <el-form-item label="年签批次" prop="YearBatch">
                   第 <el-input-number v-model="updateDepFrom.YearBatch" controls-position="right" :min="1"
                     :disabled="updateShowFlag"></el-input-number> 年签
-                  {{ "\xa0\xa0" }}<el-tag effect="plain" type="warning">为空默认设置1</el-tag>
+                 <el-tag style="margin-left:15px ;" effect="plain" type="warning">默认1</el-tag>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -1192,11 +1205,11 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label="付款方">
-                  <el-tag :closable="updateDepFrom.CompanyId + '' != item.Code + ''" @close="handleClose(item.Code)"
-                    v-for="item in PayerArray" :key="item.Code" style="margin-right: 18px;"
-                    :type="item.Type">{{ item.Name }}</el-tag>
-                    <el-divider />
-                  <el-button plain  size="mini" @click="showCollectionDialog(false)" :disabled="updateShowFlag"> +
+                  <el-tag effect="plain" :closable="updateDepFrom.CompanyId + '' != item.Code + ''" @close="handleClose(item.Code)"
+                    v-for="item in PayerArray" :key="item.Code" style="margin-right: 18px;" :type="item.Type">{{ item.Name
+                    }}</el-tag>
+                  <el-divider />
+                  <el-button icon="el-icon-plus" plain size="mini" @click="showCollectionDialog(false)" :disabled="updateShowFlag">
                     关联付款方</el-button>
                 </el-form-item>
               </el-col>
@@ -1272,57 +1285,58 @@
             <!-- 动态增减表单项 -->
             <el-row v-for="(domain, index) in updateDepFrom.domains">
               <el-col style="width:35px">
-                <el-form-item v-if="updateDepFrom.domains.length>1 && index==0" label-width="0">
+                <el-form-item v-if="updateDepFrom.domains.length > 1 && index == 0" label-width="0">
                   <span style="font-size:14px; font-weight:500;display: block;text-align: right;">（（</span>
                 </el-form-item>
                 <el-form-item v-else label-width="0">
                   <span style="font-size:14px; font-weight:500;display: block;text-align: right;">（</span>
                 </el-form-item>
               </el-col>
-                <el-col :span="5">
-                  <el-form-item label-width="85px" :key="domain.key" :label="'单价' + (index + 1)" :prop="'domains.' + index + '.UnitPrice'"
-                    :rules="{
-                      required: true,
-                      message: '合同单价不能为空',
-                      trigger: 'blur',
-                    }">
-                    <el-input v-model="domain.UnitPrice" clearable @input="handleChangeUpt" :disabled="UnitPriceFlag" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="1">
-                  <el-form-item label-width="0">
-                    <span style="font-size:18px; font-weight:500;display: block;text-align: center;">×</span>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="5">
-                  <el-form-item label-width="85px" :key="domain.key" :label="'数量' + (index + 1)" :prop="'domains.' + index + '.Quantity'"
-                    :rules="{
-                      required: true,
-                      message: '合同数量不能为空',
-                      trigger: 'blur',
-                    }">
-                    <el-input v-model="domain.Quantity" clearable @input="handleChangeUpt" :disabled="UnitPriceFlag" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="5">
-                  <el-form-item label-width="85px" label="备注" prop="Remark">
-                    <el-input v-model="domain.Remark" :disabled="UnitPriceFlag" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="1" style="line-height:100% ;text-align:center">
-                  <el-button style="margin-left:10px ;font-size:14px" type="text" icon="el-icon-delete"
-                    @click.prevent="removeDomainUpt(domain)" :disabled="UnitPriceFlag" />
-                </el-col>
-                <el-col :span="1">
-                  <el-form-item v-if="updateDepFrom.domains.length>1 && index==updateDepFrom.domains.length-1" label-width="0">
-                    <span style="font-size:14px; font-weight:500;display: block;text-align: left;">））</span>
-                  </el-form-item>
-                  <el-form-item v-else label-width="0">
-                    <span style="font-size:14px; font-weight:500;display: block;text-align: left;">）</span>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="1">
-                <el-form-item label-width="0" v-if="updateDepFrom.domains.length-1!=index">
+              <el-col :span="5">
+                <el-form-item label-width="85px" :key="domain.key" :label="'单价' + (index + 1)"
+                  :prop="'domains.' + index + '.UnitPrice'" :rules="{
+                    required: true,
+                    message: '合同单价不能为空',
+                    trigger: 'blur',
+                  }">
+                  <el-input v-model="domain.UnitPrice" clearable @input="handleChangeUpt" :disabled="UnitPriceFlag" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="1">
+                <el-form-item label-width="0">
+                  <span style="font-size:18px; font-weight:500;display: block;text-align: center;">×</span>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label-width="85px" :key="domain.key" :label="'数量' + (index + 1)"
+                  :prop="'domains.' + index + '.Quantity'" :rules="{
+                    required: true,
+                    message: '合同数量不能为空',
+                    trigger: 'blur',
+                  }">
+                  <el-input v-model="domain.Quantity" clearable @input="handleChangeUpt" :disabled="UnitPriceFlag" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label-width="85px" label="备注" prop="Remark">
+                  <el-input v-model="domain.Remark" :disabled="UnitPriceFlag" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="1" style="line-height:100% ;text-align:center">
+                <el-button style="margin-left:10px ;font-size:14px" type="text" icon="el-icon-delete"
+                  @click.prevent="removeDomainUpt(domain)" :disabled="UnitPriceFlag" />
+              </el-col>
+              <el-col :span="1">
+                <el-form-item v-if="updateDepFrom.domains.length > 1 && index == updateDepFrom.domains.length - 1"
+                  label-width="0">
+                  <span style="font-size:14px; font-weight:500;display: block;text-align: left;">））</span>
+                </el-form-item>
+                <el-form-item v-else label-width="0">
+                  <span style="font-size:14px; font-weight:500;display: block;text-align: left;">）</span>
+                </el-form-item>
+              </el-col>
+              <el-col :span="1">
+                <el-form-item label-width="0" v-if="updateDepFrom.domains.length - 1 != index">
                   <span style="font-size:14px; font-weight:500;display: block;text-align: left;">+</span>
                 </el-form-item>
               </el-col>
@@ -1330,6 +1344,7 @@
             <el-form-item>
               <el-button size="mini" icon="el-icon-plus" class="addItemClass" @click="addDomainUpt"
                 :disabled="UnitPriceFlag">新增条目</el-button>
+               
             </el-form-item>
             <el-row>
               <el-col style="width:35px;">
@@ -1365,13 +1380,18 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label-width="120px">
-                  <el-tag effect="plain"  type="">（（合同单价 x 合同数量）+...）x 缴费方式（年缴 x 1、月缴 x 12
-                    、次缴 x 1、半年缴 x 2、季缴 x 4） = 合同金额 </el-tag>
+                  <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD">(（合同单价 x 合同数量）+ 多个... ）x 缴费方式（年缴 x 1、月缴 x 12
+                    、次缴 x 1、半年缴 x 2、季缴 x 4） = 合同金额（自动计算） </el-tag>
                 </el-form-item>
               </el-col>
               <el-col :span="24">
                 <el-form-item label-width="120px">
-                  <el-tag effect="plain"  type="">如果单价中有一项或者多项为保留四位小数，那么合同金额（参与计算）只保留前两位小数（不进行四舍五入）</el-tag>
+                  <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD">如果单价中有一项或者多项为保留四位小数，那么合同金额（参与计算）只保留前两位小数（不进行四舍五入）</el-tag>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label-width="120px">
+                  <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD" >如果有多个项目类型请点击上方 “新增条目” 按钮自行动态添加金额条目（金额条目至少有一个）</el-tag>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -1544,14 +1564,14 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label="已上传文件">
-                  <el-button size="mini" style="margin-bottom:13px" plain v-if="updateDepFrom.ArchivedType == 2" :loading="placeFileLoading" type="warning"
-                    @click="placeFile">归档</el-button>
+                  <el-button icon="el-icon-receiving" size="mini" style="margin-bottom:13px" plain v-if="updateDepFrom.ArchivedType == 2"
+                    :loading="placeFileLoading" type="warning" @click="placeFile">归档</el-button>
                   <div class="bottom clearfix" v-for="item in updateDepFrom.FileLists">
                     <!-- <el-link type="primary" class="time" :href="item.url" target="_blank">{{ item.name }}
                     </el-link> -->
                     {{ item.name }}
-                    <el-button type="text" class="button" @click="clickView(item)">在线预览</el-button>
-                    <el-button type="text" class="button" @click="downView(item)">下载</el-button>
+                    <el-button icon="el-icon-view" type="text" class="button" @click="clickView(item)">在线预览</el-button>
+                    <el-button icon="el-icon-download" type="text" class="button" @click="downView(item)">下载</el-button>
                   </div>
                   <!-- <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
                     accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt"
@@ -1569,9 +1589,11 @@
                     accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
                     :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
                     :file-list="fileListUpload" :on-change="handleChangeUpdate">
-                    <el-button size="mini" plain v-if="updateDepFrom.ArchivedType != 3" slot="trigger" type="primary">选取文件</el-button>
-                    <el-button size="mini" plain v-if="updateDepFrom.ArchivedType != 3" style="margin-left: 10px;margin-bottom: 7px;"
-                      type="success" :loading="uploadServerLoading" @click="submitUploadUpdate">上传到服务器</el-button>
+                    <el-button icon="el-icon-position" size="mini" plain v-if="updateDepFrom.ArchivedType != 3" slot="trigger"
+                      type="primary">选取文件</el-button>
+                    <el-button icon="el-icon-upload2" size="mini" plain v-if="updateDepFrom.ArchivedType != 3"
+                      style="margin-left: 10px;margin-bottom: 7px;" type="success" :loading="uploadServerLoading"
+                      @click="submitUploadUpdate">上传到服务器</el-button>
                     <h3 style="margin:14px 0 10px 0 ;">注：合同或协议{{ "\xa0\xa0" }}<span
                         style="color:#ff4949 ;">双方盖章完成后</span>{{ "\xa0\xa0" }}，请上传电子版扫描件
                     </h3>
@@ -1589,7 +1611,7 @@
       <el-divider />
       <el-row class="buttonCenter">
         <el-col>
-          <el-button type="primary" :loading="LoadingUpdate || uploadServerLoading" @click="saveUpdate">保 存</el-button>
+          <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingUpdate || uploadServerLoading" @click="saveUpdate">保 存</el-button>
         </el-col>
       </el-row>
     </el-dialog>
@@ -1606,7 +1628,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button type="primary" :loading="LoadingUpdateState" @click="saveUpdateState">确 定
+            <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingUpdateState" @click="saveUpdateState">确 定
             </el-button>
           </el-col>
         </el-row>
@@ -1644,7 +1666,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button type="primary" :loading="auditStatusCheckLoading" @click="saveAuditStatusCheck">确 定
+            <el-button icon="el-icon-circle-check" type="primary" :loading="auditStatusCheckLoading" @click="saveAuditStatusCheck">确 定
             </el-button>
           </el-col>
         </el-row>
@@ -1657,8 +1679,8 @@
         <div slot="header" class="clearfix">
           <span>选择公司进行关联</span>
           <el-button-group style="float: right;">
-            <el-button type="success" icon="el-icon-circle-plus-outline" @click="AddDialog">添加新公司
-            </el-button>
+            <!-- <el-button type="success" icon="el-icon-circle-plus-outline" @click="AddDialog">添加新公司
+            </el-button> -->
             <el-button type="primary" icon="el-icon-circle-check" :loading="LoadingRoleUpdate"
               @click="saveConnectUpdate">提交保存</el-button>
           </el-button-group>
@@ -1676,7 +1698,9 @@
         <div slot="header" class="clearfix">
           <span>选择公司进行关联</span>
           <el-button-group style="float: right;">
-            <el-button type="primary" icon="el-icon-circle-check" @click="saveConnectPayUpdate">确定</el-button>
+            <el-button type="success" icon="el-icon-circle-plus-outline" @click="AddDialog">添加新公司
+            </el-button>
+            <el-button type="primary" icon="el-icon-circle-check" @click="saveConnectPayUpdate">确 定</el-button>
           </el-button-group>
         </div>
         <!-- <el-transfer v-model="value" :data="data"></el-transfer> -->
@@ -1709,20 +1733,19 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item prop="button">
-                  <el-button type="primary" :loading="LoadingSaleUpdate" @click="saveSale">提交保存
+                  <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingSaleUpdate" @click="saveSale">提交保存
                   </el-button>
                 </el-form-item>
               </el-col>
             </el-row>
           </el-form>
         </div>
-
         <el-table v-loading="saleLoading" :data="SaleDataArray" border fit height="calc(100vh - 500px)">
           <el-table-column prop="UserName" label="销售人员" small width="200" />
           <el-table-column prop="Percentage" label="提成占比" small width="200" />
           <el-table-column label="操作">
             <template slot-scope="scope" class="tableRowClass">
-              <el-button icon="el-icon-delete" type="text" size="mini" @click="deleteSale(scope.row)"> 删除</el-button>
+              <el-button icon="el-icon-delete" type="text" size="mini" @click="deleteSale(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -1779,7 +1802,7 @@
         </el-form-item>
         <el-row class="buttonCenter">
           <el-col>
-            <el-button type="primary" :loading="LoadingAddCompany" @click="saveAdd">确 定</el-button>
+            <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingAddCompany" @click="saveAdd">确 定</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -1809,8 +1832,8 @@
         <draggable v-model="showTitleArray" group="people" @start="drag = true" @end="drag = false">
           <el-col v-for="item in showTitleArray" style="height:50px ;line-height:50px;width: 140px;">
             <el-button :disabled="item == '乙方合同编号' || item == '审核状态'" type="danger" plain style="margin-left: 10px;"
-              @click="hideClick(item)">{{ item }}<i v-if="item != '乙方合同编号' && item != '审核状态'"
-                class="el-icon-close el-icon--right" /></el-button>
+              @click="hideClick(item)"><i v-if="item != '乙方合同编号' && item != '审核状态'"
+                class="el-icon-close " /> {{ item }}</el-button>
           </el-col>
         </draggable>
       </el-row>
@@ -1818,20 +1841,20 @@
       <el-row>
         <draggable v-model="hideTitleArray" group="people" @start="drag = true" @end="drag = false">
           <el-col v-for="item in hideTitleArray" style="height:50px ;line-height:50px;width: 140px">
-            <el-button type="info" plain style="margin-left: 10px;" @click="showClick(item)">{{ item }}<i
-                class="el-icon-plus el-icon--right" /></el-button>
+            <el-button type="info" plain style="margin-left: 10px;" @click="showClick(item)"><i
+                class="el-icon-plus " /> {{ item }}</el-button>
           </el-col>
         </draggable>
       </el-row>
       <el-divider />
       <el-row>
         <el-col :span="12">
-          <el-button type="text" @click="addAll">添加全部</el-button>
-          <el-button type="text" @click="resetColumn">重置</el-button>
+          <el-button icon="el-icon-circle-plus-outline" type="text" @click="addAll">添加全部</el-button>
+          <el-button icon="el-icon-refresh" type="text" @click="resetColumn">重置</el-button>
         </el-col>
         <el-col :span="12" style="text-align: right;">
-          <el-button @click="titleDialogClosed">取消</el-button>
-          <el-button type="primary" :loading="ColumnSubmitLoading" @click="ColumnSubmit">确定</el-button>
+          <el-button icon="el-icon-circle-close" @click="titleDialogClosed">取消</el-button>
+          <el-button icon="el-icon-circle-check" type="primary" :loading="ColumnSubmitLoading" @click="ColumnSubmit">确定</el-button>
         </el-col>
       </el-row>
     </el-dialog>
@@ -1908,7 +1931,7 @@ import FakeProgress from 'fake-progress';
 import { scrollTo } from '@/utils/scroll-to'
 let geocoder;
 export default {
-  name: '客户合同录入',
+  name: 'ContractsList',
   inject: ['reload'],
   components: {
     draggable,
@@ -3029,7 +3052,6 @@ export default {
     }
   },
   created() {
-    debugger
     this.fixedShowMethod(document.body.clientWidth);
     // 销售不能看到修改合同状态
     if (sessionStorage.getItem("RoleName") == "销售") {
@@ -3922,6 +3944,8 @@ export default {
     },
     detailAddDialogVisibleClosed() {
       this.$refs.addContractsRef.resetFields();
+      //清空自定义添加项目
+      this.addContractsForm.domains=[];
     },
     detailUpdateDialogVisibleClosed() {
       this.$refs.updateContractsRef.resetFields();
@@ -4030,6 +4054,8 @@ export default {
       this.PayerArray = [];
       this.addContractsForm.FileList = [];
       this.detailAddDialogVisible = true;
+      //默认添加一个自定义添加项目
+      this.addDomain();
       const isError = document.getElementsByClassName("scrollClass");
       if (isError.length != 0) {
         isError[0].scrollIntoView({
@@ -4884,12 +4910,12 @@ export default {
         case "销售人员":
           this.ifSaleName = true;
           break;
-        case "单价":
-          this.ifUnitPrice = true;
-          break;
-        case "数量":
-          this.ifQuantity = true;
-          break;
+        // case "单价":
+        //   this.ifUnitPrice = true;
+        //   break;
+        // case "数量":
+        //   this.ifQuantity = true;
+        //   break;
         case "缴费方式":
           this.ifPaymentMethodString = true;
           break;
@@ -4954,12 +4980,12 @@ export default {
         case "销售人员":
           this.ifSaleName = false;
           break;
-        case "单价":
-          this.ifUnitPrice = false;
-          break;
-        case "数量":
-          this.ifQuantity = false;
-          break;
+        // case "单价":
+        //   this.ifUnitPrice = false;
+        //   break;
+        // case "数量":
+        //   this.ifQuantity = false;
+        //   break;
         case "缴费方式":
           this.ifPaymentMethodString = false;
           break;
@@ -5141,6 +5167,7 @@ export default {
 ::v-deep .el-progress__text {
   color: white !important;
 }
+
 .addItemClass {
   color: #000000d9;
   border-color: #d9d9d9;
@@ -5271,5 +5298,4 @@ export default {
   color: #606266;
   margin-top: 7px;
 }
-
 </style>

@@ -202,7 +202,7 @@
         class="formClass">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="公司" prop="CompanyId">
+            <el-form-item label="公司名称" prop="CompanyId">
               <el-select v-model="updateInvoiceFrom.CompanyId" style="width:100% ;" filterable placeholder="公司名称" remote
                 reserve-keyword :remote-method="remoteMethod" disabled @visible-change="clearselectCorporationDatas"
                 @change="changeCompanyId">
@@ -296,7 +296,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button type="primary" :loading="LoadingUpdate" @click="saveUpdate">修 改</el-button>
+            <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingUpdate" @click="saveUpdate">保 存</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -315,7 +315,7 @@ import {
 import { showLoading, hideLoading } from "@/common/loading";
 import { parseTime, getDateByTimes } from "@/utils"; // 时间日期格式化成字符串
 export default {
-  name:'发票列表',
+  name:'InvoiceList',
   data() {
     return {
       fixedLeftShow: true,

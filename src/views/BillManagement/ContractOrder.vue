@@ -81,7 +81,7 @@
                 <el-button type="success" icon="el-icon-circle-plus-outline" @click="ShowContractAddDialog">增 加
                 </el-button>
                 <el-button type="warning" icon="el-icon-thumb" @click="auditStatusAction">
-                  提交开票申请
+                  送审
                 </el-button>
                 <!-- 超级管理员和财务都能审核 -->
                 <el-button v-show="auditStatusCheckFlag" type="danger" icon="el-icon-s-check" @click="auditStatusCheck">审
@@ -134,6 +134,16 @@
         <el-table-column prop="AmountReceived" label="账单总金额" min-width="120" sortable="">
           <template slot-scope="scope">
             <span v-format="'¥#,##0.00'">{{ scope.row.AmountReceived }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="AmountTotal" label="回款总金额" min-width="120">
+          <template slot-scope="scope">
+            <span v-format="'¥#,##0.00'">{{ scope.row.AmountTotal }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="Balance" label="余额" min-width="100">
+          <template slot-scope="scope">
+            <span v-format="'¥#,##0.00'">{{ scope.row.Balance }}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column prop="AmountTotal" label="合计"  min-width="100">
@@ -208,7 +218,7 @@
                     <div><i class="dotClass" style="background-color: #ff4949" />{{ "\xa0\xa0" }}未回款<br /></div>
                     <div> <i class="dotClass" style="background-color: #13ce66" />{{ "\xa0\xa0"
                     }}已回款</div>
-                        <div style="margin-bottom: 0;"> <i class="dotClass" style="background-color: #1890ff" />{{ "\xa0\xa0"
+                    <div style="margin-bottom: 0;"> <i class="dotClass" style="background-color: #1890ff" />{{ "\xa0\xa0"
                     }}部分回款</div>
                   </span>
                 </div>
@@ -329,11 +339,12 @@
           </el-col>
           <el-col :span="4" style="line-height:100% ;">
             <el-form-item label-width="0">
-              <el-tag style="margin-left:10px ;" v-if="domain.OrderState == 1" :disabled="true" key="未回款" effect="plain" type="danger">未回款</el-tag>
+              <el-tag style="margin-left:10px ;" v-if="domain.OrderState == 1" :disabled="true" key="未回款" effect="plain"
+                type="danger">未回款</el-tag>
               <el-button style="margin-left:10px ;" type="text" icon="el-icon-delete"
-              @click.prevent="removeDomain(domain)" />
+                @click.prevent="removeDomain(domain)" />
             </el-form-item>
-       
+
           </el-col>
         </el-row>
         <el-form-item>
@@ -408,9 +419,9 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button type="primary" :loading="LoadingAdd" @click="addOrder">提 交
+            <el-button type="primary" icon="el-icon-circle-check"  :loading="LoadingAdd" @click="addOrder">保 存
             </el-button>
-            <el-button type="info" @click="addDialogVisibleClosed">重 置</el-button>
+            <el-button icon="el-icon-refresh"  type="info" @click="addDialogVisibleClosed">重 置</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -482,11 +493,14 @@
           </el-col>
           <el-col :span="4" style="line-height:100% ;margin:auto">
             <el-form-item label-width="0">
-              <el-tag style="margin-left:10px ;" v-if="domain.OrderState == 1" :disabled="true" key="未回款" effect="plain" type="danger">未回款</el-tag>
-              <el-tag style="margin-left:10px ;" v-if="domain.OrderState == 2" :disabled="true" key="已回款" effect="plain" type="success">已回款</el-tag>
-              <el-tag style="margin-left:10px ;" v-if="domain.OrderState == 3" :disabled="true" key="部分回款" effect="plain">部分回款</el-tag>
+              <el-tag style="margin-left:10px ;" v-if="domain.OrderState == 1" :disabled="true" key="未回款" effect="plain"
+                type="danger">未回款</el-tag>
+              <el-tag style="margin-left:10px ;" v-if="domain.OrderState == 2" :disabled="true" key="已回款" effect="plain"
+                type="success">已回款</el-tag>
+              <el-tag style="margin-left:10px ;" v-if="domain.OrderState == 3" :disabled="true" key="部分回款"
+                effect="plain">部分回款</el-tag>
               <el-button :disabled="!updateShow || (domain.OrderAmount != 0 && !domain.Flag)" style="margin-left:10px ;"
-              type="text" icon="el-icon-delete" @click.prevent="removeDomainUpdate(domain)" />
+                type="text" icon="el-icon-delete" @click.prevent="removeDomainUpdate(domain)" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -564,7 +578,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button type="primary" :loading="LoadingUpdate" @click="saveUpdate">修 改
+            <el-button type="primary" icon="el-icon-circle-check" :loading="LoadingUpdate" @click="saveUpdate">保 存
             </el-button>
           </el-col>
         </el-row>
@@ -644,7 +658,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button type="primary" :loading="auditStatusCheckLoading" @click="saveAuditStatusCheck">确 定
+            <el-button icon="el-icon-circle-check" type="primary" :loading="auditStatusCheckLoading" @click="saveAuditStatusCheck">保 存
             </el-button>
           </el-col>
         </el-row>
@@ -678,7 +692,7 @@ import { cutOutNum } from '@/utils/decimals'
 moment.locale("zh-cn"); // 设置语言 或 moment.lang('zh-cn');
 
 export default {
-  name:'账单列表',
+  name: 'ContractOrder',
   components: {
     collapse
   },
@@ -1152,7 +1166,7 @@ export default {
         CustomAmount: '',
         OrderAmount: 0,
         key: Date.now(),
-        OrderState:1
+        OrderState: 1
       });
     },
     removeDomain(item) {
@@ -1171,7 +1185,7 @@ export default {
         OrderAmount: 0,
         Flag: true,
         key: Date.now(),
-        OrderState:1
+        OrderState: 1
       });
     },
     removeDomainUpdate(item) {
@@ -1214,6 +1228,7 @@ export default {
     // },
     addDialogVisibleClosed() {
       this.$refs.addContractOrderRef.resetFields();
+      this.addContractOrderForm.domains = [];
     },
     detailUpdateDialogVisibleClosed() {
       this.$refs.updateContractsRef.resetFields();
@@ -1323,8 +1338,6 @@ export default {
             this.LoadingUpdate = false;
             return;
           }
-          console.log(this.updateContractOrderForm);
-          debugger
           UpdateContractOrder(this.updateContractOrderForm).then((res) => {
             if (res.success) {
               this.$message.success("操作成功");
@@ -1408,11 +1421,13 @@ export default {
     },
     // 删除信息
     async deleteDialog(item) {
-     if(item.CollectionState!=1)
-     {
-      return this.$message.info("只能删除未回款的数据，对于已经扣款的数据不能做删除操作");
-
-     }
+      debugger
+      if (item.CollectionState != 1) {
+        return this.$message.info("只能删除未回款的数据，对于已经扣款的数据不能做删除操作");
+      }
+      if (item.AmountReceived != item.Balance) {
+        return this.$message.info("对于已经开发票的账单不能进行删除操作");
+      }
       const confirmResult = await this.$confirm(
         "此操作将删除该条, 是否继续?",
         "提示",

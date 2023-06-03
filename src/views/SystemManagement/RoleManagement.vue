@@ -34,7 +34,9 @@
                 scope.row.RoleName !== '财务' &&
                 scope.row.RoleName !== '总客服' &&
                 scope.row.RoleName !== '销售' &&
-                scope.row.RoleName !== 'HRO'
+                scope.row.RoleName !== 'HRO' &&
+                scope.row.RoleName !== '运营' &&
+                scope.row.RoleName !== 'HRO管理员'
             " icon="el-icon-edit" type="text" size="mini" @click="showEditDialog(scope.row.RoleCode)"
             >编辑</el-button>
             <el-button v-if="
@@ -43,7 +45,9 @@
                 scope.row.RoleName !== '财务' &&
                 scope.row.RoleName !== '总客服' &&
                 scope.row.RoleName !== '销售' &&
-                scope.row.RoleName !== 'HRO'
+                scope.row.RoleName !== 'HRO' &&
+                scope.row.RoleName !== '运营' &&
+                scope.row.RoleName !== 'HRO管理员'
             " icon="el-icon-delete" type="text" size="mini" @click="deleteDialog(scope.row.RoleCode)"
             >删除</el-button>
           </template>
@@ -67,7 +71,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button v-loading.fullscreen.lock="LoadingAdd" type="primary" @click="saveAdd">确 定
+            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingAdd" type="primary" @click="saveAdd">保 存
             </el-button>
           </el-col>
         </el-row>
@@ -96,7 +100,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button v-loading.fullscreen.lock="LoadingUpdate" type="primary" @click="saveUpdate">确 定
+            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingUpdate" type="primary" @click="saveUpdate">保 存
             </el-button>
           </el-col>
         </el-row>
@@ -111,9 +115,9 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>选择模块进行关联</span>
-          <el-button v-loading.fullscreen.lock="LoadingRoleUpdate" style="float: right;" type="primary"
+          <el-button icon="el-icon-link" v-loading.fullscreen.lock="LoadingRoleUpdate" style="float: right;" type="primary"
                      @click="saveRoleUpdate"
-          >绑定</el-button>
+          >绑 定</el-button>
         </div>
         <el-tree ref="tree" style="height: calc(100vh - 350px); overflow-y: scroll" :data="permissionTree"
                  show-checkbox:true show-checkbox default-expand-all:true node-key="id" highlight-current
@@ -137,7 +141,7 @@ import {
 import { showLoading, hideLoading } from "@/common/loading";
 const moment = require("moment");
 export default {
-  name: '角色管理',
+  name: 'RoleManagement',
   data() {
     return {
       LoadingUpdate: false,

@@ -472,8 +472,8 @@
                   accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
                   :on-exceed="handleExceedAdd" :on-remove="AttachmentCodeRemove" :auto-upload="false"
                   :file-list="fileList" :on-change="handleChange">
-                  <el-button size="mini" plain slot="trigger" type="primary">选取文件</el-button>
-                  <el-button size="mini" plain style="margin-left: 10px;" type="success" :loading="uploadServerLoading"
+                  <el-button icon="el-icon-position" size="mini" plain slot="trigger" type="primary">选取文件</el-button>
+                  <el-button icon="el-icon-upload2"  size="mini" plain style="margin-left: 10px;" type="success" :loading="uploadServerLoading"
                     @click="submitUpload">上传到服务器</el-button>
                   <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span></div>
                   <div slot="tip" class="el-upload__tip">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
@@ -485,8 +485,8 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button type="primary" :loading="LoadingAddSupplier" @click="addContracts">提 交</el-button>
-            <el-button type="info" @click="detailAddDialogVisibleClosed">重 置</el-button>
+            <el-button icon="el-icon-circle-check"  type="primary" :loading="LoadingAddSupplier" @click="addContracts">保 存</el-button>
+            <el-button icon="el-icon-refresh"  type="info" @click="detailAddDialogVisibleClosed">重 置</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -573,14 +573,14 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="已上传文件">
-                <el-button size="mini" style="margin-bottom:13px" plain v-if="updateSupplierFrom.ArchivedType == 2" :loading="placeFileLoading" type="warning"
+                <el-button icon="el-icon-receiving" size="mini" style="margin-bottom:13px" plain v-if="updateSupplierFrom.ArchivedType == 2" :loading="placeFileLoading" type="warning"
                   @click="placeFile">归档</el-button>
                 <div class="bottom clearfix" v-for="item in updateSupplierFrom.FileLists">
                   <!-- <el-link type="primary" class="time" :href="item.url" target="_blank">{{ item.name }}
                     </el-link> -->
                   {{ item.name }}
-                  <el-button type="text" class="button" @click="clickView(item)">在线预览</el-button>
-                  <el-button type="text" class="button" @click="downView(item)">下载</el-button>
+                  <el-button icon="el-icon-view"  type="text" class="button" @click="clickView(item)">在线预览</el-button>
+                  <el-button icon="el-icon-download" type="text" class="button" @click="downView(item)">下载</el-button>
                 </div>
                 <!-- <div v-for="item in updateSupplierFrom.FileLists" style="height:30px ;">
                   <el-link type="primary" :underline="false" :href="item.url" target="_blank">{{ item.name }}
@@ -596,8 +596,8 @@
                   accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
                   :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
                   :file-list="fileListUpload" :on-change="handleChangeUpdate">
-                  <el-button size="mini" plain v-if="updateSupplierFrom.ArchivedType != 3" slot="trigger" type="primary">选取文件</el-button>
-                  <el-button size="mini" plain v-if="updateSupplierFrom.ArchivedType != 3" style="margin-left: 10px;" type="success"
+                  <el-button icon="el-icon-position"  size="mini" plain v-if="updateSupplierFrom.ArchivedType != 3" slot="trigger" type="primary">选取文件</el-button>
+                  <el-button icon="el-icon-upload2" size="mini" plain v-if="updateSupplierFrom.ArchivedType != 3" style="margin-left: 10px;" type="success"
                     :loading="uploadServerLoading" @click="submitUploadUpdate">上传到服务器</el-button>
                   <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span></div>
                   <div slot="tip" class="el-upload__tip">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
@@ -610,7 +610,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button type="primary" :loading="LoadingUpdate" @click="saveUpdate">修 改</el-button>
+            <el-button icon="el-icon-circle-check"  type="primary" :loading="LoadingUpdate" @click="saveUpdate">保 存</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -648,7 +648,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button type="primary" :loading="auditStatusCheckLoading" @click="saveAuditStatusCheck">确 定
+            <el-button icon="el-icon-circle-check" type="primary" :loading="auditStatusCheckLoading" @click="saveAuditStatusCheck">确 定
             </el-button>
           </el-col>
         </el-row>
@@ -663,7 +663,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button v-loading.fullscreen.lock="LoadingAddSupplier" type="primary" @click="saveAdd">确
+            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingAddSupplier" type="primary" @click="saveAdd">确
               定</el-button>
           </el-col>
         </el-row>
@@ -707,7 +707,7 @@ import { showLoading, hideLoading } from "@/common/loading";
 import collapse from '../../assets/js/collapse'
 import FakeProgress from 'fake-progress';
 export default {
-  name: '供应商合同录入',
+  name: 'SupplierManagement',
   components: {
     collapse
   },

@@ -63,7 +63,7 @@
             </div>
           </div>
           <el-button size="medium" :loading="loading" type="primary" style="width: 100%"
-            @click.native.prevent="handleLogin">登录</el-button>
+            @click.native.prevent="handleLogin">登 录</el-button>
         </el-form>
 
       </div>

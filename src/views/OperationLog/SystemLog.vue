@@ -89,7 +89,7 @@ import {
 import { showLoading, hideLoading } from "@/common/loading";
 const moment = require("moment");
 export default {
-  name: '系统日志',
+  name: 'SystemLog',
   data() {
     return {
       buttonStyle: '',

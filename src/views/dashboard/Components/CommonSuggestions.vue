@@ -26,8 +26,8 @@
           <el-divider />
           <el-row class="buttonCenter">
             <el-col>
-              <el-button type="primary" :loading="LoadingAdd">
-                提 交
+              <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingAdd">
+                保 存
               </el-button>
             </el-col>
           </el-row>

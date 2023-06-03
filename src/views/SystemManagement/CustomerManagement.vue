@@ -46,7 +46,7 @@ import {
   UpdateState,
 } from "@/api/CollectionMangement";
 export default {
-  name: '客服管理',
+  name: 'CustomerManagement',
   components: {},
   data() {
     return {
