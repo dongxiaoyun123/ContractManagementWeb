@@ -685,8 +685,9 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label="付款方">
-                  <el-tag effect="plain" :closable="addContractsForm.CompanyId + '' != item.Code + ''" @close="handleClose(item.Code)"
-                    v-for="item in PayerArray" :key="item.Code" style="margin-right: 18px;" :type="item.Type">{{ item.Name
+                  <el-tag effect="plain" :closable="addContractsForm.CompanyId + '' != item.Code + ''"
+                    @close="handleClose(item.Code)" v-for="item in PayerArray" :key="item.Code"
+                    style="margin-right: 18px;" :type="item.Type">{{ item.Name
                     }}</el-tag>
                   <el-divider v-if="PayerArray.length != 0" />
                   <el-button icon="el-icon-plus" plain size="mini" @click="showCollectionDialog(true)"> 关联付款方</el-button>
@@ -851,18 +852,21 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label-width="120px">
-                  <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD">(（合同单价 x 合同数量）+ 多个... ）x 缴费方式（年缴 x 1、月缴 x 12
+                  <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD">(（合同单价 x 合同数量）+ 多个... ）x 缴费方式（年缴 x
+                    1、月缴 x 12
                     、次缴 x 1、半年缴 x 2、季缴 x 4） = 合同金额（自动计算）</el-tag>
                 </el-form-item>
               </el-col>
               <el-col :span="24">
                 <el-form-item label-width="120px">
-                  <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD">如果单价中有一项或者多项为保留四位小数，那么合同金额（参与计算）只保留前两位小数（不进行四舍五入）</el-tag>
+                  <el-tag effect="plain"
+                    style="border-color: #A29BC4;color:#6959CD">如果单价中有一项或者多项为保留四位小数，那么合同金额（参与计算）只保留前两位小数（不进行四舍五入）</el-tag>
                 </el-form-item>
               </el-col>
               <el-col :span="24">
                 <el-form-item label-width="120px">
-                  <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD" >如果有多个项目类型请点击上方 “新增条目” 按钮自行动态添加金额条目（金额条目至少有一个）</el-tag>
+                  <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD">如果有多个项目类型请点击上方 “新增条目”
+                    按钮自行动态添加金额条目（金额条目至少有一个）</el-tag>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -1030,8 +1034,8 @@
                     :on-exceed="handleExceedAdd" :on-remove="AttachmentCodeRemove" :auto-upload="false"
                     :file-list="fileList" :on-change="handleChange">
                     <el-button icon="el-icon-position" size="mini" plain slot="trigger" type="primary">选取文件</el-button>
-                    <el-button icon="el-icon-upload2" size="mini" plain style="margin-left: 10px;margin-bottom: 7px;" type="success"
-                      :loading="uploadServerLoading" @click="submitUpload">上传到服务器</el-button>
+                    <el-button icon="el-icon-upload2" size="mini" plain style="margin-left: 10px;margin-bottom: 7px;"
+                      type="success" :loading="uploadServerLoading" @click="submitUpload">上传到服务器</el-button>
                     <h3 style="margin:14px 0 10px 0 ;">注：合同或协议{{ "\xa0\xa0" }}<span
                         style="color:#ff4949 ;">双方盖章完成后</span>{{ "\xa0\xa0" }}，请上传电子版扫描件
                     </h3>
@@ -1048,7 +1052,8 @@
       <el-divider />
       <el-row class="buttonCenter">
         <el-col>
-          <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingAdd || uploadServerLoading" @click="addContracts">保 存</el-button>
+          <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingAdd || uploadServerLoading"
+            @click="addContracts">保 存</el-button>
           <el-button icon="el-icon-refresh" type="info" @click="detailAddDialogVisibleClosed">重 置</el-button>
         </el-col>
       </el-row>
@@ -1184,7 +1189,7 @@
                 <el-form-item label="年签批次" prop="YearBatch">
                   第 <el-input-number v-model="updateDepFrom.YearBatch" controls-position="right" :min="1"
                     :disabled="updateShowFlag"></el-input-number> 年签
-                 <el-tag style="margin-left:15px ;" effect="plain" type="warning">默认1</el-tag>
+                  <el-tag style="margin-left:15px ;" effect="plain" type="warning">默认1</el-tag>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -1205,11 +1210,13 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label="付款方">
-                  <el-tag effect="plain" :closable="updateDepFrom.CompanyId + '' != item.Code + ''" @close="handleClose(item.Code)"
-                    v-for="item in PayerArray" :key="item.Code" style="margin-right: 18px;" :type="item.Type">{{ item.Name
+                  <el-tag effect="plain" :closable="updateDepFrom.CompanyId + '' != item.Code + ''"
+                    @close="handleClose(item.Code)" v-for="item in PayerArray" :key="item.Code"
+                    style="margin-right: 18px;" :type="item.Type">{{ item.Name
                     }}</el-tag>
                   <el-divider />
-                  <el-button icon="el-icon-plus" plain size="mini" @click="showCollectionDialog(false)" :disabled="updateShowFlag">
+                  <el-button icon="el-icon-plus" plain size="mini" @click="showCollectionDialog(false)"
+                    :disabled="updateShowFlag">
                     关联付款方</el-button>
                 </el-form-item>
               </el-col>
@@ -1344,7 +1351,7 @@
             <el-form-item>
               <el-button size="mini" icon="el-icon-plus" class="addItemClass" @click="addDomainUpt"
                 :disabled="UnitPriceFlag">新增条目</el-button>
-               
+
             </el-form-item>
             <el-row>
               <el-col style="width:35px;">
@@ -1380,18 +1387,21 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label-width="120px">
-                  <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD">(（合同单价 x 合同数量）+ 多个... ）x 缴费方式（年缴 x 1、月缴 x 12
+                  <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD">(（合同单价 x 合同数量）+ 多个... ）x 缴费方式（年缴 x
+                    1、月缴 x 12
                     、次缴 x 1、半年缴 x 2、季缴 x 4） = 合同金额（自动计算） </el-tag>
                 </el-form-item>
               </el-col>
               <el-col :span="24">
                 <el-form-item label-width="120px">
-                  <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD">如果单价中有一项或者多项为保留四位小数，那么合同金额（参与计算）只保留前两位小数（不进行四舍五入）</el-tag>
+                  <el-tag effect="plain"
+                    style="border-color: #A29BC4;color:#6959CD">如果单价中有一项或者多项为保留四位小数，那么合同金额（参与计算）只保留前两位小数（不进行四舍五入）</el-tag>
                 </el-form-item>
               </el-col>
               <el-col :span="24">
                 <el-form-item label-width="120px">
-                  <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD" >如果有多个项目类型请点击上方 “新增条目” 按钮自行动态添加金额条目（金额条目至少有一个）</el-tag>
+                  <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD">如果有多个项目类型请点击上方 “新增条目”
+                    按钮自行动态添加金额条目（金额条目至少有一个）</el-tag>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -1564,8 +1574,9 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label="已上传文件">
-                  <el-button icon="el-icon-receiving" size="mini" style="margin-bottom:13px" plain v-if="updateDepFrom.ArchivedType == 2"
-                    :loading="placeFileLoading" type="warning" @click="placeFile">归档</el-button>
+                  <el-button icon="el-icon-receiving" size="mini" style="margin-bottom:13px" plain
+                    v-if="updateDepFrom.ArchivedType == 2" :loading="placeFileLoading" type="warning"
+                    @click="placeFile">归档</el-button>
                   <div class="bottom clearfix" v-for="item in updateDepFrom.FileLists">
                     <!-- <el-link type="primary" class="time" :href="item.url" target="_blank">{{ item.name }}
                     </el-link> -->
@@ -1589,8 +1600,8 @@
                     accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
                     :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
                     :file-list="fileListUpload" :on-change="handleChangeUpdate">
-                    <el-button icon="el-icon-position" size="mini" plain v-if="updateDepFrom.ArchivedType != 3" slot="trigger"
-                      type="primary">选取文件</el-button>
+                    <el-button icon="el-icon-position" size="mini" plain v-if="updateDepFrom.ArchivedType != 3"
+                      slot="trigger" type="primary">选取文件</el-button>
                     <el-button icon="el-icon-upload2" size="mini" plain v-if="updateDepFrom.ArchivedType != 3"
                       style="margin-left: 10px;margin-bottom: 7px;" type="success" :loading="uploadServerLoading"
                       @click="submitUploadUpdate">上传到服务器</el-button>
@@ -1611,7 +1622,8 @@
       <el-divider />
       <el-row class="buttonCenter">
         <el-col>
-          <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingUpdate || uploadServerLoading" @click="saveUpdate">保 存</el-button>
+          <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingUpdate || uploadServerLoading"
+            @click="saveUpdate">保 存</el-button>
         </el-col>
       </el-row>
     </el-dialog>
@@ -1628,7 +1640,8 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingUpdateState" @click="saveUpdateState">确 定
+            <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingUpdateState" @click="saveUpdateState">确
+              定
             </el-button>
           </el-col>
         </el-row>
@@ -1666,7 +1679,8 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" type="primary" :loading="auditStatusCheckLoading" @click="saveAuditStatusCheck">确 定
+            <el-button icon="el-icon-circle-check" type="primary" :loading="auditStatusCheckLoading"
+              @click="saveAuditStatusCheck">确 定
             </el-button>
           </el-col>
         </el-row>
@@ -1733,7 +1747,8 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item prop="button">
-                  <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingSaleUpdate" @click="saveSale">提交保存
+                  <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingSaleUpdate"
+                    @click="saveSale">提交保存
                   </el-button>
                 </el-form-item>
               </el-col>
@@ -1802,7 +1817,8 @@
         </el-form-item>
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingAddCompany" @click="saveAdd">确 定</el-button>
+            <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingAddCompany" @click="saveAdd">确
+              定</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -1832,8 +1848,8 @@
         <draggable v-model="showTitleArray" group="people" @start="drag = true" @end="drag = false">
           <el-col v-for="item in showTitleArray" style="height:50px ;line-height:50px;width: 140px;">
             <el-button :disabled="item == '乙方合同编号' || item == '审核状态'" type="danger" plain style="margin-left: 10px;"
-              @click="hideClick(item)"><i v-if="item != '乙方合同编号' && item != '审核状态'"
-                class="el-icon-close " /> {{ item }}</el-button>
+              @click="hideClick(item)"><i v-if="item != '乙方合同编号' && item != '审核状态'" class="el-icon-close " /> {{ item
+              }}</el-button>
           </el-col>
         </draggable>
       </el-row>
@@ -1841,8 +1857,8 @@
       <el-row>
         <draggable v-model="hideTitleArray" group="people" @start="drag = true" @end="drag = false">
           <el-col v-for="item in hideTitleArray" style="height:50px ;line-height:50px;width: 140px">
-            <el-button type="info" plain style="margin-left: 10px;" @click="showClick(item)"><i
-                class="el-icon-plus " /> {{ item }}</el-button>
+            <el-button type="info" plain style="margin-left: 10px;" @click="showClick(item)"><i class="el-icon-plus " />
+              {{ item }}</el-button>
           </el-col>
         </draggable>
       </el-row>
@@ -1854,7 +1870,8 @@
         </el-col>
         <el-col :span="12" style="text-align: right;">
           <el-button icon="el-icon-circle-close" @click="titleDialogClosed">取消</el-button>
-          <el-button icon="el-icon-circle-check" type="primary" :loading="ColumnSubmitLoading" @click="ColumnSubmit">确定</el-button>
+          <el-button icon="el-icon-circle-check" type="primary" :loading="ColumnSubmitLoading"
+            @click="ColumnSubmit">确定</el-button>
         </el-col>
       </el-row>
     </el-dialog>
@@ -3387,7 +3404,6 @@ export default {
     // 复制历史合同信息
     CopyContractName() {
       if (!this.addContractsForm.CompanyId) { return this.$message.warning("请先选择右侧公司名称"); }
-
       const itemCompany = this.CorporationDatas.filter((item) => {
         return item.value == this.addContractsForm.CompanyId;
       });
@@ -3395,7 +3411,7 @@ export default {
         this.CopyContractTitle = itemCompany[0].label;
         this.CopyContractNameVisible = true;
         this.CopyContractNameLoading = true;
-        GetContractData("", "", "", itemCompany[0].label, "", "", "", "", "", "", "", 1, 100000
+        GetContractData("", "", "", "", itemCompany[0].label, "", "", "", "", "", "", "", "", "", "", "", 1, 100000
         ).then((res) => {
           if (res.success) {
             this.CopyContractData = res.result.list;
@@ -3945,7 +3961,7 @@ export default {
     detailAddDialogVisibleClosed() {
       this.$refs.addContractsRef.resetFields();
       //清空自定义添加项目
-      this.addContractsForm.domains=[];
+      this.addContractsForm.domains = [];
     },
     detailUpdateDialogVisibleClosed() {
       this.$refs.updateContractsRef.resetFields();

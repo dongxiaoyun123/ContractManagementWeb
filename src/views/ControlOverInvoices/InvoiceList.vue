@@ -40,12 +40,6 @@
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item class="whereFormClass" label="公司名称">
-                <!-- <el-select v-model="CompanyId" filterable placeholder="公司名称" clearable="" remote reserve-keyword
-                  :remote-method="remoteMethod" @visible-change="clearselectCorporationDatas" @change="changeCompanyId">
-                  <el-option v-for="item in selectCorporationDatas" :key="item.value" :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select> -->
                 <el-input v-model="CompanyId" class="timeClass" clearable="" placeholder="公司名称" />
               </el-form-item>
             </el-col>
@@ -108,17 +102,6 @@
         <el-table-column v-if="fixedLeftShow" prop="InvoiceHeader" label="发票抬头" min-width="220" fixed="left"
           show-overflow-tooltip />
         <el-table-column v-else prop="InvoiceHeader" label="发票抬头" min-width="220" show-overflow-tooltip />
-        <el-table-column v-if="fixedLeftShow" prop="InvoiceAmount" label="发票金额" fixed="left" min-width="100"
-          show-overflow-tooltip sortable="">
-          <template slot-scope="scope">
-            <span v-format="'¥#,##0.00'">{{ scope.row.InvoiceAmount }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column v-else prop="InvoiceAmount" label="发票金额" min-width="100" show-overflow-tooltip sortable="">
-          <template slot-scope="scope">
-            <span v-format="'¥#,##0.00'">{{ scope.row.InvoiceAmount }}</span>
-          </template>
-        </el-table-column>
         <el-table-column prop="InvoiceTypeStr" label="发票种类" min-width="150" show-overflow-tooltip>
           <template slot-scope="{}" slot="header">
             <span>发票种类</span>
@@ -147,6 +130,11 @@
             </div>
           </template>
         </el-table-column>
+        <el-table-column prop="InvoiceAmount" label="发票金额" min-width="100" show-overflow-tooltip sortable="">
+          <template slot-scope="scope">
+            <span v-format="'¥#,##0.00'">{{ scope.row.InvoiceAmount }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="IvStateStr" label="发票状态" min-width="100">
           <template slot-scope="{}" slot="header">
             <span>发票状态</span>
@@ -155,10 +143,10 @@
               <div slot="content">
                 <div style="display: flex;  align-items: center;">
                   <span slot="reference" style="margin: 0 10px 0 6px;" class="SecondPartyNameClass">
-                    <div> <el-tag  key="未开" effect="plain" type="danger" >未开</el-tag></div>
-                    <div><el-tag  key="已开" effect="plain" type="success">已开</el-tag></div>
-                    <div><el-tag  key="作废" effect="plain" type="info">作废</el-tag></div>
-                    <div style="margin-bottom: 0;"><el-tag  key="退回" effect="plain" type="warning">退回</el-tag></div>
+                    <div> <el-tag key="未开" effect="plain" type="danger">未开</el-tag></div>
+                    <div><el-tag key="已开" effect="plain" type="success">已开</el-tag></div>
+                    <div><el-tag key="作废" effect="plain" type="info">作废</el-tag></div>
+                    <div style="margin-bottom: 0;"><el-tag key="退回" effect="plain" type="warning">退回</el-tag></div>
                   </span>
                 </div>
               </div>
@@ -171,10 +159,27 @@
             <el-tag v-if="scope.row.IvState == 7" effect="plain" type="warning">退回</el-tag>
           </template>
         </el-table-column>
+        <el-table-column prop="IssuingDateStr" label="应收年月" min-width="100" />
         <el-table-column prop="ApplyPerson" label="申开人" min-width="100" />
-        <el-table-column prop="IssuingDateStr" label="应收日期" min-width="100" />
+        <el-table-column prop="ApplyTime" label="申开时间" min-width="100">
+          <template slot-scope="scope">
+            <div v-if="scope.row.ApplyTime">
+              <i class="el-icon-time" />
+              <span style="margin-left: 6px">{{ dateFormat(scope.row.ApplyTime) }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="IssuingPerson" label="开票人" min-width="90" />
         <el-table-column prop="IssuingTimeStr" label="开具时间" min-width="120" show-overflow-tooltip />
-        <el-table-column prop="IssuingPerson" label="开票人" min-width="0" />
+        <el-table-column prop="InvoiceContent" label="发票内容" align="left" min-width="120" show-overflow-tooltip />
+        <el-table-column prop="InvoiceTypes" label="发票类型" align="left" min-width="100">
+          <template slot-scope="scope">
+            <span v-if="scope.row.InvoiceTypes == 1">全额</span>
+            <span v-else-if="scope.row.InvoiceTypes == 2">差额</span>
+            <span v-else></span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="InvoiceAccountName" label="发票科目" align="left" min-width="100" />
         <el-table-column prop="InvoiceRemark" label="备注" align="left" min-width="200" show-overflow-tooltip />
         <el-table-column v-if="fixedLeftShow" label="操作" fixed="right" min-width="80">
           <template slot-scope="scope" class="tableRowClass">
@@ -188,12 +193,12 @@
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]" :page-size="queryInfo.pagesize"
-        layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
-        @current-change="handleCurrentChange" />
+      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
+        :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
 
-    <el-dialog :visible.sync="updateDialogVisible" :lock-scroll="false" width="60%"
+    <el-dialog :visible.sync="updateDialogVisible" :lock-scroll="false" width="60%" top="5vh"
       @close="detailUpdateDialogVisibleClosed">
       <div slot="title" class="dialog-title">
         <span>编辑发票信息</span>
@@ -203,9 +208,8 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="公司名称" prop="CompanyId">
-              <el-select v-model="updateInvoiceFrom.CompanyId" style="width:100% ;" filterable placeholder="公司名称" remote
-                reserve-keyword :remote-method="remoteMethod" disabled @visible-change="clearselectCorporationDatas"
-                @change="changeCompanyId">
+              <el-select v-model="updateInvoiceFrom.CompanyId" style="width:100% ;" filterable placeholder="公司名称"
+                disabled>
                 <el-option v-for="item in selectCorporationDatas" :key="item.value" :label="item.label"
                   :value="item.value" />
               </el-select>
@@ -219,16 +223,16 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="发票金额" prop="InvoiceAmount">
-              <el-input v-model="updateInvoiceFrom.InvoiceAmount" disabled />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
             <el-form-item label="发票种类" prop="InvoiceType">
               <el-select v-model="updateInvoiceFrom.InvoiceType" class="timeClass" filterable placeholder="发票种类" disabled>
                 <el-option v-for="item in InvoiceTypeList" :key="item.Code" :class="item.Class" :label="item.Name"
                   :value="item.Code" />
               </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="发票金额" prop="InvoiceAmount">
+              <el-input v-model="updateInvoiceFrom.InvoiceAmount" disabled />
             </el-form-item>
           </el-col>
         </el-row>
@@ -246,8 +250,11 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="开具时间" prop="IssuingTime">
-              <el-date-picker v-model="updateInvoiceFrom.IssuingTime" type="date" placeholder="开具时间" disabled />
+            <el-form-item label="申开人" prop="ApplyPerson">
+              <el-select v-model="updateInvoiceFrom.ApplyPerson" filterable allow-create default-first-option
+                placeholder="申开人" disabled>
+                <el-option v-for="item in ApplyPersonList" :key="item.Code" :label="item" :value="item" />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -258,19 +265,16 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="申开人" prop="ApplyPerson">
-              <el-select v-model="updateInvoiceFrom.ApplyPerson" filterable allow-create default-first-option
-                placeholder="申开人" disabled>
-                <el-option v-for="item in ApplyPersonList" :key="item.Code" :label="item" :value="item" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
             <el-form-item label="开票人" prop="IssuingPerson">
               <el-select v-model="updateInvoiceFrom.IssuingPerson" filterable allow-create default-first-option
                 placeholder="开票人" disabled>
                 <el-option v-for="item in IssuingPersonList" :key="item.Code" :label="item" :value="item" />
               </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="开具时间" prop="IssuingTime">
+              <el-date-picker v-model="updateInvoiceFrom.IssuingTime" type="date" placeholder="开具时间" disabled />
             </el-form-item>
           </el-col>
         </el-row>
@@ -290,16 +294,90 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="发票科目" prop="InvoiceAccount">
+              <el-select v-model="updateInvoiceFrom.InvoiceAccount" filterable placeholder="发票科目" disabled>
+                <el-option v-for="item in InvoiceAccountList" :key="item.InvoiceAccountCode" :class="item.Class"
+                  :label="item.InvoiceAccountName" :value="item.InvoiceAccountCode" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="发票类型" prop="InvoiceTypes">
+              <el-select v-model="updateInvoiceFrom.InvoiceTypes" filterable placeholder="发票类型" disabled>
+                <el-option v-for="item in InvoiceTypesList" :key="item.Code" :class="item.Class" :label="item.Name"
+                  :value="item.Code" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="备注" prop="InvoiceRemark">
           <el-input v-model="updateInvoiceFrom.InvoiceRemark" type="textarea" :rows="3" placeholder="请输入备注" />
         </el-form-item>
+        <el-form-item label="已上传文件">
+          <div v-if="updateInvoiceFrom.IvState == 1">
+            <div class="bottom clearfix" v-for="item in updateInvoiceFrom.FileLists">
+              {{ item.name }}
+              <el-button icon="el-icon-view" type="text" class="button" @click="clickView(item)">在线预览</el-button>
+              <el-button icon="el-icon-download" type="text" class="button" @click="downView(item)">下载</el-button>
+            </div>
+          </div>
+          <div v-else>
+            <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :before-remove="beforeRemove"
+              :on-remove="handleRemove" :file-list="updateInvoiceFrom.FileLists" :on-preview="AttachmentCodePreview">
+              <div slot="tip" style="margin-top:-30px" class="el-upload__tip">之前上传的文件，可对其进行删除操作（执行确定会立马删除）</div>
+            </el-upload>
+          </div>
+
+        </el-form-item>
+        <el-form-item label="附件上传">
+          <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
+            accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
+            :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
+            :file-list="fileListUpload" :on-change="handleChangeAddUpload">
+            <el-button icon="el-icon-position" plain slot="trigger" type="primary">选取文件</el-button>
+            <el-button icon="el-icon-upload2" plain style="margin-left: 10px;" type="success"
+              :loading="uploadServerLoading" @click="submitUploadUpdate">上传到服务器</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span></div>
+            <div slot="tip" class="el-upload__tip">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
+            <div slot="tip" class="el-upload__tip">下面为新上传的文件</div>
+          </el-upload>
+        </el-form-item>
+        <el-divider v-if="updateInvoiceFrom.OrderData.length > 0" />
+        <el-tag v-if="updateInvoiceFrom.OrderData.length > 0" effect="plain"
+          style="border-color: #A29BC4;color:#6959CD;margin-bottom:20px">合同系统帐单列表的回款下面会显示账单详情（客服系统生成的不显示）</el-tag>
+        <el-table v-if="updateInvoiceFrom.OrderData.length > 0" :data="updateInvoiceFrom.OrderData" border>
+          <el-table-column type="index" width="50">
+          </el-table-column>
+          <el-table-column label="账单名称" prop="ContractOrderName" min-width="250" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="ApplicationTime" label="账单申请日期" min-width="110" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <div v-if="scope.row.ApplicationTime">
+                <i class="el-icon-time" />
+                <span style="margin-left: 6px">{{ dateFormat(scope.row.ApplicationTime) }}</span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="CollectionAmount" label="使用金额" min-width="120">
+            <template slot-scope="scope">
+              <span v-format="'¥#,##0.00'">{{ scope.row.CollectionAmount }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingUpdate" @click="saveUpdate">保 存</el-button>
+            <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingUpdate || uploadServerLoading"
+              @click="saveUpdate">保
+              存</el-button>
           </el-col>
         </el-row>
       </el-form>
+    </el-dialog>
+    <el-dialog append-to-body :visible="isshowpdf" width="65%" top="5vh" @close="isshowpdf = false">
+      <iframe v-if="isshowpdf" style="width: 100%; height: calc(100vh - 200px);" :src="srcDocx" />
     </el-dialog>
   </div>
 </template>
@@ -312,25 +390,30 @@ import {
   UpdateInvoiceInfo,
   GetPersonInfo,
 } from "@/api/CollectionMangement";
+import {
+  GetInvoiceAccount,
+  DeleteInvoiceAttachment,
+  Uploads,
+} from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
 import { parseTime, getDateByTimes } from "@/utils"; // 时间日期格式化成字符串
 export default {
-  name:'InvoiceList',
+  name: 'InvoiceList',
   data() {
     return {
+      isshowpdf: false,
+      srcDocx: '',
+      uploadServerLoading: false,
+      fileListUpload: [],
+      header: { Authorization: sessionStorage.getItem("token") },
+      //发票类型*：全额（默认）/差额
+      InvoiceTypesList: [
+        { Code: 1, Name: "全额" },
+        { Code: 2, Name: "差额" },
+      ],
+      InvoiceAccountList: [],
       fixedLeftShow: true,
       formShow: '',
-      GetContractTypeArray: [],
-      ContractCode: "",
-      ContractName: "",
-      ComName: "",
-      ContractType: "",
-      BeginTime: "",
-      EndTime: "",
-      BeginSignTime: "",
-      EndSignTime: "",
-      // ContractRangeTime: [],
-      ContractSignTime: [],
       entLoading: false,
       // 公司数据返回列表
       CorporationDatas: [],
@@ -343,11 +426,8 @@ export default {
         pagesize: 20,
       },
       total: 0,
-      detailDialogVisible: false,
-      detailAddDialogVisible: false,
       updateDialogVisible: false,
       InvoiceData: [],
-      corp_id: "",
       updateInvoiceFrom: {
         Id: "",
         CompanyId: "",
@@ -363,13 +443,14 @@ export default {
         IssuingPerson: "",
         InvoiceContent: "",
         InvoiceRemark: "",
+        OrderData: [],
+        FileLists: [],
+        AttachmentLists: [],
+        FileList:[],
       },
       loading: false,
       CorporationDatas: [],
       selectCorporationDatas: [],
-      UserList: [],
-      PaymentMethodList: [],
-      DicCategoryList: [],
       updateContractsRules: {
         // CompanyId: [
         //   { required: true, message: "请选择公司", trigger: "change" },
@@ -453,8 +534,96 @@ export default {
     this.GetPersonInfoList();
     // 获取发票数据
     this.GetInvoiceData();
+    // 获取发票科目数据
+    this.GetInvoiceAccountList();
   },
   methods: {
+    clickView(src) {
+      this.srcDocx = src.url;
+      this.isshowpdf = true
+    },
+    downView(src) {
+      window.location.href = src.urlDown;
+    },
+    submitUploadUpdate() {
+      this.uploadServerLoading = true;
+      const formData = new FormData()
+      this.fileListUpload.forEach(item => {
+        formData.append('files', item.raw)
+      })
+      if (!formData) {
+        this.$message.warning("请选择要上传到服务器的文件");
+      }
+      this.updateInvoiceFrom.FileList = [];
+      Uploads(formData).then(response => {
+        if (response.success) {
+          for (const index in response.result) {
+            var addForm = {
+              AttachmentName: response.result[index].AttachmentName,
+              FileName: response.result[index].FileName,
+            };
+            // 给添加表单的列表赋值
+            this.updateInvoiceFrom.FileList.push(addForm);
+          }
+          this.$message.success("上传成功");
+        } else {
+          this.$message.error(response.resultMessage);
+        }
+        this.uploadServerLoading = false;
+      })
+        .catch(err => {
+          this.uploadServerLoading = false;
+          this.$message.error("上传失败");
+        })
+    },
+    // 修改-上传文件
+    handleChangeAddUpload(file, fileList) {
+      this.fileListUpload = fileList
+    },
+    handleExceedAddUpdate(files, fileList) {
+      this.$message.warning('当前文件数量超过限制');
+    },
+    AttachmentCodeRemoveUpdate(file, fileList) {
+      this.fileListUpload = fileList
+    },
+    AttachmentCodePreview(file) {
+      window.open(file.url);
+    },
+    // 修改中对以前的文件进行编辑操作
+    async beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
+    },
+    handleRemove(file, fileList) {
+      DeleteInvoiceAttachment(this.updateInvoiceFrom.AttachmentRelationCode, file.name).then((res) => {
+        if (res.success) {
+          this.$message.success("操作成功！");
+        } else {
+          return this.$message.error(res.resultMessage);
+        }
+      });
+    },
+    // 获取发票科目数据
+    GetInvoiceAccountList() {
+      GetInvoiceAccount(
+        "",
+        1,
+        100000
+      ).then((res) => {
+        if (res.success) {
+          this.InvoiceAccountList = res.result.list;
+          this.total = res.result.totalNumber;
+        } else {
+          this.InvoiceAccountList = [];
+          this.total = 0;
+        }
+      });
+    },
+    // 列表时间格式化
+    dateFormat(row) {
+      if (row) {
+        return this.$moment(row).format("YYYY-MM-DD");
+      } else { return null; }
+    },
     // InvoiceTypeStyle({ row, column, rowIndex, columnIndex }) {
     //   if (columnIndex === 3) {      // 表格的第4列做处理
 
@@ -489,12 +658,6 @@ export default {
         this.updateInvoiceFrom.IssuingPerson = sessionStorage.getItem("User_RealName");
       }
     },
-    changeCompanyId(e) {
-      var item = this.selectCorporationDatas.filter((item) => {
-        return item.value == e;
-      });
-      this.addContractsForm.FirstPartyName = item[0].label;
-    },
     changeCompanyIdUpdate(e) {
       var item = this.selectCorporationDatas.filter((item) => {
         return item.value == e;
@@ -503,10 +666,7 @@ export default {
     },
     detailUpdateDialogVisibleClosed() {
       this.$refs.updateInvoiceRef.resetFields();
-    },
-    // 关闭远程搜索下拉时需要清空筛选出来的数据进行重新筛选
-    clearselectCorporationDatas(e) {
-      this.selectCorporationDatas = [];
+      this.fileListUpload=[];
     },
     // 监听 pagesize改变的事件
     handleSizeChange(newSize) {
@@ -537,6 +697,13 @@ export default {
       this.updateInvoiceFrom.IssuingPerson = item.IssuingPerson;
       this.updateInvoiceFrom.InvoiceContent = item.InvoiceContent;
       this.updateInvoiceFrom.InvoiceRemark = item.InvoiceRemark;
+      this.updateInvoiceFrom.InvoiceAccount = item.InvoiceAccount;
+      this.updateInvoiceFrom.InvoiceTypes = item.InvoiceTypes;
+      this.updateInvoiceFrom.OrderData = item.OrderData;
+      this.updateInvoiceFrom.AttachmentLists = item.AttachmentLists;
+      this.updateInvoiceFrom.FileLists = item.FileLists;
+      this.updateInvoiceFrom.AttachmentRelationCode = item.AttachmentRelationCode;
+      
       this.updateDialogVisible = true;
     },
     // 保存修改
@@ -563,6 +730,32 @@ export default {
           });
           return;
         } else {
+          //如果有附件，那么需要进行判断
+          if (this.fileListUpload.length != 0 || this.updateInvoiceFrom.FileList.length != 0) {
+            for (const index in this.fileListUpload) {
+              var flag = this.updateInvoiceFrom.FileList.filter((item) => {
+                return item.FileName == this.fileListUpload[index].name;
+              });
+              if (flag.length == 0) {
+                this.LoadingUpdate = false;
+                this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
+                return;
+              }
+            }
+          }
+          // 反向对比
+          if (this.fileListUpload.length != 0 || this.updateInvoiceFrom.FileList.length != 0) {
+            for (const index in this.updateInvoiceFrom.FileList) {
+              var flag = this.fileListUpload.filter((item) => {
+                return item.name == this.updateInvoiceFrom.FileList[index].FileName;
+              });
+              if (flag.length == 0) {
+                this.LoadingUpdate = false;
+                this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
+                return;
+              }
+            }
+          }
           UpdateInvoiceInfo(this.updateInvoiceFrom).then((res) => {
             if (res.success) {
               this.$message.success("操作成功");
@@ -595,6 +788,7 @@ export default {
         this.SMonth,
         this.ApplyPerson,
         this.IssuingPerson,
+        false,
         this.queryInfo.pagenum,
         this.queryInfo.pagesize
       ).then((res) => {
@@ -632,10 +826,7 @@ export default {
               label: item.ComName,
             };
           });
-
-          this.companyList = res.result;
         } else {
-          this.companyList = [];
         }
       });
     },
@@ -696,20 +887,6 @@ export default {
       });
     },
 
-    // 输入过滤
-    remoteMethod(query) {
-      if (query !== "") {
-        this.entLoading = true;
-        setTimeout(() => {
-          this.entLoading = false;
-          this.selectCorporationDatas = this.CorporationDatas.filter((item) => {
-            return item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
-          });
-        }, 200);
-      } else {
-        this.selectCorporationDatas = [];
-      }
-    },
     // 反填只显示选中的公司名称
     remoteMethodShow(query) {
       if (query !== "") {
@@ -780,6 +957,9 @@ export default {
 
 .SecondPartyNameClass div {
   margin-bottom: 10px;
+}
+.button {
+  margin-left: 1rem;
 }
 </style>
 

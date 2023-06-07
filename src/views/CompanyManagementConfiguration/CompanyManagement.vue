@@ -25,28 +25,35 @@
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="注册地址">
+              <el-form-item label="注册地址：">
                 <span>{{ props.row.RegisteredAddress }}</span>
               </el-form-item>
-              <el-form-item label="电话">
+              <el-form-item label="联系电话：">
                 <span>{{ props.row.Phone }}</span>
               </el-form-item>
-              <el-form-item label="开户银行">
+              <el-form-item label="开户银行：">
                 <span>{{ props.row.DepositBank }}</span>
               </el-form-item>
-              <el-form-item label="账号">
+              <el-form-item label="银行账号：">
                 <span>{{ props.row.Account }}</span>
               </el-form-item>
-              <el-form-item label="状态">
-                <span>{{ props.row.IsUsed ? (props.row.IsUsed == 1 ? "启用" : "禁用") : "" }}</span>
+              <el-form-item label="状态：">
+                <span>{{ props.row.IsUsed ? (props.row.IsUsed == 1 ? "启用" : "禁用") : props.row.IsUsed == 0 ? "禁用" : "启用"
+                }}</span>
               </el-form-item>
-              <el-form-item label="已上传文件">
+              <el-form-item label="最后修改时间：">
+                  <div v-if="props.row.BillingUpdateTime">
+                    <i class="el-icon-time" />
+                    <span style="margin-left: 6px">{{ dateFormat(props.row.BillingUpdateTime) }}</span>
+                  </div>
+              </el-form-item>
+              <el-form-item label="已上传文件：">
                 <div>
                   <el-link icon="el-icon-document" style="margin-right:1rem ;" v-for="item in props.row.FileListUpload"
                     :href="item.url" target="_blank">{{ item.name }}</el-link>
                 </div>
               </el-form-item>
-              <el-form-item label="曾用名">
+              <el-form-item label="曾用名：">
                 <div>
                   <el-tag :type="colorArray[index]" :key="tag" v-for="(tag, index) in props.row.childrenStr" closable
                     :disable-transitions="false" @close="handleClose(tag, props)">
@@ -55,17 +62,36 @@
                   <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
                     @keyup.enter.native="handleInputConfirm(props)" @blur="handleInputConfirm(props)">
                   </el-input>
-                  <el-button icon="el-icon-plus" v-else class="button-new-tag" size="small" @click="showInput"> 添加公司曾用名</el-button>
+                  <el-button icon="el-icon-plus" v-else class="button-new-tag" size="small" @click="showInput">
+                    添加公司曾用名</el-button>
                 </div>
 
               </el-form-item>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column prop="ComID" label="公司编号" width="120" />
-        <el-table-column prop="ComName" label="公司名称" width="300" show-overflow-tooltip />
-        <el-table-column prop="CompanyNumber" label="自定义公司编号" width="200" sortable />
+        <el-table-column prop="ComID" label="公司编号" width="80" />
+        <el-table-column prop="CompanyNumber" label="自定义公司编号" width="130" sortable />
+        <el-table-column prop="ComName" label="公司名称" width="250" show-overflow-tooltip />
+        <el-table-column prop="TaxpayerIdentificationNumber" label="信用代码" width="180" show-overflow-tooltip />
         <el-table-column prop="ShortName" label="公司简称" width="200" show-overflow-tooltip />
+        <el-table-column width="150" property="CreateTime" label="创建时间">
+          <template slot-scope="scope">
+            <div v-if="scope.row.CreateTime">
+              <i class="el-icon-time" />
+              <span style="margin-left: 6px">{{ dateFormat(scope.row.CreateTime) }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column width="150" property="UpdateTime" label="修改时间">
+          <template slot-scope="scope">
+            <div v-if="scope.row.UpdateTime">
+              <i class="el-icon-time" />
+              <span style="margin-left: 6px">{{ dateFormat(scope.row.UpdateTime) }}</span>
+            </div>
+          </template>
+        </el-table-column>
+
         <el-table-column prop="ComAddress" label="公司地址" />
         <el-table-column label="操作" width="170px">
           <template slot-scope="scope">
@@ -84,7 +110,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
 
-    <el-dialog title="添加公司" :visible.sync="addDialogVisible" top="5vh" width="50%" @close="addDialogClosed">
+    <el-dialog :title="UpdateTitle" :visible.sync="addDialogVisible" top="5vh" width="50%" @close="addDialogClosed">
       <el-form ref="addRef" :model="AddCompanyForm" :rules="AddCompanyRules" label-width="90px">
         <el-row>
           <el-col :span="12">
@@ -149,13 +175,13 @@
         <el-form-item label="注册地址" prop="RegisteredAddress">
           <el-input v-model="updateCompanyNameAForm.RegisteredAddress" />
         </el-form-item>
-        <el-form-item label="电话" prop="Phone">
+        <el-form-item label="联系电话" prop="Phone">
           <el-input v-model="updateCompanyNameAForm.Phone" />
         </el-form-item>
         <el-form-item label="开户银行" prop="DepositBank">
           <el-input v-model="updateCompanyNameAForm.DepositBank" />
         </el-form-item>
-        <el-form-item label="账号" prop="Account">
+        <el-form-item label="银行账号" prop="Account">
           <el-input v-model="updateCompanyNameAForm.Account" />
         </el-form-item>
         <el-form-item label="状态" prop="IsUsed">
@@ -175,8 +201,8 @@
             :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
             :file-list="fileListUpload" :on-change="handleChangeUpdate">
             <el-button icon="el-icon-position" plain slot="trigger" type="primary">选取文件</el-button>
-            <el-button icon="el-icon-upload2"  plain style="margin-left: 10px;" type="success" :loading="uploadServerLoading"
-              @click="submitUploadUpdate">上传到服务器</el-button>
+            <el-button icon="el-icon-upload2" plain style="margin-left: 10px;" type="success"
+              :loading="uploadServerLoading" @click="submitUploadUpdate">上传到服务器</el-button>
             <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span></div>
             <div slot="tip" class="el-upload__tip">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
             <div slot="tip" class="el-upload__tip">下面为新上传的文件</div>
@@ -185,7 +211,8 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check"  type="primary" :loading="LoadingUpdate || uploadServerLoading" @click="saveUpdate">保 存</el-button>
+            <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingUpdate || uploadServerLoading"
+              @click="saveUpdate">保 存</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -210,6 +237,7 @@ export default {
   name: 'CompanyManagement',
   data() {
     return {
+      UpdateTitle: '',
       deleteLoading: false,
       Name: "",
       LoadingAdd: false,
@@ -301,16 +329,22 @@ export default {
       colorArr: ["success", "info", "warning", "danger"],
       colorArray: [],
       flag: false,
-      disabledFlag:true,
+      disabledFlag: true,
     };
   },
   watch: {},
   created() {
-    if(sessionStorage.getItem("RoleName")=="超级管理员")
-    this.disabledFlag=false;
+    if (sessionStorage.getItem("RoleName") == "超级管理员")
+      this.disabledFlag = false;
     this.GetCompany();
   },
   methods: {
+    // 列表时间格式化
+    dateFormat(row) {
+      if (row) {
+        return this.$moment(row).format("YYYY-MM-DD HH:mm:ss");
+      } else { return null; }
+    },
     // 编辑获取反填信息
     showEditDialog(row) {
       GetCompanyNameAFirst(row.ComID).then((res) => {
@@ -542,6 +576,10 @@ export default {
     // 添加模块
     AddDialog(flag, row) {
       this.flag = flag;
+      if (flag)
+        this.UpdateTitle = "添加公司";
+      else
+        this.UpdateTitle = "修改公司";
       // this.$options.data()//是原始data中的数据
       // this.$data //是改变后的data中的数据
       // this.$root //表示app.vue中data的数据
@@ -627,6 +665,7 @@ export default {
     GetCompany() {
       this.loading = true;
       GetCompany(
+        null,//公司编号
         this.Name,
         this.queryInfo.pagenum,
         this.queryInfo.pagesize

@@ -378,7 +378,7 @@
             <el-tooltip class="item" effect="dark" placement="top" style="margin-left: 5px;margin-bottom: 0.2rem">
               <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
               <div slot="content">
-                <p style="color: #ffba00;font-weight: bolder;">便捷操作：点击实际应缴会自动填充“本次回款金额”列（ 实际应缴 - 回款金额 ）。</p>
+                <p style="color: #ffba00;font-weight: bolder;">便捷操作：点击实际应缴会自动填充 “本次回款金额” 列（ 实际应缴 - 回款金额 ）。</p>
               </div>
             </el-tooltip>
           </template>
@@ -473,6 +473,15 @@
         <el-table-column label="主公司名称" prop="CompanyName" show-overflow-tooltip min-width="200"></el-table-column>
         <el-table-column label="收款项目" prop="CustomAmountName" min-width="200"></el-table-column>
         <el-table-column label="收款金额" prop="CustomAmount" width="90">
+          <template slot-scope="{}" slot="header">
+            <span>收款金额</span>
+            <el-tooltip class="item" effect="dark" placement="top" style="margin-left: 5px;margin-bottom: 0.2rem">
+              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
+              <div slot="content">
+                <p style="color: #ffba00;font-weight: bolder;">便捷操作：点击收款金额会自动填充 “本次回款金额” 列（ 收款金额 - 回款金额 ）。</p>
+              </div>
+            </el-tooltip>
+          </template>
           <template slot-scope="scope">
             <span v-format="'¥#,##0.00'">{{ scope.row.CustomAmount }}</span>
           </template>

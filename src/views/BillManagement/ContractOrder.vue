@@ -81,11 +81,14 @@
                 <el-button type="success" icon="el-icon-circle-plus-outline" @click="ShowContractAddDialog">增 加
                 </el-button>
                 <el-button type="warning" icon="el-icon-thumb" @click="auditStatusAction">
-                  送审
+                  送 审
                 </el-button>
                 <!-- 超级管理员和财务都能审核 -->
                 <el-button v-show="auditStatusCheckFlag" type="danger" icon="el-icon-s-check" @click="auditStatusCheck">审
                   核
+                </el-button>
+                <el-button type="primary" icon="el-icon-search" @click="ApplyInvoicing">
+                  开 票
                 </el-button>
                 <el-button type="text" style="margin-left: 10px;"
                   :icon="isActive ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
@@ -113,7 +116,9 @@
           show-overflow-tooltip fixed="left" />
         <el-table-column v-else key="CompanyNameFalse" prop="CompanyName" label="公司名称" min-width="200"
           show-overflow-tooltip />
-        <el-table-column v-if="fixedLeftShow" prop="ApplicationTimeStr" label="账单申请日期" min-width="130"
+        <el-table-column prop="Name" label="合同类型" min-width="100" show-overflow-tooltip />
+        <el-table-column prop="SecondPartyName" label="乙方名称" min-width="100" show-overflow-tooltip />
+        <!-- <el-table-column v-if="fixedLeftShow" prop="ApplicationTimeStr" label="账单申请日期" min-width="130"
           show-overflow-tooltip fixed="left">
           <template slot-scope="scope">
             <div v-if="scope.row.ApplicationTimeStr">
@@ -121,8 +126,8 @@
               <span style="margin-left: 6px">{{ scope.row.ApplicationTimeStr }}</span>
             </div>
           </template>
-        </el-table-column>
-        <el-table-column v-else prop="ApplicationTimeStr" label="账单申请日期" min-width="130" show-overflow-tooltip>
+        </el-table-column> -->
+        <el-table-column prop="ApplicationTimeStr" label="账单申请日期" min-width="130" show-overflow-tooltip>
           <template slot-scope="scope">
             <div v-if="scope.row.ApplicationTimeStr">
               <i class="el-icon-time" />
@@ -141,7 +146,7 @@
             <span v-format="'¥#,##0.00'">{{ scope.row.AmountTotal }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="Balance" label="余额" min-width="100">
+        <el-table-column prop="Balance" label="开票金额" min-width="100">
           <template slot-scope="scope">
             <span v-format="'¥#,##0.00'">{{ scope.row.Balance }}</span>
           </template>
@@ -235,6 +240,37 @@
               <span v-if="scope.row.CollectionState == 1">未回款</span>
               <span v-if="scope.row.CollectionState == 2">已回款</span>
               <span v-if="scope.row.CollectionState == 3">部分回款</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="BillingState" label="开票账单状态" min-width="120">
+          <template slot-scope="{}" slot="header">
+            <span>开票账单状态</span>
+            <el-tooltip class="item" effect="light" placement="bottom" style="margin-left: 5px;margin-bottom: 0.2rem">
+              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
+              <div slot="content">
+                <div style="display: flex;  align-items: center;">
+                  <span slot="reference" style="margin-right: 10px;" class="SecondPartyNameClass">
+                    <div><i class="dotClass" style="background-color: #ff4949" />{{ "\xa0\xa0" }}未回款<br /></div>
+                    <div> <i class="dotClass" style="background-color: #13ce66" />{{ "\xa0\xa0"
+                    }}已回款</div>
+                    <div style="margin-bottom: 0;"> <i class="dotClass" style="background-color: #1890ff" />{{ "\xa0\xa0"
+                    }}部分回款</div>
+                  </span>
+                </div>
+              </div>
+            </el-tooltip>
+          </template>
+          <template slot-scope="scope" class="tableRowClass">
+            <div style="display: flex;  align-items: center;">
+              <span slot="reference" style="margin-right: 8px;">
+                <i v-if="scope.row.BillingState == 1" class="dotClass" style="background-color: #ff4949" />
+                <i v-if="scope.row.BillingState == 2" class="dotClass" style="background-color: #13ce66" />
+                <i v-if="scope.row.BillingState == 3" class="dotClass" style="background-color: #1890ff" />
+              </span>
+              <span v-if="scope.row.BillingState == 1">未回款</span>
+              <span v-if="scope.row.BillingState == 2">已回款</span>
+              <span v-if="scope.row.BillingState == 3">部分回款</span>
             </div>
           </template>
         </el-table-column>
@@ -419,9 +455,9 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button type="primary" icon="el-icon-circle-check"  :loading="LoadingAdd" @click="addOrder">保 存
+            <el-button type="primary" icon="el-icon-circle-check" :loading="LoadingAdd" @click="addOrder">保 存
             </el-button>
-            <el-button icon="el-icon-refresh"  type="info" @click="addDialogVisibleClosed">重 置</el-button>
+            <el-button icon="el-icon-refresh" type="info" @click="addDialogVisibleClosed">重 置</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -658,11 +694,247 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" type="primary" :loading="auditStatusCheckLoading" @click="saveAuditStatusCheck">保 存
+            <el-button icon="el-icon-circle-check" type="primary" :loading="auditStatusCheckLoading"
+              @click="saveAuditStatusCheck">保 存
             </el-button>
           </el-col>
         </el-row>
       </el-form>
+    </el-dialog>
+    <!-- 弹出开票窗口 -->
+    <el-dialog title="开票申请" :visible.sync="updateInvoicingDialogVisible" top="5vh" width="70%"
+      @close="InvoicingVisibleClosed">
+      <el-descriptions v-if="ClickRow" title="公司发票信息" class="margin-top" :column="3" border>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-office-building"></i>
+            公司名称
+          </template>
+          {{ ClickRow.CompanyName }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-tickets"></i>
+            合同类型
+          </template>
+          {{ ClickRow.Name }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-office-building"></i>
+            乙方公司
+          </template>
+          {{ ClickRow.SecondPartyName }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-money"></i>
+            总金额
+          </template>
+          <span style="font-weight:bolder;">{{ ClickRow.totalMoney }}</span>
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-money"></i>
+            剩余金额
+          </template>
+          <span style="color: #ff4949;font-weight: bolder;">{{ ClickRow.residueMoney }}</span>
+          <el-tag type="success" effect="plain" style="margin-left:20px">输入本次发票金额会自动计算临时剩余金额</el-tag>
+        </el-descriptions-item>
+      </el-descriptions>
+      <el-divider></el-divider>
+      <el-table :data="CollectionOrderData" border @cell-click="CollectionOrderClick" :cell-style="showCollection">
+        <el-table-column type="index" width="50">
+        </el-table-column>
+        <el-table-column label="账单名称" prop="ContractOrderName" width="250" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="ApplicationTimeStr" label="账单申请日期" min-width="110" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <div v-if="scope.row.ApplicationTimeStr">
+              <i class="el-icon-time" />
+              <span style="margin-left: 6px">{{ scope.row.ApplicationTimeStr }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="AmountReceived" label="账单总金额" min-width="110">
+          <template slot-scope="{}" slot="header">
+            <span>账单总金额</span>
+            <el-tooltip class="item" effect="dark" placement="top" style="margin-left: 5px;margin-bottom: 0.2rem">
+              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
+              <div slot="content">
+                <p style="color: #ffba00;font-weight: bolder;">便捷操作：点击账单总金额会自动填充 “本次发票金额” 列（ 账单总金额 - 已生成发票金额 ）。</p>
+              </div>
+            </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+            <span v-format="'¥#,##0.00'">{{ scope.row.AmountReceived }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="Balance" label="已生成发票金额" min-width="120">
+          <template slot-scope="scope">
+            <span v-format="'¥#,##0.00'">{{ scope.row.Balance }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="本次发票金额" prop="ServReceiveNew" min-width="120">
+          <template slot-scope="scope">
+            <el-input size="mini" v-model="scope.row.ServReceiveNew" placeholder="金额" clearable
+              @input="handleChange(scope.row)" />
+          </template>
+        </el-table-column>
+        <el-table-column label="账单状态" prop="BillingState" width="90">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.BillingState == 1" effect="plain" type="danger">未回款</el-tag>
+            <el-tag v-if="scope.row.BillingState == 3" effect="plain">部分回款</el-tag>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-divider />
+      <el-descriptions title="公司开票信息" class="margin-top" :column="3" border>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-office-building"></i>
+            公司名称
+          </template>
+          {{ DicCategoryList.ComName }}
+        </el-descriptions-item>
+        <el-descriptions-item :content-class-name="!DicCategoryList.TaxpayerIdentificationNumber ? 'my-content' : ''">
+          <template slot="label">
+            <i class="el-icon-office-building"></i>
+            统一信用代码/税号
+          </template>
+          <span v-if="!DicCategoryList.TaxpayerIdentificationNumber" style="color:#ff4949">待完善</span>
+          <span v-else>{{ DicCategoryList.TaxpayerIdentificationNumber }}</span>
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-date"></i>
+            注册地址
+          </template>
+          <span v-if="RegisteredAddress == '待完善'"> {{ RegisteredAddress }}</span>
+          <span v-else>{{ RegisteredAddress }}</span>
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-date"></i>
+            联系电话
+          </template>
+          <span v-if="Phone == '待完善'"> {{ Phone }}</span>
+          <span v-else>{{ Phone }}</span>
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-date"></i>
+            开户银行
+          </template>
+          <span v-if="DepositBank == '待完善'"> {{ DepositBank }}</span>
+          <span v-else>{{ DepositBank }}</span>
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-date"></i>
+            银行账号
+          </template>
+          <span v-if="Account == '待完善'"> {{ Account }}</span>
+          <span v-else>{{ Account }}</span>
+        </el-descriptions-item>
+      </el-descriptions>
+      <el-divider />
+      <el-form ref="updateInvoiceRef" :model="updateInvoiceFrom" :rules="updateContractsRules" label-width="100px"
+        class="formClass">
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label-width="100px">
+              <el-tag effect="plain"
+                style="border-color: #A29BC4;color:#6959CD;margin-right:15px">（选择增值税专用发票、增值税电子普通发票）上方公司开票信息所有字段不可为空</el-tag>
+              <el-tag effect="plain"
+                style="border-color: #A29BC4;color:#6959CD;margin-right:15px">（选择增值税普通发票）上方公司名称、统一信用代码/税号不可为空</el-tag>
+              <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD;">开票完成后公司信息和开票信息尽量不要更改</el-tag>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="发票种类" prop="InvoiceType">
+              <el-select v-model="updateInvoiceFrom.InvoiceType" filterable placeholder="发票种类">
+                <el-option v-for="item in InvoiceTypeList" :key="item.Code" :class="item.Class" :label="item.Name"
+                  :value="item.Code" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="发票抬头" prop="InvoiceHeader">
+              <el-input v-model="updateInvoiceFrom.InvoiceHeader" placeholder="发票抬头" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="发票科目" prop="InvoiceAccount">
+              <el-select v-model="updateInvoiceFrom.InvoiceAccount" filterable placeholder="发票科目">
+                <el-option v-for="item in InvoiceAccountList" :key="item.InvoiceAccountCode" :class="item.Class"
+                  :label="item.InvoiceAccountName" :value="item.InvoiceAccountCode" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="发票类型" prop="InvoiceTypes">
+              <el-select v-model="updateInvoiceFrom.InvoiceTypes" filterable placeholder="发票类型">
+                <el-option v-for="item in InvoiceTypesList" :key="item.Code" :class="item.Class" :label="item.Name"
+                  :value="item.Code" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="发票金额" prop="InvoiceAmount">
+              <el-input v-model="updateInvoiceFrom.InvoiceAmount" disabled="" placeholder="账单中本次发票的总金额（自动生成）" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="应收年份" prop="SYear">
+              <el-date-picker v-model="updateInvoiceFrom.SYear" type="year" placeholder="选择年">
+              </el-date-picker>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="应收月份" prop="SMonth">
+              <el-select v-model="updateInvoiceFrom.SMonth" filterable placeholder="选择月">
+                <el-option v-for="item in 12" :key="item" :label="item + '月'" :value="item" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="发票内容" prop="InvoiceContent">
+              <el-input v-model="updateInvoiceFrom.InvoiceContent" placeholder="发票内容" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item label="备注" prop="InvoiceRemark">
+          <el-input v-model="updateInvoiceFrom.InvoiceRemark" type="textarea" :rows="3" placeholder="备注" />
+        </el-form-item>
+        <el-form-item label="附件上传">
+          <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
+            accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
+            :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
+            :file-list="fileListUpload" :on-change="handleChangeAddUpload">
+            <el-button icon="el-icon-position" plain slot="trigger" type="primary">选取文件</el-button>
+            <el-button icon="el-icon-upload2" plain style="margin-left: 10px;" type="success"
+              :loading="uploadServerLoading" @click="submitUploadUpdate">上传到服务器</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span></div>
+            <div slot="tip" class="el-upload__tip">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
+            <div slot="tip" class="el-upload__tip">下面为新上传的文件</div>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <el-divider />
+      <el-row style="text-align:center;">
+        <el-col :span="24">
+          <el-button icon="el-icon-circle-check" :loading="LoadingInvoicing || uploadServerLoading" type="primary"
+            @click="saveInvoicing">保
+            存</el-button>
+        </el-col>
+      </el-row>
     </el-dialog>
   </div>
 </template>
@@ -680,9 +952,12 @@ import {
   GetContractNameList,
   OrderSubmitForCensorship,
   OrderSaveAuditStatus,
+  InvoicingData,
 } from "@/api/CollectionMangement";
 import {
+  GetCompany,
   GetInvoiceAccount,
+  Uploads,
 } from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
 import { parseTime, getDateByTimes } from "@/utils"; // 时间日期格式化成字符串
@@ -690,7 +965,7 @@ import moment from "moment"; // 导入模块
 import collapse from '../../assets/js/collapse';
 import { cutOutNum } from '@/utils/decimals'
 moment.locale("zh-cn"); // 设置语言 或 moment.lang('zh-cn');
-
+import { BigNumber } from 'bignumber.js';
 export default {
   name: 'ContractOrder',
   components: {
@@ -698,6 +973,31 @@ export default {
   },
   data() {
     return {
+      uploadServerLoading: false,
+      fileListUpload: [],
+      header: { Authorization: sessionStorage.getItem("token") },
+      LoadingInvoicing: false,
+      updateInvoiceFrom: {
+        InvoiceHeader: "",
+        InvoiceAmount: "",
+        InvoiceType: "",
+        SYear: "",
+        SMonth: "",
+        InvoiceContent: "",
+        InvoiceRemark: "",
+        InvoiceAccount: "",
+        InvoiceTypes: 1,
+        FileList: [],
+      },
+      RegisteredAddress: '',
+      Phone: '',
+      DepositBank: '',
+      Account: '',
+      DicCategoryList: [],
+      ClickRow: null,
+      ClickRowOld: null,
+      CollectionOrderData: [],
+      updateInvoicingDialogVisible: false,
       fixedLeftShow: true,
       formShow: '',
       multipleSelection: [],
@@ -908,6 +1208,12 @@ export default {
         { Code: 0, Name: "无效" },
 
       ],
+      //发票类型*：全额（默认）/差额
+      InvoiceTypesList: [
+        { Code: 1, Name: "全额" },
+        { Code: 2, Name: "差额" },
+
+      ],
       // 添加合同正则验证
       addContractOrderRules: {
         ContractCode: [
@@ -959,9 +1265,47 @@ export default {
           { required: true, message: "请选择回款状态", trigger: "change" },
         ],
       },
-      updateContractsRules: {},
+      updateContractsRules: {
+        InvoiceHeader: [
+          { required: true, message: "请输入发票抬头", trigger: "blur" },
+          {
+            min: 1,
+            max: 50,
+            message: "长度在 1 到 50 个字符内",
+            trigger: "blur",
+          },
+        ],
+        InvoiceAmount: [
+          {
+            required: true,
+            pattern:
+              /^([0-9]\d*(\.\d{1,2})?|([0](\.([0][0-9]|[0-9]\d{0,1}))))$/,
+            message: "发票金额输入不合法（不能小于0小数位不超过2位）",
+            trigger: "blur",
+          },
+        ],
+        InvoiceAccount: [
+          { required: true, message: "请选择发票科目", trigger: "change" },
+        ],
+        InvoiceTypes: [
+          { required: true, message: "请选择发票类型", trigger: "change" },
+        ],
+        InvoiceType: [
+          { required: true, message: "请选择发票种类", trigger: "change" },
+        ],
+        SYear: [
+          { required: true, message: "请选择应收年份", trigger: "change" },
+        ],
+        SMonth: [
+          { required: true, message: "请选择应收月份", trigger: "change" },
+        ],
+        InvoiceContent: [
+          { required: true, message: "请输入发票内容", trigger: "blur" },
+        ],
+      },
       auditStatusdescription: '',
       auditStatusCheckDialog: false,
+
     };
   },
   watch: {
@@ -993,6 +1337,214 @@ export default {
     this.GetInvoiceStatus();
   },
   methods: {
+    submitUploadUpdate() {
+      this.uploadServerLoading = true;
+      const formData = new FormData()
+      this.fileListUpload.forEach(item => {
+        formData.append('files', item.raw)
+      })
+      if (!formData) {
+        this.$message.warning("请选择要上传到服务器的文件");
+      }
+      this.updateInvoiceFrom.FileList = [];
+      Uploads(formData).then(response => {
+        if (response.success) {
+          for (const index in response.result) {
+            var addForm = {
+              AttachmentName: response.result[index].AttachmentName,
+              FileName: response.result[index].FileName,
+            };
+            // 给添加表单的列表赋值
+            this.updateInvoiceFrom.FileList.push(addForm);
+          }
+          this.$message.success("上传成功");
+        } else {
+          this.$message.error(response.resultMessage);
+        }
+        this.uploadServerLoading = false;
+      })
+        .catch(err => {
+          this.uploadServerLoading = false;
+          this.$message.error("上传失败");
+        })
+    },
+    // 修改-上传文件
+    handleChangeAddUpload(file, fileList) {
+      this.fileListUpload = fileList
+    },
+    handleExceedAddUpdate(files, fileList) {
+      this.$message.warning('当前文件数量超过限制');
+    },
+    AttachmentCodeRemoveUpdate(file, fileList) {
+      this.fileListUpload = fileList
+    },
+    InvoicingVisibleClosed() {
+      this.$refs.updateInvoiceRef.resetFields();
+      this.fileListUpload = [];
+    },
+    saveInvoicing() {
+      this.LoadingInvoicing = true;
+      var flagvaildate = false;
+      //选中账单条目中本次发票金额不能为0或者为空
+      this.CollectionOrderData.forEach((item) => {
+        if (!item.ServReceiveNew) {
+          flagvaildate = true;
+        }
+      })
+      if (flagvaildate) {
+        this.LoadingInvoicing = false;
+        this.$message.warning("选中账单条目中本次发票金额不能为0或者为空，请检查");
+        return;
+      }
+      // 提交请求前，表单预验证
+      this.$refs.updateInvoiceRef.validate(async (valid, object) => {
+        // 表单预校验失败
+        if (!valid) {
+          this.LoadingInvoicing = false;
+          return;
+        } else {
+          if (!this.DicCategoryList.TaxpayerIdentificationNumber) {
+            this.LoadingInvoicing = false;
+            this.$message({
+              message: '公司信用代码不完整，请先到公司管理设置-客户管理中点击编辑，进行信用代码维护',
+              type: 'warning',
+              duration: 5000
+            });
+            return;
+          }
+          if (this.updateInvoiceFrom.InvoiceType == 1 || this.updateInvoiceFrom.InvoiceType == 3) {
+            if (this.DicCategoryList.IsUsed) {
+              if (this.RegisteredAddress == "待完善" || this.Phone == "待完善" || this.DepositBank == "待完善" || this.Account == "待完善") {
+                this.LoadingInvoicing = false;
+                this.$message({
+                  message: '（选择增值税专用发票、增值税电子普通发票）上方公司开票信息不完整，请先到公司管理设置-客户管理中点击开票信息进行维护',
+                  type: 'warning',
+                  duration: 5000
+                });
+                return;
+              }
+            }
+            else {
+              this.LoadingInvoicing = false;
+              this.$message({
+                message: '（选择增值税专用发票、增值税电子普通发票）上方公司开票信息不完整，请先到公司管理设置-客户管理中点击开票信息进行维护(开票信息状态不能为禁用！！！)',
+                type: 'warning',
+                duration: 5000
+              });
+              return;
+            }
+          }
+          //如果有附件，那么需要进行判断
+          if (this.fileListUpload.length != 0 || this.updateInvoiceFrom.FileList.length != 0) {
+            for (const index in this.fileListUpload) {
+              var flag = this.updateInvoiceFrom.FileList.filter((item) => {
+                return item.FileName == this.fileListUpload[index].name;
+              });
+              if (flag.length == 0) {
+                this.LoadingInvoicing = false;
+                this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
+                return;
+              }
+            }
+          }
+          // 反向对比
+          if (this.fileListUpload.length != 0 || this.updateInvoiceFrom.FileList.length != 0) {
+            for (const index in this.updateInvoiceFrom.FileList) {
+              var flag = this.fileListUpload.filter((item) => {
+                return item.name == this.updateInvoiceFrom.FileList[index].FileName;
+              });
+              if (flag.length == 0) {
+                this.LoadingInvoicing = false;
+                this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
+                return;
+              }
+            }
+          }
+          let changedData = [];
+          this.CollectionOrderData.forEach((item) => {
+            if (item.ServReceiveNew)
+              changedData.push(item);
+          })
+          if (this.updateInvoiceFrom.SYear) { this.updateInvoiceFrom.SYear = parseTime(new Date(this.updateInvoiceFrom.SYear), "{y}") }
+          let parameters = {
+            CompanyId: this.ClickRow.CompanyId,
+            InvoiceHeader: this.updateInvoiceFrom.InvoiceHeader,
+            InvoiceAmount: this.updateInvoiceFrom.InvoiceAmount,
+            InvoiceType: this.updateInvoiceFrom.InvoiceType,
+            SYear: this.updateInvoiceFrom.SYear,
+            SMonth: this.updateInvoiceFrom.SMonth,
+            InvoiceContent: this.updateInvoiceFrom.InvoiceContent,
+            InvoiceRemark: this.updateInvoiceFrom.InvoiceRemark,
+            InvoiceAccount: this.updateInvoiceFrom.InvoiceAccount,
+            InvoiceTypes: this.updateInvoiceFrom.InvoiceTypes,
+            FileList: this.updateInvoiceFrom.FileList,
+            ChangedData: changedData,//输入金额的数据
+          }
+          InvoicingData(parameters).then((res) => {
+            if (res.success) {
+              this.$message.success("操作成功");
+              this.GetContractOrderListSearch();
+            } else {
+              this.$message.error(res.resultMessage);
+            }
+            this.updateInvoicingDialogVisible = false;
+          });
+        }
+      });
+    },
+    //点击单元格时触发
+    CollectionOrderClick(row, column, cell, event) {
+      if (column.label == "账单总金额") {
+        row.ServReceiveNew = this.minus(row.AmountReceived, row.Balance);
+        this.handleChange(row);
+      }
+    },
+    handleChange(row) {
+      //验证输入是否金额，如果不是直接返回
+      row.ServReceiveNew = /^\d+\.?\d{0,2}$/.test(row.ServReceiveNew) ?
+        row.ServReceiveNew :
+        (row.ServReceiveNew.indexOf('.') == -1 ?
+          "" :
+          cutOutNum(parseFloat(row.ServReceiveNew)));
+
+      this.RecalculateMoney();
+      // //临时金额，判断剩余金额-当前输入金额是否>=0
+      // let remainingAmount = this.ClickRow.RemainingAmount - row.ServReceiveNew;
+      //如果该行的实际应缴减去回款金额小于当前输入金额或者临时金额小于零，那么证明输入金额不合法
+      if (parseFloat((row.AmountReceived - row.Balance).toFixed(2)) < parseFloat(row.ServReceiveNew) || parseFloat(this.ClickRow.residueMoney) < 0) {
+        row.ServReceiveNew = "";
+        this.$message.warning("金额输入不合理，请重新输入");
+      }
+      this.RecalculateMoney();
+      return;
+    },
+    RecalculateMoney() {
+      let totalInputMoney = 0;
+      this.CollectionOrderData.forEach((item) => {
+        totalInputMoney += item.ServReceiveNew ? parseFloat(item.ServReceiveNew) : 0;
+      })
+      this.ClickRow.residueMoney = (this.ClickRowOld.residueMoney - totalInputMoney).toFixed(2);
+      //自动计算发票总金额
+      this.updateInvoiceFrom.InvoiceAmount = (this.ClickRowOld.residueMoney - this.ClickRow.residueMoney).toFixed(2);
+    },
+    //减法（高精度）
+    minus(a, b) {
+      a = BigNumber(a);
+      b = BigNumber(b);
+      return a.minus(b).toNumber();
+    },
+    //为要复制的单元格填充背景颜色
+    showCollection({ row, column }) {
+      if (column.label == "账单总金额") {
+        return {
+          backgroundColor: "#E6F7FF",
+        };
+      } else {
+        return {
+          backgroundColor: "#FFFFFF",
+        };
+      }
+    },
     handleChangeAdd(CustomAmount, index) {
       //验证输入是否金额，如果不是直接返回
       this.addContractOrderForm.domains[index].CustomAmount = /^\d+\.?\d{0,2}$/.test(CustomAmount) ?
@@ -1107,6 +1659,88 @@ export default {
         }
         hideLoading();
       });
+    },
+
+    // 开票
+    ApplyInvoicing() {
+      if (!this.OrderCodeStr) {
+        this.$message.warning("请勾选要开票的数据！");
+        return;
+      }
+      let dataArr = [];
+      let totalMoney = 0;
+      let residueMoney = 0;
+      let flagIsUsed = false;
+      let flagFinlished = false;
+      this.multipleSelection.forEach(item => {
+        const ifExists = dataArr.find(c => c.ContractType === item.ContractType && c.CompanyId === item.CompanyId && c.SecondPartyName === item.SecondPartyName);
+        if (!ifExists) {
+          const obj = {
+            ContractType: item.ContractType,
+            CompanyId: item.CompanyId,
+            SecondPartyName: item.SecondPartyName,
+            CompanyName: item.CompanyName,
+            Name: item.Name,
+            SecondPartyName: item.SecondPartyName,
+            BillingState: item.BillingState,
+          };
+          dataArr.push(obj);
+        };
+        totalMoney += item.AmountReceived;
+        residueMoney += item.Balance;
+        if (item.IsUsed == 0) {
+          flagIsUsed = true;
+        }
+        if (item.BillingState == 2) {
+          flagFinlished = true;
+        }
+      });
+      if (flagIsUsed) {
+        this.$message.warning("选中条目中有无效的账单状态，请检查");
+        return;
+      }
+      if (flagFinlished) {
+        this.$message.warning("不能选中已回款的开票账单状态，请检查");
+        return;
+      }
+      //选中条目去重，如果数据符合条件只可能存在一条数据
+      if (dataArr.length != 1) {
+        //因为提示的较为复杂延时显示
+        this.$message({
+          message: '相同的合同类型、公司名称、乙方名称的账单才可合并开票，请检查',
+          type: 'warning',
+          duration: 5000
+        });
+        return;
+      }
+      //为对象数组添加 总金额和剩余金额项
+      this.$set(dataArr[0], 'totalMoney', totalMoney.toFixed(2));
+      //选中账单的总金额减去已经生成的账单的金额等于剩余要开发票的金额
+      this.$set(dataArr[0], 'residueMoney', (totalMoney - residueMoney).toFixed(2));
+      this.ClickRow = Object.assign({}, dataArr[0]); // 创建新的对象副本;
+      this.ClickRowOld = Object.assign({}, dataArr[0]); // 创建新的对象副本;
+      this.CollectionOrderData = this.multipleSelection.map(v => {
+        this.$set(v, 'ServReceiveNew', "");
+        return v
+      });
+      //根据公司编号获取公司发票信息
+      GetCompany(
+        dataArr[0].CompanyId,//公司编号
+        '',
+        1,
+        100000
+      ).then((res) => {
+        if (res.success) {
+          this.DicCategoryList = res.result.list[0];
+          this.RegisteredAddress = this.DicCategoryList.RegisteredAddress ? this.DicCategoryList.RegisteredAddress : '待完善';
+          this.Phone = this.DicCategoryList.Phone ? this.DicCategoryList.Phone : '待完善';
+          this.DepositBank = this.DicCategoryList.DepositBank ? this.DicCategoryList.DepositBank : '待完善';
+          this.Account = this.DicCategoryList.Account ? this.DicCategoryList.Account : '待完善';
+        } else {
+          this.DicCategoryList = [];
+        }
+      });
+      this.updateInvoicingDialogVisible = true;
     },
 
     // 复选框选中事件
@@ -1405,8 +2039,8 @@ export default {
       this.updateContractOrderForm.InvoiceState = item.InvoiceState + "";
       this.updateContractOrderForm.ContractOrderName = item.ContractOrderName;
       this.updateContractOrderForm.AmountTotal = item.AmountTotal;
-      //只有未审核并且是未回款时候才可以进行修改
-      if (item.InvoiceState == 0 && item.CollectionState == 1) { this.updateShow = true; } else { this.updateShow = false; }
+      //只有未开并且是未回款并且开票账单状态是未回款时候才可以进行修改
+      if (item.InvoiceState == 0 && item.CollectionState == 1 && item.BillingState == 1) { this.updateShow = true; } else { this.updateShow = false; }
       this.updateContractOrderForm.CollectionState = item.CollectionState;
 
       // 根据合同查询关联自定义金额数据
@@ -1421,11 +2055,13 @@ export default {
     },
     // 删除信息
     async deleteDialog(item) {
-      debugger
+      if (item.InvoiceState == 1) {
+        return this.$message.info("已开的发票状态不能进行删除操作");
+      }
       if (item.CollectionState != 1) {
         return this.$message.info("只能删除未回款的数据，对于已经扣款的数据不能做删除操作");
       }
-      if (item.AmountReceived != item.Balance) {
+      if (item.Balance != 0) {
         return this.$message.info("对于已经开发票的账单不能进行删除操作");
       }
       const confirmResult = await this.$confirm(
@@ -1642,5 +2278,10 @@ export default {
 
 .SecondPartyNameClass div {
   margin-bottom: 10px;
+}
+</style>
+<style>
+.my-content {
+  background: #E1F3D8;
 }
 </style>

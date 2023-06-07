@@ -538,7 +538,12 @@ export function DeleteAttachment(BillingCode, FileName) {
     method: 'post',
   });
 }
-
+export function DeleteInvoiceAttachment(AttachmentRelationCode, FileName) {
+  return request({
+    url: '/SystemManagement/DeleteInvoiceAttachment?AttachmentRelationCode=' + AttachmentRelationCode + '&FileName=' + FileName,
+    method: 'post',
+  });
+}
 // 添加甲方公司
 export function UpdateCompanyNameA(model) {
   return request({
@@ -561,9 +566,9 @@ export function getUrl(BillingCode, FileName) {
   });
 }
 // 获取公司
-export function GetCompany(CompanyName, PageIndex, PageSize) {
+export function GetCompany( CompanyId,CompanyName, PageIndex, PageSize) {
   return request({
-    url: '/SystemManagement/GetCompany?CompanyName=' + CompanyName + '&PageIndex=' + PageIndex + '&PageSize=' + PageSize,
+    url: '/SystemManagement/GetCompany?CompanyId=' + CompanyId + '&CompanyName=' + CompanyName+ '&PageIndex=' + PageIndex + '&PageSize=' + PageSize,
     method: 'post',
   });
 }

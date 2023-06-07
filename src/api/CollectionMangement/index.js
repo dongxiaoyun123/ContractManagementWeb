@@ -206,7 +206,7 @@ export function GetAttachmentFirst(Type, Id) {
 }
 
 // 获取发票列表
-export function GetInvoiceDataMethod(CompanyId, InvoiceType, IvState, SYear, SMonth, ApplyPerson, IssuingPerson, pagenum, pagesize) {
+export function GetInvoiceDataMethod(CompanyId, InvoiceType, IvState, SYear, SMonth, ApplyPerson, IssuingPerson, Flag, pagenum, pagesize) {
   CompanyId = CompanyId || "";
   InvoiceType = InvoiceType || "";
   IvState = IvState || "";
@@ -216,7 +216,7 @@ export function GetInvoiceDataMethod(CompanyId, InvoiceType, IvState, SYear, SMo
   IssuingPerson = IssuingPerson || "";
   return request({
     url: '/CollectionMangement/GetInvoiceData?CompanyId=' + CompanyId + '&InvoiceType=' + InvoiceType + '&IvState=' + IvState + '&SYear=' + SYear + '&SMonth=' + SMonth +
-      '&ApplyPerson=' + ApplyPerson + '&IssuingPerson=' + IssuingPerson + '&pageIndex=' + pagenum + '&pageSize=' + pagesize + '&Id=',
+      '&ApplyPerson=' + ApplyPerson + '&IssuingPerson=' + IssuingPerson + '&Flag=' + Flag + '&pageIndex=' + pagenum + '&pageSize=' + pagesize + '&Id=',
     method: 'post',
   });
 }
@@ -463,3 +463,25 @@ export function PlaceFileMethodSupplier(SupplierId) {
     method: 'post',
   });
 }
+
+export function InvoicingData(model) {
+  return request({
+    url: '/CollectionMangement/InvoicingData',
+    method: 'post',
+    data: model
+  });
+}
+
+export function ConfirmInvoicing(IdStr) {
+  return request({
+    url: '/CollectionMangement/ConfirmInvoicing?IdStr=' + IdStr,
+    method: 'post',
+  });
+}
+export function RevokeInvoicing(IdStr) {
+  return request({
+    url: '/CollectionMangement/RevokeInvoicing?IdStr=' + IdStr,
+    method: 'post',
+  });
+}
+
