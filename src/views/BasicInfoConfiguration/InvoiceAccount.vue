@@ -9,32 +9,28 @@
         </el-col>
         <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
           <el-button type="primary" style="margin-left: 8px" icon="el-icon-circle-plus-outline"
-                     @click="_AddInvoiceAccount"
-          >添 加</el-button>
+            @click="_AddInvoiceAccount">添 加</el-button>
         </el-col>
       </el-row>
     </el-card>
     <el-card class="CardTableClass">
       <el-table v-loading="loading" highlight-current-row :data="InvoiceAccountList" row-key="id">
         <el-table-column prop="InvoiceAccountCode" label="发票科目编号" width="320" />
-        <el-table-column prop="InvoiceAccountName" label="发票科目名称" width="150" />
+        <el-table-column prop="InvoiceAccountName" label="发票科目名称" width="200" />
         <el-table-column prop="Sort" label="排序" width="100" sortable />
         <el-table-column label="操作" min-width="150">
           <template slot-scope="scope">
             <el-button icon="el-icon-edit" type="text" size="mini"
-                       @click="showEditDialog(scope.row.InvoiceAccountCode)"
-            >编辑</el-button>
-            <el-button icon="el-icon-delete" type="text" size="mini"
-                       @click="deleteDialog(scope.row.InvoiceAccountCode)"
-            >删除</el-button>
+              @click="showEditDialog(scope.row.InvoiceAccountCode)">编辑</el-button>
+            <el-button icon="el-icon-delete" type="text" size="mini" v-if="flagDelete == '超级管理员'"
+              @click="deleteDialog(scope.row.InvoiceAccountCode)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
       <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
-                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
-      />
+        :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
     <el-dialog title="添加发票科目" :visible.sync="addDialogVisible" width="30%" @close="addClosed">
       <el-form ref="addRef" :model="AddInvoiceAccountFrom" :rules="AddInvoiceAccountRules" label-width="120px">
@@ -47,7 +43,8 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingAdd" type="primary" @click="saveAdd">保 存
+            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingAdd" type="primary"
+              @click="saveAdd">保 存
             </el-button>
           </el-col>
         </el-row>
@@ -67,7 +64,8 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingUpdate" type="primary" @click="saveUpdate">保 存
+            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingUpdate" type="primary"
+              @click="saveUpdate">保 存
             </el-button>
           </el-col>
         </el-row>
@@ -89,6 +87,7 @@ export default {
   name: 'InvoiceAccount',
   data() {
     return {
+      flagDelete: sessionStorage.getItem("RoleName"),
       Name: "",
       LoadingUpdate: false,
       LoadingAdd: false,

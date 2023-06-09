@@ -27,26 +27,6 @@
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item class="whereFormClass" label="应收年份">
-                <el-date-picker v-model="SYear" style="width:100% ;" class="timeClass" type="year" placeholder="选择年" />
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item class="whereFormClass" label="申开人">
-                <el-select v-model="ApplyPerson" class="timeClass" filterable placeholder="申开人" clearable>
-                  <el-option v-for="item in ApplyPersonList" :key="item.Code" :label="item" :value="item" />
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item class="whereFormClass" label="公司名称">
-                <el-input v-model="CompanyId" class="timeClass" clearable="" placeholder="公司名称" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 分割----------------- -->
-          <el-row>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item class="whereFormClass" label="发票状态">
                 <el-select v-model="IvState" class="timeClass" filterable placeholder="发票状态" clearable>
                   <el-option v-for="item in InvoiceStatusList" :key="item.Code" :class="item.Class" :label="item.Name"
@@ -60,9 +40,21 @@
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+              <el-form-item class="whereFormClass" label="应收年份">
+                <el-date-picker v-model="SYear" style="width:100% ;" class="timeClass" type="year" placeholder="选择年" />
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item class="whereFormClass" label="应收月份">
                 <el-date-picker v-model="SMonth" style="width:100% ;" class="timeClass" type="month" placeholder="选择月"
                   format="MM" />
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+              <el-form-item class="whereFormClass" label="申开人">
+                <el-select v-model="ApplyPerson" class="timeClass" filterable placeholder="申开人" clearable>
+                  <el-option v-for="item in ApplyPersonList" :key="item.Code" :label="item" :value="item" />
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
@@ -73,23 +65,37 @@
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+              <el-form-item class="whereFormClass" label="公司名称">
+                <el-input v-model="CompanyId" class="timeClass" clearable="" placeholder="公司名称" />
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+              <el-form-item class="whereFormClass" label="乙方公司">
+                <el-select v-model="SecondPartyName" class="timeClass" filterable placeholder="乙方公司" clearable="">
+                  <el-option v-for="item in DicCategoryListAll" :key="item.Code" :label="item.Name" :value="item.Code" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <!-- 分割----------------- -->
+          <el-row>
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
               <el-button-group style="margin-left: 1.3rem;">
                 <el-button type="primary" icon="el-icon-search" @click="GetInvoiceDataSearch">查 询
                 </el-button>
                 <el-button type="info" icon="el-icon-refresh-left" @click="reseatData">重 置
                 </el-button>
               </el-button-group>
+              <el-tooltip class="item" :content="MaxMoney" placement="bottom">
+                <h5 style="width: 350px;color: #FF4949;margin: 0 0 0 15px;display: inline-block;">当前数据发票总金额：<span
+                    v-format="'¥#,##0.00'">{{
+                      MinMoney
+                    }}</span></h5>
+              </el-tooltip>
             </el-col>
           </el-row>
         </el-row>
       </el-form>
-      <div :style="formShow" style="margin-left: 1.3rem;">
-        <el-tooltip class="item" :content="MaxMoney" placement="bottom">
-          <h5 style="width: 350px;color: #FF4949;margin: 1px 0px;">当前数据发票总金额：<span v-format="'¥#,##0.00'">{{
-            MinMoney
-          }}</span></h5>
-        </el-tooltip>
-      </div>
     </el-card>
     <el-card class="CardTableClass">
       <el-table v-loading="loading" highlight-current-row :data="InvoiceData" fit>
@@ -99,6 +105,9 @@
         <el-table-column v-if="fixedLeftShow" prop="CompanyName" label="公司名称" min-width="220" fixed="left"
           show-overflow-tooltip />
         <el-table-column v-else prop="CompanyName" label="公司名称" min-width="220" show-overflow-tooltip />
+        <el-table-column v-if="fixedLeftShow" prop="SecondPartyName" label="乙方公司" min-width="90" fixed="left"
+          show-overflow-tooltip />
+        <el-table-column v-else prop="SecondPartyName" label="乙方公司" min-width="90" show-overflow-tooltip />
         <el-table-column v-if="fixedLeftShow" prop="InvoiceHeader" label="发票抬头" min-width="220" fixed="left"
           show-overflow-tooltip />
         <el-table-column v-else prop="InvoiceHeader" label="发票抬头" min-width="220" show-overflow-tooltip />
@@ -171,7 +180,7 @@
         </el-table-column>
         <el-table-column prop="IssuingPerson" label="开票人" min-width="90" />
         <el-table-column prop="IssuingTimeStr" label="开具时间" min-width="120" show-overflow-tooltip />
-        <el-table-column prop="InvoiceContent" label="发票内容" align="left" min-width="120" show-overflow-tooltip />
+        <!-- <el-table-column prop="InvoiceContent" label="发票内容" align="left" min-width="120" show-overflow-tooltip /> -->
         <el-table-column prop="InvoiceTypes" label="发票类型" align="left" min-width="100">
           <template slot-scope="scope">
             <span v-if="scope.row.InvoiceTypes == 1">全额</span>
@@ -179,7 +188,7 @@
             <span v-else></span>
           </template>
         </el-table-column>
-        <el-table-column prop="InvoiceAccountName" label="发票科目" align="left" min-width="100" />
+        <el-table-column prop="InvoiceAccountName" label="发票科目" align="left" min-width="200" show-overflow-tooltip />
         <el-table-column prop="InvoiceRemark" label="备注" align="left" min-width="200" show-overflow-tooltip />
         <el-table-column v-if="fixedLeftShow" label="操作" fixed="right" min-width="80">
           <template slot-scope="scope" class="tableRowClass">
@@ -216,12 +225,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="乙方公司" prop="SecondPartyName">
+              <el-input v-model="updateInvoiceFrom.SecondPartyName" disabled />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="发票抬头" prop="InvoiceHeader">
               <el-input v-model="updateInvoiceFrom.InvoiceHeader" disabled />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="发票种类" prop="InvoiceType">
               <el-select v-model="updateInvoiceFrom.InvoiceType" class="timeClass" filterable placeholder="发票种类" disabled>
@@ -230,13 +242,6 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="发票金额" prop="InvoiceAmount">
-              <el-input v-model="updateInvoiceFrom.InvoiceAmount" disabled />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="应收年份" prop="SYear">
               <el-input v-model="updateInvoiceFrom.SYear" disabled />
@@ -247,8 +252,6 @@
               <el-input v-model="updateInvoiceFrom.SMonth" disabled />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="申开人" prop="ApplyPerson">
               <el-select v-model="updateInvoiceFrom.ApplyPerson" filterable allow-create default-first-option
@@ -262,8 +265,6 @@
               <el-date-picker v-model="updateInvoiceFrom.ApplyTime" type="date" placeholder="申开时间" disabled />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="开票人" prop="IssuingPerson">
               <el-select v-model="updateInvoiceFrom.IssuingPerson" filterable allow-create default-first-option
@@ -277,24 +278,11 @@
               <el-date-picker v-model="updateInvoiceFrom.IssuingTime" type="date" placeholder="开具时间" disabled />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="发票状态" prop="IvState">
-              <el-select v-model="updateInvoiceFrom.IvState" :disabled="disabledFlag" filterable placeholder="发票状态"
-                @change="ivStateChange">
-                <el-option v-for="item in InvoiceStatusList" :key="item.Code" :class="item.Class" :label="item.Name"
-                  :value="item.Code" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="发票内容" prop="InvoiceContent">
               <el-input v-model="updateInvoiceFrom.InvoiceContent" placeholder="请输入发票内容" disabled />
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
+          </el-col> -->
           <el-col :span="12">
             <el-form-item label="发票科目" prop="InvoiceAccount">
               <el-select v-model="updateInvoiceFrom.InvoiceAccount" filterable placeholder="发票科目" disabled>
@@ -311,9 +299,23 @@
               </el-select>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="发票状态" prop="IvState">
+              <el-select v-model="updateInvoiceFrom.IvState" :disabled="disabledFlag" filterable placeholder="发票状态"
+                @change="ivStateChange">
+                <el-option v-for="item in InvoiceStatusList" :key="item.Code" :class="item.Class" :label="item.Name"
+                  :value="item.Code" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="发票金额" prop="InvoiceAmount">
+              <el-input v-model="updateInvoiceFrom.InvoiceAmount" disabled />
+            </el-form-item>
+          </el-col>
         </el-row>
-        <el-form-item label="备注" prop="InvoiceRemark">
-          <el-input v-model="updateInvoiceFrom.InvoiceRemark" type="textarea" :rows="3" placeholder="请输入备注" />
+        <el-form-item label="发票备注" prop="InvoiceRemark">
+          <el-input v-model="updateInvoiceFrom.InvoiceRemark" type="textarea" :rows="3" placeholder="请输入发票备注" />
         </el-form-item>
         <el-form-item label="已上传文件">
           <div v-if="updateInvoiceFrom.IvState == 1">
@@ -394,6 +396,7 @@ import {
   GetInvoiceAccount,
   DeleteInvoiceAttachment,
   Uploads,
+  GetDicCategoryC,
 } from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
 import { parseTime, getDateByTimes } from "@/utils"; // 时间日期格式化成字符串
@@ -401,6 +404,8 @@ export default {
   name: 'InvoiceList',
   data() {
     return {
+      DicCategoryListAll: [],
+      SecondPartyName: "",
       isshowpdf: false,
       srcDocx: '',
       uploadServerLoading: false,
@@ -413,7 +418,6 @@ export default {
       ],
       InvoiceAccountList: [],
       fixedLeftShow: true,
-      formShow: '',
       entLoading: false,
       // 公司数据返回列表
       CorporationDatas: [],
@@ -446,7 +450,7 @@ export default {
         OrderData: [],
         FileLists: [],
         AttachmentLists: [],
-        FileList:[],
+        FileList: [],
       },
       loading: false,
       CorporationDatas: [],
@@ -536,8 +540,20 @@ export default {
     this.GetInvoiceData();
     // 获取发票科目数据
     this.GetInvoiceAccountList();
+    // 获取乙方公司数据
+    this.GetDicCategoryC();
   },
   methods: {
+    // 获取乙方公司数据
+    GetDicCategoryC() {
+      GetDicCategoryC("", 1, 100000).then((res) => {
+        if (res.success) {
+          this.DicCategoryListAll = res.result.list;
+        } else {
+          this.DicCategoryListAll = [];
+        }
+      });
+    },
     clickView(src) {
       this.srcDocx = src.url;
       this.isshowpdf = true
@@ -640,6 +656,7 @@ export default {
     // },
 
     reseatData() {
+      this.SecondPartyName = '';
       this.CompanyId = null;
       this.InvoiceType = null;
       this.IvState = null;
@@ -666,7 +683,7 @@ export default {
     },
     detailUpdateDialogVisibleClosed() {
       this.$refs.updateInvoiceRef.resetFields();
-      this.fileListUpload=[];
+      this.fileListUpload = [];
     },
     // 监听 pagesize改变的事件
     handleSizeChange(newSize) {
@@ -691,8 +708,8 @@ export default {
       this.updateInvoiceFrom.CompanyId = item.CompanyId;
       this.updateInvoiceFrom.InvoiceHeader = item.InvoiceHeader;
       this.updateInvoiceFrom.InvoiceAmount = item.InvoiceAmount;
-      this.updateInvoiceFrom.SYear = item.SYear + "";
-      this.updateInvoiceFrom.SMonth = item.SMonth + "";
+      this.updateInvoiceFrom.SYear = item.SYear ? item.SYear + "" : "";
+      this.updateInvoiceFrom.SMonth = item.SMonth ? item.SMonth + "" : "";
       this.updateInvoiceFrom.ApplyPerson = item.ApplyPerson;
       this.updateInvoiceFrom.IssuingPerson = item.IssuingPerson;
       this.updateInvoiceFrom.InvoiceContent = item.InvoiceContent;
@@ -703,7 +720,7 @@ export default {
       this.updateInvoiceFrom.AttachmentLists = item.AttachmentLists;
       this.updateInvoiceFrom.FileLists = item.FileLists;
       this.updateInvoiceFrom.AttachmentRelationCode = item.AttachmentRelationCode;
-      
+      this.updateInvoiceFrom.SecondPartyName = item.SecondPartyName;
       this.updateDialogVisible = true;
     },
     // 保存修改
@@ -789,6 +806,7 @@ export default {
         this.ApplyPerson,
         this.IssuingPerson,
         false,
+        this.SecondPartyName,
         this.queryInfo.pagenum,
         this.queryInfo.pagesize
       ).then((res) => {
@@ -904,10 +922,8 @@ export default {
     fixedShowMethod(newVal) {
       // 上方表单距下方间距
       if (newVal < 768) {
-        this.formShow = 'margin-top: 18px;';
         this.fixedLeftShow = false;
       } else {
-        this.formShow = 'margin-top: 0;';
         this.fixedLeftShow = true;
       }
     }
@@ -958,6 +974,7 @@ export default {
 .SecondPartyNameClass div {
   margin-bottom: 10px;
 }
+
 .button {
   margin-left: 1rem;
 }

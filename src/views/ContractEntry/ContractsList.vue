@@ -43,9 +43,9 @@
               </el-form-item>
             </el-col> -->
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-                  <el-form-item class="whereFormClass" label="乙方名称">
+                  <el-form-item class="whereFormClass" label="乙方公司">
                     <!-- <el-input clearable="" placeholder="合同名称" v-model="ContractName"></el-input> -->
-                    <el-select v-model="SecondPartyName" class="timeClass" filterable placeholder="乙方名称" clearable="">
+                    <el-select v-model="SecondPartyName" class="timeClass" filterable placeholder="乙方公司" clearable="">
                       <el-option v-for="item in DicCategoryList" :key="item.Code" :label="item.Name" :value="item.Code" />
                     </el-select>
                   </el-form-item>
@@ -431,7 +431,7 @@
             <div v-else>{{ scope.row.CompanyName }}</div>
           </template>
         </el-table-column>
-        <el-table-column v-if="ifSecondPartyName" key="SecondPartyName" prop="SecondPartyName" label="乙方名称" small
+        <el-table-column v-if="ifSecondPartyName" key="SecondPartyName" prop="SecondPartyName" label="乙方公司" small
           min-width="120" />
         <el-table-column v-if="ifName" key="Name" prop="Name" label="合同类型" small min-width="100" />
         <el-table-column v-if="ifConStateName" key="ConStateName" prop="ConStateName" label="合同状态" small min-width="100">
@@ -928,8 +928,8 @@
           <el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="乙方名称" prop="SecondPartyName">
-                  <el-select v-model="addContractsForm.SecondPartyName" filterable placeholder="乙方名称" clearable="">
+                <el-form-item label="乙方公司" prop="SecondPartyName">
+                  <el-select v-model="addContractsForm.SecondPartyName" filterable placeholder="乙方公司" clearable="">
                     <el-option v-for="item in DicCategoryList" :key="item.Code" :label="item.Name" :value="item.Code" />
                   </el-select>
                 </el-form-item>
@@ -1471,8 +1471,8 @@
           <el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="乙方名称" prop="SecondPartyName">
-                  <el-select v-model="updateDepFrom.SecondPartyName" filterable placeholder="乙方名称" clearable=""
+                <el-form-item label="乙方公司" prop="SecondPartyName">
+                  <el-select v-model="updateDepFrom.SecondPartyName" filterable placeholder="乙方公司" clearable=""
                     :disabled="ConCompany">
                     <el-option v-for="item in DicCategoryList" :key="item.Code" :label="item.Name" :value="item.Code" />
                   </el-select>
@@ -2084,7 +2084,7 @@ export default {
         '归档类型',
         // '合同名称',
         '公司名称',
-        '乙方名称',
+        '乙方公司',
         '合同类型',
         '合同状态',
         '有无关联合同',
@@ -2606,7 +2606,7 @@ export default {
           },
         ],
         SecondPartyName: [
-          { required: true, message: "请选择乙方名称", trigger: "change" },
+          { required: true, message: "请选择乙方公司", trigger: "change" },
         ],
         SecondPartyAddress: [
           { required: false },
@@ -2879,7 +2879,7 @@ export default {
           },
         ],
         SecondPartyName: [
-          { required: true, message: "请选择乙方名称", trigger: "change" },
+          { required: true, message: "请选择乙方公司", trigger: "change" },
         ],
         SecondPartyAddress: [
           { required: false },
@@ -4941,7 +4941,7 @@ export default {
         case "甲方名称":
           this.ifFirstPartyName = true;
           break;
-        case "乙方名称":
+        case "乙方公司":
           this.ifSecondPartyName = true;
           break;
         case "添加人":
@@ -5011,7 +5011,7 @@ export default {
         case "甲方名称":
           this.ifFirstPartyName = false;
           break;
-        case "乙方名称":
+        case "乙方公司":
           this.ifSecondPartyName = false;
           break;
         case "添加人":
@@ -5122,7 +5122,7 @@ export default {
 }
 
 .timeHalfClass {
-  width: 50%;
+  width: 50% !important;
 }
 
 .demonstration {

@@ -31,6 +31,7 @@ export default {
       immediate: true
     },
     async theme(val) {
+      debugger
       const oldVal = this.chalk ? this.theme : ORIGINAL_THEME
       if (typeof val !== 'string') return
       const themeCluster = this.getThemeCluster(val.replace('#', ''))

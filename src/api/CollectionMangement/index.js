@@ -206,7 +206,7 @@ export function GetAttachmentFirst(Type, Id) {
 }
 
 // 获取发票列表
-export function GetInvoiceDataMethod(CompanyId, InvoiceType, IvState, SYear, SMonth, ApplyPerson, IssuingPerson, Flag, pagenum, pagesize) {
+export function GetInvoiceDataMethod(CompanyId, InvoiceType, IvState, SYear, SMonth, ApplyPerson, IssuingPerson, Flag, SecondPartyName, pagenum, pagesize) {
   CompanyId = CompanyId || "";
   InvoiceType = InvoiceType || "";
   IvState = IvState || "";
@@ -216,7 +216,7 @@ export function GetInvoiceDataMethod(CompanyId, InvoiceType, IvState, SYear, SMo
   IssuingPerson = IssuingPerson || "";
   return request({
     url: '/CollectionMangement/GetInvoiceData?CompanyId=' + CompanyId + '&InvoiceType=' + InvoiceType + '&IvState=' + IvState + '&SYear=' + SYear + '&SMonth=' + SMonth +
-      '&ApplyPerson=' + ApplyPerson + '&IssuingPerson=' + IssuingPerson + '&Flag=' + Flag + '&pageIndex=' + pagenum + '&pageSize=' + pagesize + '&Id=',
+      '&ApplyPerson=' + ApplyPerson + '&IssuingPerson=' + IssuingPerson + '&Flag=' + Flag + '&SecondPartyName=' + SecondPartyName + '&pageIndex=' + pagenum + '&pageSize=' + pagesize + '&Id=',
     method: 'post',
   });
 }
@@ -278,10 +278,10 @@ export function deleteSaleData(ContractRelationCode) {
 }
 
 // 获取订单数据列表
-export function GetContractOrder(ContractCode, ContractName, CompanyName, InvoiceAccount, InvoiceType, Applicant, ApplicationTimeBegin, ApplicationTimeEnd, pagenum, pagesize) {
+export function GetContractOrder(ContractCode, ContractName, CompanyName, InvoiceAccount, InvoiceType, Applicant, ApplicationTimeBegin, ApplicationTimeEnd, SecondPartyName, pagenum, pagesize) {
   return request({
     url: '/CollectionMangement/GetContractOrder?ContractCode=' + ContractCode + '&ContractName=' + ContractName + '&CompanyName=' + CompanyName + '&InvoiceAccount=' + InvoiceAccount +
-      '&InvoiceType=' + InvoiceType + '&Applicant=' + Applicant + '&ApplicationTimeBegin=' + ApplicationTimeBegin + '&ApplicationTimeEnd=' + ApplicationTimeEnd +
+      '&InvoiceType=' + InvoiceType + '&Applicant=' + Applicant + '&ApplicationTimeBegin=' + ApplicationTimeBegin + '&ApplicationTimeEnd=' + ApplicationTimeEnd + '&SecondPartyName=' + SecondPartyName +
       '&PageIndex=' + pagenum + '&PageSize=' + pagesize + '&OrderCode=',
     method: 'post',
   });

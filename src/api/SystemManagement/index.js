@@ -493,14 +493,6 @@ export function BindUserExport(model) {
     data: model
   });
 }
-// 添加甲方公司
-export function AddCompanyNameAMethod(model) {
-  return request({
-    url: '/SystemManagement/AddCompanyNameA',
-    method: 'post',
-    data: model
-  });
-}
 // 上传文件
 export function Uploads(param) {
   return request({
@@ -509,13 +501,6 @@ export function Uploads(param) {
     headers: { 'Content-type': 'multipart/form-data' },
     data: param
   })
-}
-// 获取甲方公司
-export function GetCompanyNameA(ComID, PageIndex, PageSize) {
-  return request({
-    url: '/SystemManagement/GetCompanyNameA?ComID=' + ComID + '&PageIndex=' + PageIndex + '&PageSize=' + PageSize,
-    method: 'post',
-  });
 }
 // 获取甲方公司数据格式化
 export function GetCompanyNameAData() {
@@ -553,16 +538,11 @@ export function UpdateCompanyNameA(model) {
   });
 }
 
-export function DeleteCompanyNameA(BillingCode) {
+export function UpdateTicket(model) {
   return request({
-    url: '/SystemManagement/DeleteCompanyNameA?BillingCode=' + BillingCode,
+    url: '/SystemManagement/UpdateTicket',
     method: 'post',
-  });
-}
-export function getUrl(BillingCode, FileName) {
-  return request({
-    url: '/SystemManagement/getUrl?BillingCode=' + BillingCode + '&FileName=' + FileName,
-    method: 'post',
+    data: model
   });
 }
 // 获取公司

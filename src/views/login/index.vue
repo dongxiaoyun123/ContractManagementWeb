@@ -260,8 +260,15 @@ export default {
             //     duration: 800, //0.8秒后关闭
             //   });
             // }, 100)
-            if (sessionStorage.getItem("RoleCode") === "01F70224-6886-38A2-DA3F-7073E49E4359") { this.$router.push("CollectionMangement/CollectionData"); } else { this.$router.push("ContractEntry/ContractsList"); }
-          } else { this.$message.error(data.resultMessage); }
+            if (sessionStorage.getItem("RoleCode") === "01F70224-6886-38A2-DA3F-7073E49E4359") {
+              this.$router.push("CollectionMangement/CollectionData");
+            }
+            else {
+              this.$router.push("ContractEntry/ContractsList");
+            }
+          } else {
+            this.$message.error(data.resultMessage);
+          }
         })
         .catch((data) => {
           this.loading = false;

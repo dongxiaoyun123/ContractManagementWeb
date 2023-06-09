@@ -53,6 +53,13 @@
                   </el-form-item>
                 </el-col> -->
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item class="whereFormClass" label="乙方公司">
+                    <el-select v-model="SecondPartyName" class="timeClass" filterable placeholder="乙方公司" clearable="">
+                      <el-option v-for="item in DicCategoryListAll" :key="item.Code" :label="item.Name" :value="item.Code" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item label="申请人" prop="SaleId" class="scrollClass">
                     <el-select v-model="Applicant" class="timeClass" filterable placeholder="申请人" clearable="">
                       <el-option v-for="item in UserList" :key="item.UserID" :label="item.UserName"
@@ -80,14 +87,13 @@
                 </el-button>
                 <el-button type="success" icon="el-icon-circle-plus-outline" @click="ShowContractAddDialog">增 加
                 </el-button>
-                <el-button type="warning" icon="el-icon-thumb" @click="auditStatusAction">
+                <!-- <el-button type="warning" icon="el-icon-thumb" @click="auditStatusAction">
                   送 审
                 </el-button>
-                <!-- 超级管理员和财务都能审核 -->
                 <el-button v-show="auditStatusCheckFlag" type="danger" icon="el-icon-s-check" @click="auditStatusCheck">审
                   核
-                </el-button>
-                <el-button type="primary" icon="el-icon-search" @click="ApplyInvoicing">
+                </el-button> -->
+                <el-button type="warning" icon="el-icon-tickets" @click="ApplyInvoicing">
                   开 票
                 </el-button>
                 <el-button type="text" style="margin-left: 10px;"
@@ -117,7 +123,7 @@
         <el-table-column v-else key="CompanyNameFalse" prop="CompanyName" label="公司名称" min-width="200"
           show-overflow-tooltip />
         <el-table-column prop="Name" label="合同类型" min-width="100" show-overflow-tooltip />
-        <el-table-column prop="SecondPartyName" label="乙方名称" min-width="100" show-overflow-tooltip />
+        <el-table-column prop="SecondPartyName" label="乙方公司" min-width="100" show-overflow-tooltip />
         <!-- <el-table-column v-if="fixedLeftShow" prop="ApplicationTimeStr" label="账单申请日期" min-width="130"
           show-overflow-tooltip fixed="left">
           <template slot-scope="scope">
@@ -188,7 +194,7 @@
             <span v-if="scope.row.IsUsed == 1">有效</span>
           </template>
         </el-table-column>
-        <el-table-column prop="InvoiceStateStr" label="发票状态" min-width="100">
+        <!-- <el-table-column prop="InvoiceStateStr" label="发票状态" min-width="100">
           <template slot-scope="{}" slot="header">
             <span>发票状态</span>
             <el-tooltip class="item" effect="light" placement="bottom" style="margin-left: 5px;margin-bottom: 0.2rem">
@@ -211,7 +217,7 @@
             <el-tag v-if="scope.row.InvoiceState == '5'" effect="plain" type="info">作废</el-tag>
             <el-tag v-if="scope.row.InvoiceState == '6'" effect="plain">已送审</el-tag>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column prop="CollectionState" label="回款状态" min-width="100">
           <template slot-scope="{}" slot="header">
             <span>回款状态</span>
@@ -243,19 +249,19 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="BillingState" label="开票账单状态" min-width="120">
+        <el-table-column prop="BillingState" label="开票状态" min-width="120">
           <template slot-scope="{}" slot="header">
-            <span>开票账单状态</span>
+            <span>开票状态</span>
             <el-tooltip class="item" effect="light" placement="bottom" style="margin-left: 5px;margin-bottom: 0.2rem">
               <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
               <div slot="content">
                 <div style="display: flex;  align-items: center;">
                   <span slot="reference" style="margin-right: 10px;" class="SecondPartyNameClass">
-                    <div><i class="dotClass" style="background-color: #ff4949" />{{ "\xa0\xa0" }}未回款<br /></div>
+                    <div><i class="dotClass" style="background-color: #ff4949" />{{ "\xa0\xa0" }}未开<br /></div>
                     <div> <i class="dotClass" style="background-color: #13ce66" />{{ "\xa0\xa0"
-                    }}已回款</div>
+                    }}已开</div>
                     <div style="margin-bottom: 0;"> <i class="dotClass" style="background-color: #1890ff" />{{ "\xa0\xa0"
-                    }}部分回款</div>
+                    }}部分开</div>
                   </span>
                 </div>
               </div>
@@ -268,9 +274,9 @@
                 <i v-if="scope.row.BillingState == 2" class="dotClass" style="background-color: #13ce66" />
                 <i v-if="scope.row.BillingState == 3" class="dotClass" style="background-color: #1890ff" />
               </span>
-              <span v-if="scope.row.BillingState == 1">未回款</span>
-              <span v-if="scope.row.BillingState == 2">已回款</span>
-              <span v-if="scope.row.BillingState == 3">部分回款</span>
+              <span v-if="scope.row.BillingState == 1">未开</span>
+              <span v-if="scope.row.BillingState == 2">已开</span>
+              <span v-if="scope.row.BillingState == 3">部分开</span>
             </div>
           </template>
         </el-table-column>
@@ -796,45 +802,41 @@
           </template>
           {{ DicCategoryList.ComName }}
         </el-descriptions-item>
-        <el-descriptions-item :content-class-name="!DicCategoryList.TaxpayerIdentificationNumber ? 'my-content' : ''">
+        <el-descriptions-item :label-class-name="!DicCategoryList.TaxpayerIdentificationNumber ? 'my-label' : ''">
           <template slot="label">
             <i class="el-icon-office-building"></i>
             统一信用代码/税号
           </template>
-          <span v-if="!DicCategoryList.TaxpayerIdentificationNumber" style="color:#ff4949">待完善</span>
-          <span v-else>{{ DicCategoryList.TaxpayerIdentificationNumber }}</span>
+          <el-input v-model="DicCategoryList.TaxpayerIdentificationNumber" @blur="UpdateCompany"
+            placeholder="输入失去焦点自动更新" />
         </el-descriptions-item>
         <el-descriptions-item>
           <template slot="label">
             <i class="el-icon-date"></i>
             注册地址
           </template>
-          <span v-if="RegisteredAddress == '待完善'"> {{ RegisteredAddress }}</span>
-          <span v-else>{{ RegisteredAddress }}</span>
+          <el-input v-model="DicCategoryList.RegisteredAddress" @blur="UpdateTicket" placeholder="输入失去焦点自动更新" />
         </el-descriptions-item>
         <el-descriptions-item>
           <template slot="label">
             <i class="el-icon-date"></i>
             联系电话
           </template>
-          <span v-if="Phone == '待完善'"> {{ Phone }}</span>
-          <span v-else>{{ Phone }}</span>
+          <el-input v-model="DicCategoryList.Phone" @blur="UpdateTicket" placeholder="输入失去焦点自动更新" />
         </el-descriptions-item>
         <el-descriptions-item>
           <template slot="label">
             <i class="el-icon-date"></i>
             开户银行
           </template>
-          <span v-if="DepositBank == '待完善'"> {{ DepositBank }}</span>
-          <span v-else>{{ DepositBank }}</span>
+          <el-input v-model="DicCategoryList.DepositBank" @blur="UpdateTicket" placeholder="输入失去焦点自动更新" />
         </el-descriptions-item>
         <el-descriptions-item>
           <template slot="label">
             <i class="el-icon-date"></i>
             银行账号
           </template>
-          <span v-if="Account == '待完善'"> {{ Account }}</span>
-          <span v-else>{{ Account }}</span>
+          <el-input v-model="DicCategoryList.Account" @blur="UpdateTicket" placeholder="输入失去焦点自动更新" />
         </el-descriptions-item>
       </el-descriptions>
       <el-divider />
@@ -883,35 +885,35 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="发票金额" prop="InvoiceAmount">
               <el-input v-model="updateInvoiceFrom.InvoiceAmount" disabled="" placeholder="账单中本次发票的总金额（自动生成）" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="应收年份" prop="SYear">
-              <el-date-picker v-model="updateInvoiceFrom.SYear" type="year" placeholder="选择年">
-              </el-date-picker>
-              </el-select>
-            </el-form-item>
-          </el-col>
+    
         </el-row>
         <el-row>
           <el-col :span="12">
+            <el-form-item label="应收年份" prop="SYear">
+              <el-date-picker v-model="updateInvoiceFrom.SYear" type="year" placeholder="选择年" clearable>
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="应收月份" prop="SMonth">
-              <el-select v-model="updateInvoiceFrom.SMonth" filterable placeholder="选择月">
+              <el-select v-model="updateInvoiceFrom.SMonth" filterable placeholder="选择月" clearable >
                 <el-option v-for="item in 12" :key="item" :label="item + '月'" :value="item" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="发票内容" prop="InvoiceContent">
               <el-input v-model="updateInvoiceFrom.InvoiceContent" placeholder="发票内容" />
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
-        <el-form-item label="备注" prop="InvoiceRemark">
-          <el-input v-model="updateInvoiceFrom.InvoiceRemark" type="textarea" :rows="3" placeholder="备注" />
+        <el-form-item label="发票备注" prop="InvoiceRemark">
+          <el-input v-model="updateInvoiceFrom.InvoiceRemark" type="textarea" :rows="3" placeholder="发票备注" />
         </el-form-item>
         <el-form-item label="附件上传">
           <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
@@ -958,6 +960,9 @@ import {
   GetCompany,
   GetInvoiceAccount,
   Uploads,
+  UpdateCompany,
+  GetDicCategoryC,
+  UpdateTicket,
 } from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
 import { parseTime, getDateByTimes } from "@/utils"; // 时间日期格式化成字符串
@@ -973,6 +978,9 @@ export default {
   },
   data() {
     return {
+      SecondPartyName: "",
+      DicCategoryListAll: [],
+      DicCategoryList: [],
       uploadServerLoading: false,
       fileListUpload: [],
       header: { Authorization: sessionStorage.getItem("token") },
@@ -989,11 +997,6 @@ export default {
         InvoiceTypes: 1,
         FileList: [],
       },
-      RegisteredAddress: '',
-      Phone: '',
-      DepositBank: '',
-      Account: '',
-      DicCategoryList: [],
       ClickRow: null,
       ClickRowOld: null,
       CollectionOrderData: [],
@@ -1294,13 +1297,13 @@ export default {
           { required: true, message: "请选择发票种类", trigger: "change" },
         ],
         SYear: [
-          { required: true, message: "请选择应收年份", trigger: "change" },
+          { required: false, message: "请选择应收年份", trigger: "change" },
         ],
         SMonth: [
-          { required: true, message: "请选择应收月份", trigger: "change" },
+          { required: false, message: "请选择应收月份", trigger: "change" },
         ],
         InvoiceContent: [
-          { required: true, message: "请输入发票内容", trigger: "blur" },
+          { required: false, message: "请输入发票内容", trigger: "blur" },
         ],
       },
       auditStatusdescription: '',
@@ -1335,8 +1338,54 @@ export default {
     // this.GetContractName();
     // 获取发票状态
     this.GetInvoiceStatus();
+       // 获取乙方公司数据
+       this.GetDicCategoryC();
   },
   methods: {
+        // 获取乙方公司数据
+        GetDicCategoryC() {
+      GetDicCategoryC("", 1, 100000).then((res) => {
+        if (res.success) {
+          this.DicCategoryListAll = res.result.list;
+        } else {
+          this.DicCategoryListAll = [];
+        }
+      });
+    },
+    UpdateCompany() {
+      if (!this.DicCategoryList.TaxpayerIdentificationNumber) {
+        this.$message.warning("统一信用代码/税号是必填的，请填写");
+        return;
+      }
+      let parameter = {
+        ComID: this.DicCategoryList.ComID,
+        ComName: this.DicCategoryList.ComName,
+        ShortName: this.DicCategoryList.ShortName,
+        ComAddress: this.DicCategoryList.ComAddress,
+        lat: this.DicCategoryList.lat,
+        lng: this.DicCategoryList.lng,
+        TaxpayerIdentificationNumber: this.DicCategoryList.TaxpayerIdentificationNumber,
+      };
+      UpdateCompany(parameter).then((res) => {
+        if (res.success) {
+          this.$message.success("更新成功");
+        }
+      });
+    },
+    UpdateTicket() {
+      let parameter = {
+        BillingCode: this.DicCategoryList.BillingCode,
+        RegisteredAddress: this.DicCategoryList.RegisteredAddress,
+        Phone: this.DicCategoryList.Phone,
+        DepositBank: this.DicCategoryList.DepositBank,
+        Account: this.DicCategoryList.Account,
+      }
+      UpdateTicket(parameter).then((res) => {
+        if (res.success) {
+          this.$message.success("更新成功");
+        }
+      });
+    },
     submitUploadUpdate() {
       this.uploadServerLoading = true;
       const formData = new FormData()
@@ -1405,19 +1454,16 @@ export default {
         } else {
           if (!this.DicCategoryList.TaxpayerIdentificationNumber) {
             this.LoadingInvoicing = false;
-            this.$message({
-              message: '公司信用代码不完整，请先到公司管理设置-客户管理中点击编辑，进行信用代码维护',
-              type: 'warning',
-              duration: 5000
-            });
+            this.$message.warning("公司统一信用代码/税号不完整，请先添加");
             return;
           }
           if (this.updateInvoiceFrom.InvoiceType == 1 || this.updateInvoiceFrom.InvoiceType == 3) {
             if (this.DicCategoryList.IsUsed) {
-              if (this.RegisteredAddress == "待完善" || this.Phone == "待完善" || this.DepositBank == "待完善" || this.Account == "待完善") {
+              if (!this.DicCategoryList.RegisteredAddress || !this.DicCategoryList.Phone ||
+                !this.DicCategoryList.DepositBank || !this.DicCategoryList.Account) {
                 this.LoadingInvoicing = false;
                 this.$message({
-                  message: '（选择增值税专用发票、增值税电子普通发票）上方公司开票信息不完整，请先到公司管理设置-客户管理中点击开票信息进行维护',
+                  message: '（选择增值税专用发票、增值税电子普通发票）上方公司开票信息不完整，请先添加(开票信息状态不能为禁用！！！)',
                   type: 'warning',
                   duration: 5000
                 });
@@ -1427,7 +1473,7 @@ export default {
             else {
               this.LoadingInvoicing = false;
               this.$message({
-                message: '（选择增值税专用发票、增值税电子普通发票）上方公司开票信息不完整，请先到公司管理设置-客户管理中点击开票信息进行维护(开票信息状态不能为禁用！！！)',
+                message: '（选择增值税专用发票、增值税电子普通发票）上方公司开票信息不完整，请先添加(开票信息状态不能为禁用！！！)',
                 type: 'warning',
                 duration: 5000
               });
@@ -1479,6 +1525,7 @@ export default {
             InvoiceTypes: this.updateInvoiceFrom.InvoiceTypes,
             FileList: this.updateInvoiceFrom.FileList,
             ChangedData: changedData,//输入金额的数据
+            SecondPartyName: this.ClickRow.SecondPartyName
           }
           InvoicingData(parameters).then((res) => {
             if (res.success) {
@@ -1672,6 +1719,7 @@ export default {
       let residueMoney = 0;
       let flagIsUsed = false;
       let flagFinlished = false;
+      let flagSecondPartyName = [];
       this.multipleSelection.forEach(item => {
         const ifExists = dataArr.find(c => c.ContractType === item.ContractType && c.CompanyId === item.CompanyId && c.SecondPartyName === item.SecondPartyName);
         if (!ifExists) {
@@ -1694,7 +1742,9 @@ export default {
         if (item.BillingState == 2) {
           flagFinlished = true;
         }
+        flagSecondPartyName.push(item.SecondPartyName);
       });
+      flagSecondPartyName = Array.from(new Set(flagSecondPartyName));
       if (flagIsUsed) {
         this.$message.warning("选中条目中有无效的账单状态，请检查");
         return;
@@ -1703,11 +1753,15 @@ export default {
         this.$message.warning("不能选中已回款的开票账单状态，请检查");
         return;
       }
+      if (flagSecondPartyName.length > 1) {
+        this.$message.warning("选中条目中的乙方公司必须一致，请检查");
+        return;
+      }
       //选中条目去重，如果数据符合条件只可能存在一条数据
       if (dataArr.length != 1) {
         //因为提示的较为复杂延时显示
         this.$message({
-          message: '相同的合同类型、公司名称、乙方名称的账单才可合并开票，请检查',
+          message: '相同的合同类型、公司名称、乙方公司的账单才可合并开票，请检查',
           type: 'warning',
           duration: 5000
         });
@@ -1732,10 +1786,7 @@ export default {
       ).then((res) => {
         if (res.success) {
           this.DicCategoryList = res.result.list[0];
-          this.RegisteredAddress = this.DicCategoryList.RegisteredAddress ? this.DicCategoryList.RegisteredAddress : '待完善';
-          this.Phone = this.DicCategoryList.Phone ? this.DicCategoryList.Phone : '待完善';
-          this.DepositBank = this.DicCategoryList.DepositBank ? this.DicCategoryList.DepositBank : '待完善';
-          this.Account = this.DicCategoryList.Account ? this.DicCategoryList.Account : '待完善';
+          this.updateInvoiceFrom.InvoiceHeader = this.DicCategoryList.ComName;
         } else {
           this.DicCategoryList = [];
         }
@@ -1833,6 +1884,7 @@ export default {
     },
     // 重置数据
     reseatData() {
+      this.SecondPartyName='';
       this.ContractCode = '';
       this.ContractName = '';
       this.CompanyName = '';
@@ -2009,6 +2061,7 @@ export default {
         this.Applicant,
         this.ApplicationTimeBegin,
         this.ApplicationTimeEnd,
+        this.SecondPartyName,
         this.queryInfo.pagenum,
         this.queryInfo.pagesize
       ).then((res) => {
@@ -2281,7 +2334,7 @@ export default {
 }
 </style>
 <style>
-.my-content {
-  background: #E1F3D8;
+.my-label {
+  background: #FDE2E2 !important;
 }
 </style>
