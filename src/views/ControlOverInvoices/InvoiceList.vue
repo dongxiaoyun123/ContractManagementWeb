@@ -51,6 +51,18 @@
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+              <el-form-item class="whereFormClass" label="公司名称">
+                <el-input v-model="CompanyId" class="timeClass" clearable="" placeholder="公司名称" />
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+              <el-form-item class="whereFormClass" label="乙方公司">
+                <el-select v-model="SecondPartyName" class="timeClass" filterable placeholder="乙方公司" clearable="">
+                  <el-option v-for="item in DicCategoryListAll" :key="item.Code" :label="item.Name" :value="item.Code" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item class="whereFormClass" label="申开人">
                 <el-select v-model="ApplyPerson" class="timeClass" filterable placeholder="申开人" clearable>
                   <el-option v-for="item in ApplyPersonList" :key="item.Code" :label="item" :value="item" />
@@ -61,18 +73,6 @@
               <el-form-item class="whereFormClass" label="开票人">
                 <el-select v-model="IssuingPerson" class="timeClass" filterable placeholder="开票人" clearable>
                   <el-option v-for="item in IssuingPersonList" :key="item.Code" :label="item" :value="item" />
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item class="whereFormClass" label="公司名称">
-                <el-input v-model="CompanyId" class="timeClass" clearable="" placeholder="公司名称" />
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item class="whereFormClass" label="乙方公司">
-                <el-select v-model="SecondPartyName" class="timeClass" filterable placeholder="乙方公司" clearable="">
-                  <el-option v-for="item in DicCategoryListAll" :key="item.Code" :label="item.Name" :value="item.Code" />
                 </el-select>
               </el-form-item>
             </el-col>
