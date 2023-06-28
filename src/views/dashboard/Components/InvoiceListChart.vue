@@ -1,5 +1,5 @@
 <template>
-  <div ref="chart1" style="width:100%;height:450px" />
+    <div ref="chart1" style="width:100%;height:450px" />
 </template>
 <script>
 import echarts from 'echarts'
@@ -46,15 +46,12 @@ export default {
                 },
                 toolbox: {
                     show: true,
-                    // feature: {
-                    //     dataZoom: {
-                    //         yAxisIndex: 'none'
-                    //     },
-                    //     dataView: { readOnly: false },
-                    //     magicType: { type: ['line', 'bar'] },
-                    //     restore: {},
-                    //     saveAsImage: {}
-                    // }
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        magicType: { show: true, type: ['line', 'bar'] },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
                 },
                 grid: {
                     left: '3%',

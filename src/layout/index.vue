@@ -10,9 +10,9 @@
         <!-- 上侧标签 -->
         <tags-view v-if="needTagsView" />
       </div>
-      <app-main />
+      <app-main style="background-color:#F0F2F5 ;"/>
       <!-- 右侧设置 -->
-      <right-panel v-if="showSettings">
+      <right-panel v-if="showSettings" >
         <settings />
       </right-panel>
     </div>

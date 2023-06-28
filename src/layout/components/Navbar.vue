@@ -14,30 +14,30 @@
         </el-tooltip>
 
         <!-- <error-log class="errLog-container right-menu-item hover-effect" /> -->
-
-        <el-tooltip content="全屏" effect="dark" placement="bottom">
+        <el-tooltip content="系统建议" effect="dark" placement="bottom">
+          <message-log class="right-menu-item hover-effect" />
+        </el-tooltip>
+        <el-tooltip content="全屏展示" effect="dark" placement="bottom">
           <screenfull id="screenfull" class="right-menu-item hover-effect" />
         </el-tooltip>
 
-        <el-tooltip content="自定义尺寸" effect="dark" placement="bottom">
+        <el-tooltip content="控件尺寸" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
         <el-tooltip content="操作手册" effect="dark" placement="bottom">
           <OperationManual id="header-search" class="right-menu-item" />
         </el-tooltip>
-        <el-tooltip content="二维码" effect="dark" placement="bottom">
+        <el-tooltip content="手机访问" effect="dark" placement="bottom">
           <QrCode id="header-QrCode" class="right-menu-item" />
         </el-tooltip>
 
       </template>
-
       <el-dropdown trigger="click" class="avatar-container right-menu-item hover-effect" @command="
         (command) => {
           handleCommand(command);
         }
       "
       >
-
         <el-form :inline="true" style="color: white;height: 50px;cursor: pointer;">
           <el-form-item>
             <div class="avatar-wrapper">
@@ -72,9 +72,8 @@
           <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
             <el-dropdown-item>Docs</el-dropdown-item>
           </a> -->
-          <el-dropdown-item command="a">修改密码</el-dropdown-item>
-          <el-dropdown-item command="b">
-            <span style="display:block;">退出登录</span>
+          <el-dropdown-item command="a" icon="el-icon-unlock">修改密码{{ "\xa0\xa0" }}</el-dropdown-item>
+          <el-dropdown-item command="b" icon="el-icon-switch-button">退出登录{{ "\xa0\xa0" }}
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -115,7 +114,7 @@ import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
 import OperationManual from '@/components/OperationManual'
 import QrCode from '@/components/QrCode'
-
+import MessageLog from '@/components/MessageLog'
 import {
   UpdatePasswordCommit
 } from "@/api/SystemManagement";
@@ -129,6 +128,7 @@ export default {
     Search,
     OperationManual,
     QrCode,
+    MessageLog,
   },
   data() {
     return {
@@ -175,7 +175,7 @@ export default {
       const imgs = [
         require('@/assets/i-mages/Logo1.gif'),
         require('@/assets/i-mages/Logo2.gif'),
-        require('@/assets/i-mages/Logo3.gif'),
+        require('@/assets/i-mages/Logo3.gif')
       ];
       return imgs[Math.floor(Math.random() * 3)]; // 进行计算随机
     },

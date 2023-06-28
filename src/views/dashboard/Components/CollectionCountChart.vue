@@ -1,35 +1,80 @@
 <template>
-  <div ref="chart1" style="width:100%;height:376px" />
+    <div ref="chart1" style="width:100%;height:376px" />
 </template>
 <script>
+import {
+    GetContractEnterCount,
+} from "@/api/Dashboards";
 import echarts from 'echarts'
+import { string } from "yargs";
 export default {
     data() {
         return {
             myChart1: null,
+            loading: false,
+            MonthData: [],
+            CollectionCountData: [],
         }
     },
-    watch: {},
+    //父组件传过来的数据
+    props: {
+        WhereParameter: {
+            type: Object
+        },
+        Title: {
+            type: String
+        },
+    },
+    // watch: {
+    //     WhereParameter: {
+    //         handler() {
+    //             debugger
+    //             this.GetCollectionCount();
+    //         },
+    //         deep: true,  // 可以深度检测到 obj 对象的属性值的变化
+    //     },
+    // },
     mounted() {
-        var chart1 = this.$refs.chart1
-        this.myChart1 = echarts.init(chart1);
-        this.myChart1.clear();
-        this.myChart1.showLoading({
-            text: 'loading',
-            color: this.$store.state.settings.theme,
-            textColor: '#000',
-            maskColor: 'rgba(255, 255, 255, 0.8)',
-            zlevel: 0,
-        });
-        this.getEchartData()
+        this.GetCollectionCount();
     },
     created() {
+
     },
     methods: {
+        GetCollectionCount() {
+            //初始化echarts
+            var chart1 = this.$refs.chart1
+            this.myChart1 = echarts.init(chart1);
+            this.myChart1.clear();
+            this.myChart1.showLoading({
+                text: 'loading',
+                color: this.$store.state.settings.theme,
+                textColor: '#000',
+                maskColor: 'rgba(255, 255, 255, 0.8)',
+                zlevel: 0,
+            });
+            //获取数据
+            var parameter = {
+                ContractsOption: this.WhereParameter.ContractsOption,
+                UserArray: this.WhereParameter.UserArray,
+                PositionStatus: this.WhereParameter.PositionStatus
+            }
+            GetContractEnterCount(parameter).then((res) => {
+                this.loading = false;
+                if (res.success) {
+                    this.MonthData = res.result.monthData;
+                    this.CollectionCountData = res.result.contractEnterData;
+                    this.getEchartData()
+                }
+                else {
+                    this.$message.error("获取失败");
+                }
+            });
+        },
         getEchartData() {
             const option = {
                 title: {
-                    text: '近一年合同录入统计',
+                    text: this.Title,
                 },
                 tooltip: {
                     trigger: 'axis',
@@ -38,8 +83,12 @@ export default {
                     }
                 },
                 toolbox: {
+                    right: '3%',
                     feature: {
-                        saveAsImage: {}
+                        dataView: { show: true, readOnly: false },
+                        magicType: { show: true, type: ['line', 'bar'] },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
                     }
                 },
                 grid: {
@@ -50,17 +99,16 @@ export default {
                 },
                 xAxis: {
                     type: 'category',
-                    data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+                    data: this.MonthData
                 },
                 yAxis: {
                     type: 'value'
                 },
-
                 series: [
                     {
                         name: '合同录入条数',
                         barWidth: '60%',
-                        data: [20, 50, 60, 30, 73, 30, 46, 41, 50, 66, 31, 20],
+                        data: this.CollectionCountData,
                         type: 'bar',
                         itemStyle: {
                             normal: {

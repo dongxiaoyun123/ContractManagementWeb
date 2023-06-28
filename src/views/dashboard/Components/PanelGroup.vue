@@ -1,15 +1,15 @@
 <template>
-  <el-row :gutter="20" class="panel-group row-bg">
+  <el-row :gutter="16" class="panel-group row-bg">
     <el-col class="card-panel-col grid-content" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
       <div class="card-panel">
-        <div class="card-panel-icon-wrapper icon-AuditFailed">
+        <div class="card-panel-icon-wrapper icon-Entry">
           <svg-icon style="color: inherit;" icon-class="iconfont icon-lurupizhunwenhao" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
             录入未送审
           </div>
-          <count-to :start-val="0" :end-val="10" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="NotSubmitted" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -22,20 +22,7 @@
           <div class="card-panel-text">
             审核中
           </div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col class="card-panel-col grid-content" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-      <div class="card-panel">
-        <div class="card-panel-icon-wrapper icon-Entry">
-          <svg-icon style="color: inherit;" icon-class="iconfont icon-shenheshibai" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            审核失败
-          </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="InReview" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -48,7 +35,20 @@
           <div class="card-panel-text">
             审核成功
           </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="AuditSuccessful" :duration="3600" class="card-panel-num" />
+        </div>
+      </div>
+    </el-col>
+    <el-col class="card-panel-col grid-content" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+      <div class="card-panel">
+        <div class="card-panel-icon-wrapper icon-AuditFailed">
+          <svg-icon style="color: inherit;" icon-class="iconfont icon-shenheshibai" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            审核失败
+          </div>
+          <count-to :start-val="0" :end-val="AuditFailed" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -69,23 +69,69 @@
 </template>
 
 <script>
+import {
+    GetContractStatisticsCount,
+} from "@/api/Dashboards";
 import CountTo from 'vue-count-to'
-
 export default {
   components: {
     CountTo
   },
-  methods: {
-    handleSetLineChartData(type) {
-      this.$emit('handleSetLineChartData', type)
+  data() {
+    return {
+      NotSubmitted: 0,
+      InReview: 0,
+      AuditFailed: 0,
+      AuditSuccessful: 0,
     }
+  },
+
+  //父组件传过来的数据
+  props: {
+    WhereParameter: {
+      type: Object
+    },
+  },
+
+  watch: {
+    WhereParameter: {
+      handler() {
+        this.GetCollectionCount();
+      },
+      deep: true,  // 可以深度检测到 obj 对象的属性值的变化
+    },
+  },
+  methods: {
+    GetCollectionCount() {
+      //获取数据
+      var parameter = {
+        ContractsOption: this.WhereParameter.ContractsOption,
+        UserArray: this.WhereParameter.UserArray,
+        PositionStatus:this.WhereParameter.PositionStatus
+      }
+      GetContractStatisticsCount(parameter).then((res) => {
+        this.loading = false;
+        if (res.success) {
+          this.NotSubmitted = res.result.NotSubmitted;
+          this.InReview = res.result.InReview;
+          this.AuditFailed = res.result.AuditFailed;
+          this.AuditSuccessful = res.result.AuditSuccessful;
+        }
+        else {
+          this.$message.error("获取失败");
+        }
+      });
+    },
+    // handleSetLineChartData(type) {
+    //   this.$emit('handleSetLineChartData', type)
+    // }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .panel-group {
-  margin-top: 18px;
+  margin-top: 16px;
 
   .grid-content {
     border-radius: 4px;
@@ -93,7 +139,7 @@ export default {
   }
 
   .card-panel-col {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   .card-panel {
@@ -179,6 +225,7 @@ export default {
         margin-bottom: 12px;
         text-align: right;
       }
+
       .card-panel-num {
         font-size: 20px;
         display: block;

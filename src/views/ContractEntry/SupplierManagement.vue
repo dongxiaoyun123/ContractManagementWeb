@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 8px;">
+  <div style="padding: 16px;">
     <el-card>
       <el-form label-width="90px">
         <!-- 合同信息 -->
@@ -383,7 +383,7 @@
     </el-card>
 
     <!-- 添加合同弹出页面 -->
-    <el-dialog :visible.sync="detailAddDialogVisible" top="5vh" width="50%" :lock-scroll="false" :append-to-body="true"
+    <el-dialog :visible.sync="detailAddDialogVisible" top="5vh" width="60%" :lock-scroll="false" :append-to-body="true"
       @close="detailAddDialogVisibleClosed">
       <!-- 上面两个属性用来重置滚动条 -->
       <div slot="title" class="dialog-title">
@@ -491,7 +491,7 @@
         </el-row>
       </el-form>
     </el-dialog>
-    <el-dialog :visible.sync="updateDialogVisible" top="5vh" :append-to-body="true" width="50%"
+    <el-dialog :visible.sync="updateDialogVisible" top="5vh" :append-to-body="true" width="60%"
       @close="detailUpdateDialogVisibleClosed">
       <div slot="title" class="dialog-title">
         <span>编辑供应商合同</span>
@@ -1500,7 +1500,6 @@ export default {
           this.updateSupplierFrom.EndTime = this.updateSupplierFrom.EndTime
             ? parseTime(this.updateSupplierFrom.EndTime, "{y}-{m}-{d}")
             : "";
-          console.log(this.updateSupplierFrom);
 
           UpdateSupplier(this.updateSupplierFrom).then((res) => {
             if (res.success) {

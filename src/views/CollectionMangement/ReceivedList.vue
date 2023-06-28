@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 8px;">
+  <div style="padding: 16px;">
     <el-card>
       <el-form label-width="90px">
         <!-- 合同信息 -->

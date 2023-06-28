@@ -1,40 +1,40 @@
 <template>
-  <div style="height: 550px;">
-    <el-card class="box-card cardTopClass" style="float: right ;width:99%;height:530px;">
-      <div slot="header" class="clearfix">
-        <div slot="header" class="clearfix">
-          <h4 style="float: left;margin: 0;">操作记录</h4>
-        </div>
-      </div>
-      <!-- <el-backtop target=".infinite-list" :bottom="45">
+    <div style="height: 600px;">
+        <el-card class="box-card cardTopClass" style="float: right ;width:99%;height:580px;">
+            <div slot="header" class="clearfix">
+                <div slot="header" class="clearfix">
+                    <h4 style="float: left;margin: 0;">操作记录</h4>
+                </div>
+            </div>
+            <!-- <el-backtop target=".infinite-list" :bottom="45">
                 <div class="TopClass">
                     UP
                 </div>
             </el-backtop> -->
-      <div v-loading="loading" class="block">
-        <el-timeline>
-          <!-- 无限滚动组件有一个bug必须加上阈值，否则可能导致不能滚动或者只能滚动一次等诸多问题 -->
-          <ul v-infinite-scroll="loadLogPaymentList" class="infinite-list" style="overflow:auto"
-              infinite-scroll-distance="1"
-          >
-            <el-timeline-item v-for="item in LogPaymentList" :timestamp="item.CreateTimeStr"
-                              placement="top"
-            >
-              <div style="width:95% ;">
-                <h4 style="margin: 0;">{{ item.PermissionName }}</h4>
-                <p>{{ item.CreateUserName }}>>>{{ item.MenuDescription }}>>>{{ item.Description }}</p>
-              </div>
-            </el-timeline-item>
-          </ul>
-        </el-timeline>
-      </div>
-    </el-card>
-  </div>
+            <div v-loading="loading" class="block">
+                <el-timeline>
+                    <!-- 无限滚动组件有一个bug必须加上阈值，否则可能导致不能滚动或者只能滚动一次等诸多问题 -->
+                    <ul v-infinite-scroll="loadLogPaymentList" class="infinite-list" style="overflow:auto"
+                        infinite-scroll-distance="1" infinite-scroll-immediate="false">
+                        <el-timeline-item v-for="item in LogPaymentList" :timestamp="item.CreateTimeStr" placement="top">
+                            <div style="width:95% ;">
+                                <el-card>
+                                    <p style="font-weight: bolder;margin-top: 0;">{{ item.PermissionName }}</p>
+                                    <p style="margin-bottom:10px ;">{{ item.CreateUserName }}>>>{{ item.MenuDescription
+                                    }}>>>{{ item.Description }}</p>
+                                </el-card>
+                            </div>
+                        </el-timeline-item>
+                    </ul>
+                </el-timeline>
+            </div>
+        </el-card>
+    </div>
 </template>
 <script>
 import {
     GetSystemLog,
-} from "@/api/SystemManagement";
+} from "@/api/Dashboards";
 export default {
     data() {
         return {
@@ -49,10 +49,31 @@ export default {
             LogPaymentList: [],
         };
     },
-    watch: {},
+    //父组件传过来的数据
+    props: {
+        WhereParameter: {
+            type: Object
+        },
+    },
+    // watch: {
+    //     WhereParameter: {
+    //         handler() {
+    //             this.GetLogData();
+    //         },
+    //         deep: true,  // 可以深度检测到 obj 对象的属性值的变化
+    //     },
+    // },
     created() {
     },
+    mounted() {
+        this.GetLogData();
+    },
     methods: {
+        GetLogData() {
+            this.queryInfo.pagenum = 1;
+            this.queryInfo.pagesize = 1;
+            this.loadLogPaymentList();
+        },
         loadLogPaymentList() {
             this.queryInfo.pagesize += 5;
             this.GetSystemLog();
@@ -60,7 +81,15 @@ export default {
         // 获取数据
         GetSystemLog() {
             this.loading = true;
-            GetSystemLog("", "", "", this.queryInfo.pagenum, this.queryInfo.pagesize).then((res) => {
+            //获取数据
+            var parameter = {
+                ContractsOption: this.WhereParameter.ContractsOption,
+                UserArray: this.WhereParameter.UserArray,
+                PositionStatus: this.WhereParameter.PositionStatus,
+                PageIndex: this.queryInfo.pagenum,
+                PageSize: this.queryInfo.pagesize,
+            }
+            GetSystemLog(parameter).then((res) => {
                 if (res.success) {
                     this.LogPaymentList = res.result.list;
                     this.total = res.result.totalNumber;
@@ -105,7 +134,7 @@ export default {
 }
 
 .infinite-list {
-    height: 430px;
+    height: 480px;
     padding: 0;
     margin: 0;
     list-style: none;

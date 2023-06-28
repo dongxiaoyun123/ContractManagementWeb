@@ -219,7 +219,7 @@ aside {
 
 //el-card只要引用了CardTableClass这个类，下面的样式就会生效
 .CardTableClass {
-  margin-top: 8px;
+  margin-top: 16px;
   // margin-bottom: -5px;
 }
 
@@ -246,4 +246,9 @@ aside {
 // 如果有复选框，那么献给table赋一个tableCheckClass 然后全选按钮就可以对齐了
  .tableCheckClass.el-table th.el-table__cell:first-child  .cell{
   padding-left:14px
+}
+
+//分割线上下间距缩小点，全局
+.el-divider--horizontal {
+  margin: 15px 0;
 }

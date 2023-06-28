@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 8px;">
+  <div style="padding: 16px;">
     <el-card>
       <el-form label-width="90px">
         <!-- 合同信息 -->
@@ -7,76 +7,83 @@
           <span>发票列表</span>
         </div>
         <el-row>
-          <el-row>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item class="whereFormClass" label="发票种类">
-                <el-select v-model="InvoiceType" class="timeClass" filterable placeholder="发票种类" clearable>
-                  <el-option v-for="item in InvoiceTypeList" :key="item.Code" :label="item.Name" :value="item.Code">
-                    <template slot-scope="scope">
-                      <div style="display: flex;  align-items: center;">
-                        <span slot="reference" style="margin-right: 8px;">
-                          <i v-if="item.Name == '增值税专用发票'" class="dotClass" style="background-color: #13ce66" />
-                          <i v-if="item.Name == '增值税普通发票'" class="dotClass" style="background-color: #ffba00" />
-                          <i v-if="item.Name == '增值税电子普通发票'" class="dotClass" style="background-color: #ff4949" />
-                        </span>
-                        {{ item.Name }}
-                      </div>
-                    </template>
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item class="whereFormClass" label="发票状态">
-                <el-select v-model="IvState" class="timeClass" filterable placeholder="发票状态" clearable>
-                  <el-option v-for="item in InvoiceStatusList" :key="item.Code" :class="item.Class" :label="item.Name"
-                    :value="item.Code">
-                    <el-tag v-if="item.Code == 0" effect="plain" type="danger">未开</el-tag>
-                    <el-tag v-if="item.Code == 1" effect="plain" type="success">已开</el-tag>
-                    <el-tag v-if="item.Code == 5" effect="plain" type="info">作废</el-tag>
-                    <el-tag v-if="item.Code == 7" effect="plain" type="warning">退回</el-tag>
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item class="whereFormClass" label="应收年份">
-                <el-date-picker v-model="SYear" style="width:100% ;" class="timeClass" type="year" placeholder="选择年" />
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item class="whereFormClass" label="应收月份">
-                <el-date-picker v-model="SMonth" style="width:100% ;" class="timeClass" type="month" placeholder="选择月"
-                  format="MM" />
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item class="whereFormClass" label="公司名称">
-                <el-input v-model="CompanyId" class="timeClass" clearable="" placeholder="公司名称" />
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item class="whereFormClass" label="乙方公司">
-                <el-select v-model="SecondPartyName" class="timeClass" filterable placeholder="乙方公司" clearable="">
-                  <el-option v-for="item in DicCategoryListAll" :key="item.Code" :label="item.Name" :value="item.Code" />
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item class="whereFormClass" label="申开人">
-                <el-select v-model="ApplyPerson" class="timeClass" filterable placeholder="申开人" clearable>
-                  <el-option v-for="item in ApplyPersonList" :key="item.Code" :label="item" :value="item" />
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item class="whereFormClass" label="开票人">
-                <el-select v-model="IssuingPerson" class="timeClass" filterable placeholder="开票人" clearable>
-                  <el-option v-for="item in IssuingPersonList" :key="item.Code" :label="item" :value="item" />
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <collapse>
+            <div v-show="isActive">
+              <el-row>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item class="whereFormClass" label="发票种类">
+                    <el-select v-model="InvoiceType" class="timeClass" filterable placeholder="发票种类" clearable>
+                      <el-option v-for="item in InvoiceTypeList" :key="item.Code" :label="item.Name" :value="item.Code">
+                        <template slot-scope="scope">
+                          <div style="display: flex;  align-items: center;">
+                            <span slot="reference" style="margin-right: 8px;">
+                              <i v-if="item.Name == '增值税专用发票'" class="dotClass" style="background-color: #13ce66" />
+                              <i v-if="item.Name == '增值税普通发票'" class="dotClass" style="background-color: #ffba00" />
+                              <i v-if="item.Name == '增值税电子普通发票'" class="dotClass" style="background-color: #ff4949" />
+                            </span>
+                            {{ item.Name }}
+                          </div>
+                        </template>
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item class="whereFormClass" label="发票状态">
+                    <el-select v-model="IvState" class="timeClass" filterable placeholder="发票状态" clearable>
+                      <el-option v-for="item in InvoiceStatusList" :key="item.Code" :class="item.Class" :label="item.Name"
+                        :value="item.Code">
+                        <el-tag v-if="item.Code == 0" effect="plain" type="danger">未开</el-tag>
+                        <el-tag v-if="item.Code == 1" effect="plain" type="success">已开</el-tag>
+                        <el-tag v-if="item.Code == 5" effect="plain" type="info">作废</el-tag>
+                        <el-tag v-if="item.Code == 7" effect="plain" type="warning">退回</el-tag>
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item class="whereFormClass" label="应收年份">
+                    <el-date-picker v-model="SYear" style="width:100% ;" class="timeClass" type="year"
+                      placeholder="选择年" />
+                  </el-form-item>
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item class="whereFormClass" label="应收月份">
+                    <el-date-picker v-model="SMonth" style="width:100% ;" class="timeClass" type="month" placeholder="选择月"
+                      format="MM" />
+                  </el-form-item>
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item class="whereFormClass" label="公司名称">
+                    <el-input v-model="CompanyId" class="timeClass" clearable="" placeholder="公司名称" />
+                  </el-form-item>
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item class="whereFormClass" label="乙方公司">
+                    <el-select v-model="SecondPartyName" class="timeClass" filterable placeholder="乙方公司" clearable="">
+                      <el-option v-for="item in DicCategoryListAll" :key="item.Code" :label="item.Name"
+                        :value="item.Code" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item class="whereFormClass" label="申开人">
+                    <el-select v-model="ApplyPerson" class="timeClass" filterable placeholder="申开人" clearable>
+                      <el-option v-for="item in ApplyPersonList" :key="item.Code" :label="item" :value="item" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item class="whereFormClass" label="开票人">
+                    <el-select v-model="IssuingPerson" class="timeClass" filterable placeholder="开票人" clearable>
+                      <el-option v-for="item in IssuingPersonList" :key="item.Code" :label="item" :value="item" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+          </collapse>
+
           <!-- 分割----------------- -->
           <el-row>
             <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -85,6 +92,9 @@
                 </el-button>
                 <el-button type="info" icon="el-icon-refresh-left" @click="reseatData">重 置
                 </el-button>
+                <el-button type="text" style="margin-left: 10px;"
+                  :icon="isActive ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
+                  @click="collapseClick">{{ isActive ? "收起" : "展开" }}</el-button>
               </el-button-group>
               <el-tooltip class="item" :content="MaxMoney" placement="bottom">
                 <h5 style="width: 350px;color: #FF4949;margin: 0 0 0 15px;display: inline-block;">当前数据发票总金额：<span
@@ -400,10 +410,13 @@ import {
 } from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
 import { parseTime, getDateByTimes } from "@/utils"; // 时间日期格式化成字符串
+import collapse from '../../assets/js/collapse'
 export default {
   name: 'InvoiceList',
+  components: { collapse },
   data() {
     return {
+      isActive: false,
       DicCategoryListAll: [],
       SecondPartyName: "",
       isshowpdf: false,
@@ -544,6 +557,9 @@ export default {
     this.GetDicCategoryC();
   },
   methods: {
+    collapseClick() {
+      this.isActive = !this.isActive
+    },
     // 获取乙方公司数据
     GetDicCategoryC() {
       GetDicCategoryC("", 1, 100000).then((res) => {
@@ -885,7 +901,6 @@ export default {
             }
             this.InvoiceTypeList.push(item);
           });
-          console.log(this.InvoiceTypeList);
 
           // this.InvoiceTypeList = res.result;
         } else {

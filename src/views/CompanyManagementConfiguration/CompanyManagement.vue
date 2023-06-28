@@ -1,9 +1,9 @@
 <template>
-  <div style="padding: 8px;">
+  <div style="padding: 16px;">
     <el-card>
       <el-row>
         <el-col :xs="10" :sm="5" :md="5" :lg="5" :xl="5">
-          <el-input v-model="Name" placeholder="公司名称" class="input-with-select" clearable="">
+          <el-input v-model="Name" placeholder="公司名称（模糊搜索）" class="input-with-select" clearable="">
             <el-button slot="append" icon="el-icon-search" @click="GetCompanySearch" />
           </el-input>
         </el-col>

@@ -1,46 +1,87 @@
 <template>
-  <div ref="chart1" style="width:100%;height:376px" />
+    <div ref="chart1" style="width:100%;height:376px" />
 </template>
 <script>
+import {
+    GetContractStateCount,
+} from "@/api/Dashboards";
 import echarts from 'echarts'
 export default {
     data() {
         return {
             myChart1: null,
+            CollectionStateData: [],
         }
     },
-    watch: {},
+    //父组件传过来的数据
+    props: {
+        WhereParameter: {
+            type: Object
+        },
+    },
+    watch: {
+        WhereParameter: {
+            handler(newValue,oldValue) {
+                debugger
+                this.GetCollectionCount();
+            },
+            deep: true,  // 可以深度检测到 obj 对象的属性值的变化
+        },
+    },
     mounted() {
-        var chart1 = this.$refs.chart1
-        this.myChart1 = echarts.init(chart1);
-        this.myChart1.clear();
-        this.myChart1.showLoading({
-            text: 'loading',
-            color: this.$store.state.settings.theme,
-            textColor: '#000',
-            maskColor: 'rgba(255, 255, 255, 0.8)',
-            zlevel: 0,
-        });
-        this.getEchartData()
     },
     created() {
     },
     methods: {
+        GetCollectionCount() {
+            //初始化echarts
+            var chart1 = this.$refs.chart1
+            this.myChart1 = echarts.init(chart1);
+            this.myChart1.clear();
+            this.myChart1.showLoading({
+                text: 'loading',
+                color: this.$store.state.settings.theme,
+                textColor: '#000',
+                maskColor: 'rgba(255, 255, 255, 0.8)',
+                zlevel: 0,
+            });
+            //获取数据
+            var parameter = {
+                ContractsOption: this.WhereParameter.ContractsOption,
+                UserArray: this.WhereParameter.UserArray,
+                PositionStatus: this.WhereParameter.PositionStatus
+            }
+            GetContractStateCount(parameter).then((res) => {
+                this.loading = false;
+                if (res.success) {
+                    this.CollectionStateData = res.result;
+                    this.getEchartData()
+                }
+                else {
+                    this.$message.error("获取失败");
+                }
+            });
+        },
         getEchartData() {
             const option = {
                 title: {
                     text: '近一年合同状态统计',
                 },
                 toolbox: {
+                    right: '3%',
                     feature: {
-                        saveAsImage: {}
+                        dataView: { show: true, readOnly: false },
+                        // magicType: { show: true, type: ['line', 'bar'] },
+                        // restore: { show: true },
+                        saveAsImage: { show: true }
                     }
                 },
                 tooltip: {
                     trigger: 'item'
                 },
                 // legend: {
-                //     top: '5%',
+                //     bottom: '5%',
+                //     top: 'bottom',
                 //     left: 'center'
                 // },
                 grid: {
@@ -57,25 +98,22 @@ export default {
                         radius: ['40%', '70%'],
                         avoidLabelOverlap: false,
                         label: {
-                            show: false,
-                            position: 'center'
-                        },
-                        emphasis: {
-                            label: {
-                                show: true,
-                                fontSize: 20,
-                                fontWeight: 'bold'
+                            show: true,
+                            formatter(param) {
+                                return param.name + ' ：' + param.value;
                             }
                         },
-                        labelLine: {
-                            show: false
-                        },
-                        data: [
-                            { value: 5900, name: '正在执行' },
-                            { value: 150, name: '到期，未结款' },
-                            { value: 930, name: '已完结' },
-                            { value: 3, name: '未知' },
-                        ],
+                        // emphasis: {
+                        //     label: {
+                        //         show: true,
+                        //         fontSize: 20,
+                        //         fontWeight: 'bold'
+                        //     }
+                        // },
+                        // labelLine: {
+                        //     show: false
+                        // },
+                        data: this.CollectionStateData,
                         itemStyle: {
                             normal: {
                                 color: function (params) {

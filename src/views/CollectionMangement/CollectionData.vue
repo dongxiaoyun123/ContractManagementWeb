@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 8px;">
+  <div style="padding: 16px;">
     <el-card>
       <el-form label-width="90px">
         <!-- 合同信息 -->
@@ -8,42 +8,49 @@
         </div>
         <el-row>
           <el-row>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item label="回款状态">
-                <el-select v-model="States" class="comentClass" filterable placeholder="回款状态" clearable="" collapse-tags>
-                  <el-option v-for="item in PaymentCollectionStateArray" :key="item.Code" :label="item.Name"
-                    :value="item.Code">
-                    <template slot-scope="scope">
-                      <!-- <el-tag effect="plain" key="全部"  type="info" v-if="item.Code == 0">全部</el-tag> -->
-                      <el-tag v-if="item.Code == 1" key="未回款" effect="plain" type="danger">未回款</el-tag>
-                      <el-tag v-if="item.Code == 2" key="已回款" effect="plain" type="success">已回款</el-tag>
-                      <el-tag v-if="item.Code == 3" key="有余额" effect="plain">有余额</el-tag>
-                    </template>
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item label="公司名称">
-                <el-input v-model="Condition" clearable placeholder="公司名称" />
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item label="到账时间">
-                <el-date-picker v-model="PaymentDate" class="comentClass" type="daterange" range-separator="至"
-                  start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" clearable=""
-                  @input="datetimeChange" />
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-              <el-form-item label="收款公司" prop="SecondPartyName">
-                <el-select v-model="SecondPartyName" class="comentClass" filterable placeholder="收款公司" clearable="">
-                  <el-option v-for="item in DicCategoryList" :key="item.Id" :label="item.Name" :value="item.Id" />
-                </el-select>
-              </el-form-item>
-            </el-col>
+            <collapse>
+              <div v-show="isActive">
+                <el-row>
+                  <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                    <el-form-item label="领取状态">
+                      <el-select v-model="States" class="comentClass" filterable placeholder="领取状态" clearable=""
+                        collapse-tags>
+                        <el-option v-for="item in PaymentCollectionStateArray" :key="item.Code" :label="item.Name"
+                          :value="item.Code">
+                          <template slot-scope="scope">
+                            <!-- <el-tag effect="plain" key="全部"  type="info" v-if="item.Code == 0">全部</el-tag> -->
+                            <el-tag v-if="item.Code == 1" key="未领取" effect="plain" type="danger">未领取</el-tag>
+                            <el-tag v-if="item.Code == 2" key="已领取" effect="plain" type="success">已领取</el-tag>
+                            <el-tag v-if="item.Code == 3" key="部分领取" effect="plain">部分领取</el-tag>
+                          </template>
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                    <el-form-item label="公司名称">
+                      <el-input v-model="Condition" clearable placeholder="公司名称" />
+                    </el-form-item>
+                  </el-col>
+                  <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                    <el-form-item label="到账时间">
+                      <el-date-picker v-model="PaymentDate" class="comentClass" type="daterange" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" clearable=""
+                        @input="datetimeChange" />
+                    </el-form-item>
+                  </el-col>
+                  <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                    <el-form-item label="收款公司" prop="SecondPartyName">
+                      <el-select v-model="SecondPartyName" class="comentClass" filterable placeholder="收款公司" clearable="">
+                        <el-option v-for="item in DicCategoryList" :key="item.Id" :label="item.Name" :value="item.Id" />
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </div>
+            </collapse>
             <el-col :span="colRight">
-              <el-button-group style="margin-left: 1.3rem;margin-bottom: 18px;">
+              <el-button-group style="margin-left: 1.3rem;" >
                 <el-button type="primary" icon="el-icon-search" @click="GetAdmin_PermissionSearch">查 询
                 </el-button>
                 <el-dropdown trigger="click" style="margin-left: 0;" @command="(command) => {
@@ -66,6 +73,9 @@
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
+                <el-button type="text" style="margin-left: 10px;"
+                  :icon="isActive ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
+                  @click="collapseClick">{{ isActive ? "收起" : "展开" }}</el-button>
               </el-button-group>
             </el-col>
             <el-col :span="tipWidth" style="text-align: right;">
@@ -86,25 +96,28 @@
               </el-tooltip>
             </el-col>
           </el-row>
-          <el-descriptions style="margin-left: 1.3rem;" class="margin-top" :column="descriptionColumn" border>
-            <el-descriptions-item v-for="item in TotalSecondPartyNameList" :labelStyle="DescriptionStyle">
-              <template slot="label">
-                <i class="el-icon-money"></i>
-                {{ item.SecondPartyName }}
-              </template>
-              <div>
-                <el-tooltip v-if="item.Sum > 0" class="item" :content="item.SumDetail" placement="bottom">
-                  <span style="font-weight: bold;" v-format="'¥#,##0.00'">{{
-                    item.Sum
-                  }}</span>
-                </el-tooltip>
-                <span style="font-weight: bold;" v-else v-format="'¥#,##0.00'">{{
-                  item.Sum
-                }}</span>
-              </div>
-
-            </el-descriptions-item>
-          </el-descriptions>
+          <collapse>
+            <div v-show="isActive">
+              <el-descriptions style="margin-left: 1.3rem;margin-top: 18px;" class="margin-top" :column="descriptionColumn" border>
+                <el-descriptions-item v-for="item in TotalSecondPartyNameList" :labelStyle="DescriptionStyle">
+                  <template slot="label">
+                    <i class="el-icon-money"></i>
+                    {{ item.SecondPartyName }}
+                  </template>
+                  <div>
+                    <el-tooltip v-if="item.Sum > 0" class="item" :content="item.SumDetail" placement="bottom">
+                      <span style="font-weight: bold;" v-format="'¥#,##0.00'">{{
+                        item.Sum
+                      }}</span>
+                    </el-tooltip>
+                    <span style="font-weight: bold;" v-else v-format="'¥#,##0.00'">{{
+                      item.Sum
+                    }}</span>
+                  </div>
+                </el-descriptions-item>
+              </el-descriptions>
+            </div>
+          </collapse>
         </el-row>
       </el-form>
     </el-card>
@@ -175,26 +188,26 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="States" label="回款状态" min-width="100">
+        <el-table-column prop="States" label="领取状态" min-width="100">
           <template slot-scope="{}" slot="header">
-            <span>回款状态</span>
+            <span>领取状态</span>
             <el-tooltip class="item" effect="light" placement="bottom" style="margin-left: 5px;margin-bottom: 0.2rem">
               <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
               <div slot="content">
                 <div style="display: flex;  align-items: center;">
                   <span slot="reference" style="margin: 0 10px 0 6px;" class="SecondPartyNameClass">
-                    <div> <el-tag key="未回款" effect="plain" type="danger">未回款</el-tag></div>
-                    <div><el-tag key="已回款" effect="plain" type="success">已回款</el-tag></div>
-                    <div style="margin-bottom: 0;"><el-tag key="有余额" effect="plain">有余额</el-tag></div>
+                    <div> <el-tag key="未领取" effect="plain" type="danger">未领取</el-tag></div>
+                    <div><el-tag key="已领取" effect="plain" type="success">已领取</el-tag></div>
+                    <div style="margin-bottom: 0;"><el-tag key="部分领取" effect="plain">部分领取</el-tag></div>
                   </span>
                 </div>
               </div>
             </el-tooltip>
           </template>
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.States == 1" key="未回款" effect="plain" type="danger">未回款</el-tag>
-            <el-tag v-if="scope.row.States == 2" key="已回款" effect="plain" type="success">已回款</el-tag>
-            <el-tag v-if="scope.row.States == 3" key="有余额" effect="plain">有余额</el-tag>
+            <el-tag v-if="scope.row.States == 1" key="未领取" effect="plain" type="danger">未领取</el-tag>
+            <el-tag v-if="scope.row.States == 2" key="已领取" effect="plain" type="success">已领取</el-tag>
+            <el-tag v-if="scope.row.States == 3" key="部分领取" effect="plain">部分领取</el-tag>
             <!-- <el-tag  type="danger" v-if="scope.row.States == 1">未回款</el-tag>
               <el-tag  type="success" v-if="scope.row.States == 2">已回款</el-tag>
               <el-tag v-if="scope.row.States == 3">有余额</el-tag> -->
@@ -218,7 +231,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="Remark" label="备注" align="left" min-width="250" show-overflow-tooltip />
-        <el-table-column label="操作" fixed="right" :width="DynamicColumn" v-if="fixedLeftShow">
+        <el-table-column label="操作" fixed="right" :width="DynamicColumn" v-if="fixedLeftShow && RoleName != '销售'">
           <template slot-scope="scope">
             <div v-if="RoleName == '客服'">
               <el-button v-if="scope.row.States != 2" icon="el-icon-refresh-left" type="text" size="mini" @click="
@@ -231,7 +244,7 @@
                 UpdateDetailDialog(scope.row.InsProductPayCode, scope.row.Remark)
                 ">修改</el-button>
             </div>
-            <div v-else-if="RoleName == '超级管理员'">
+            <div v-else-if="RoleName == '超级管理员' || RoleName == '总客服'">
               <el-button-group>
                 <el-dropdown trigger="click" @command="(command) => {
                   handleCommand(command, scope.row);
@@ -241,10 +254,12 @@
                     更多操作<i class="el-icon-arrow-down el-icon--right" />
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item v-if="scope.row.States != 2" command="a" icon="el-icon-refresh-left">回款(客服){{ "\xa0\xa0" }}
+                    <el-dropdown-item v-if="scope.row.States != 2" command="a" icon="el-icon-refresh-left">回款(客服){{
+                      "\xa0\xa0" }}
                     </el-dropdown-item>
                     <el-dropdown-item command="b" icon="el-icon-view">详情(客服){{ "\xa0\xa0" }}</el-dropdown-item>
-                    <el-dropdown-item v-if="scope.row.States != 2" command="c" icon="el-icon-refresh-left">回款(其它){{ "\xa0\xa0" }}
+                    <el-dropdown-item v-if="scope.row.States != 2" command="c" icon="el-icon-refresh-left">回款(其它){{
+                      "\xa0\xa0" }}
                     </el-dropdown-item>
                     <el-dropdown-item command="d" icon="el-icon-view">详情(其它){{ "\xa0\xa0" }}</el-dropdown-item>
                     <el-dropdown-item command="e" icon="el-icon-edit">修改{{ "\xa0\xa0" }}</el-dropdown-item>
@@ -265,7 +280,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" :width="DynamicColumn" v-else>
+        <el-table-column label="操作" :width="DynamicColumn" v-else-if="!fixedLeftShow && RoleName != '销售'">
           <template slot-scope="scope">
             <div v-if="RoleName == '客服'">
               <el-button v-if="scope.row.States != 2" icon="el-icon-refresh-left" type="text" size="mini" @click="
@@ -278,7 +293,7 @@
                 UpdateDetailDialog(scope.row.InsProductPayCode, scope.row.Remark)
                 ">修改</el-button>
             </div>
-            <div v-else-if="RoleName == '超级管理员'">
+            <div v-else-if="RoleName == '超级管理员'|| RoleName == '总客服'">
               <el-button-group>
                 <el-dropdown trigger="click" @command="(command) => {
                   handleCommand(command, scope.row);
@@ -288,10 +303,12 @@
                     更多操作<i class="el-icon-arrow-down el-icon--right" />
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item v-if="scope.row.States != 2" command="a" icon="el-icon-refresh-left">回款(客服){{ "\xa0\xa0" }}
+                    <el-dropdown-item v-if="scope.row.States != 2" command="a" icon="el-icon-refresh-left">回款(客服){{
+                      "\xa0\xa0" }}
                     </el-dropdown-item>
                     <el-dropdown-item command="b" icon="el-icon-view">详情(客服){{ "\xa0\xa0" }}</el-dropdown-item>
-                    <el-dropdown-item v-if="scope.row.States != 2" command="c" icon="el-icon-refresh-left">回款(其它){{ "\xa0\xa0" }}
+                    <el-dropdown-item v-if="scope.row.States != 2" command="c" icon="el-icon-refresh-left">回款(其它){{
+                      "\xa0\xa0" }}
                     </el-dropdown-item>
                     <el-dropdown-item command="d" icon="el-icon-view">详情(其它){{ "\xa0\xa0" }}</el-dropdown-item>
                     <el-dropdown-item command="e" icon="el-icon-edit">修改{{ "\xa0\xa0" }}</el-dropdown-item>
@@ -318,7 +335,7 @@
         :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
-    <el-dialog title="客服回款" :visible.sync="updateDialogVisible" top="5vh" width="70%">
+    <el-dialog title="客服回款" :visible.sync="updateDialogVisible" top="5vh" width="75%">
       <el-descriptions v-if="ClickRow" class="margin-top" :column="3" border>
         <el-descriptions-item>
           <template slot="label">
@@ -414,11 +431,12 @@
       <el-divider />
       <el-row style="text-align:center;">
         <el-col :span="24">
-          <el-button icon="el-icon-circle-check" :loading="LoadingUpdate" type="primary" @click="saveUpdate">保 存</el-button>
+          <el-button icon="el-icon-circle-check" :loading="LoadingUpdate" type="primary" @click="saveUpdate">保
+            存</el-button>
         </el-col>
       </el-row>
     </el-dialog>
-    <el-dialog title="除客服之外其它角色回款" :visible.sync="updateDialogOtherVisible" top="5vh" width="70%">
+    <el-dialog title="除客服之外其它角色回款" :visible.sync="updateDialogOtherVisible" top="5vh" width="75%">
       <el-descriptions v-if="ClickRowOther" class="margin-top" :column="3" border>
         <el-descriptions-item>
           <template slot="label">
@@ -458,7 +476,7 @@
           <el-tag type="success" effect="plain" style="margin-left:20px">输入本次回款金额会自动计算临时剩余金额</el-tag>
         </el-descriptions-item>
       </el-descriptions>
-       <el-divider />
+      <el-divider />
       <el-table :data="CollectionOrderOtherData" border :span-method="rowSpanMethodOther"
         v-loading="CollectionOtherLoading" @cell-click="CollectionOrderClickOther" :cell-style="showCollectionOther">
         <el-table-column type="index" width="50">
@@ -513,7 +531,8 @@
       <el-divider />
       <el-row style="text-align:center;">
         <el-col :span="24">
-          <el-button icon="el-icon-circle-check" :loading="LoadingUpdateOther" type="primary" @click="saveUpdateOther">保 存</el-button>
+          <el-button icon="el-icon-circle-check" :loading="LoadingUpdateOther" type="primary" @click="saveUpdateOther">保
+            存</el-button>
         </el-col>
       </el-row>
     </el-dialog>
@@ -526,13 +545,14 @@
           <el-upload ref="upload" :action="actionUrl" :on-preview="handlePreview" :on-remove="handleRemove"
             :on-success="fileUploadSuccess" :on-error="fileUploadFail" :on-change="fileChange" :file-list="fileList"
             :limit="1" :auto-upload="false" :headers="myHeaders">
-            <el-button icon="el-icon-position"   plain slot="trigger" type="primary" class="buttonM">选取文件</el-button>
+            <el-button icon="el-icon-position" plain slot="trigger" type="primary" class="buttonM">选取文件</el-button>
           </el-upload>
         </el-form-item>
         <el-divider />
         <el-row style="text-align:center;">
           <el-col :span="24">
-            <el-button icon="el-icon-upload2"  :loading="uploadLoading" type="success" @click="submitUpload">开始导入</el-button>
+            <el-button icon="el-icon-upload2" :loading="uploadLoading" type="success"
+              @click="submitUpload">开始导入</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -545,7 +565,8 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingDetailUpdate" type="primary" @click="saveDetailUpdate">保 存</el-button>
+            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingDetailUpdate" type="primary"
+              @click="saveDetailUpdate">保 存</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -578,6 +599,7 @@ import {
   GetDicCategoryC,
 } from "@/api/SystemManagement";
 import { cutOutNum } from '@/utils/decimals'
+import { parseTime, getDateByTimes, getNowDate } from "@/utils"; // 时间日期格式化成字符串
 import axios from "axios";
 import { showLoading, hideLoading } from "@/common/loading";
 import Customer from "./Components/Customer"
@@ -585,13 +607,14 @@ import CustomerOther from "./Components/CustomerOther"
 import moment from 'moment';
 import FakeProgress from 'fake-progress';
 import { BigNumber } from 'bignumber.js';
-
+import collapse from '../../assets/js/collapse'
 export default {
   name: 'CollectionData',
-  components: { Customer,CustomerOther },
+  components: { Customer, CustomerOther, collapse },
   data() {
     return {
-      LoadingUpdateOther:false,
+      isActive: true,
+      LoadingUpdateOther: false,
       RoleName: sessionStorage.getItem("RoleName"),
       DynamicColumn: '',
       fixedLeftShow: true,
@@ -672,9 +695,9 @@ export default {
       // 回款状态
       PaymentCollectionStateArray: [
         // { Code: 0, Name: "全部" },
-        { Code: 1, Name: "未回款" },
-        { Code: 2, Name: "已回款" },
-        { Code: 3, Name: "有余额" },
+        { Code: 1, Name: "未领取" },
+        { Code: 2, Name: "已领取" },
+        { Code: 3, Name: "部分领取" },
       ],
       // 判断选中的数据回款状态是否都是未回款，只要有一个是已回款，那么这个状态为true
       collectionStateFlag: false,
@@ -775,7 +798,7 @@ export default {
     },
   },
   created() {
-    if (sessionStorage.getItem("RoleName") == "超级管理员")
+    if (sessionStorage.getItem("RoleName") == "超级管理员" || sessionStorage.getItem("RoleName") == "总客服")
       this.DynamicColumn = '120';
     else
       this.DynamicColumn = '250';
@@ -810,6 +833,9 @@ export default {
       process.env.VUE_APP_BASE_API + "/CollectionMangement/UploadFiles?Flag=" + this.Flag;
   },
   methods: {
+    collapseClick() {
+      this.isActive = !this.isActive
+    },
     // 列表时间格式化
     dateFormat(row) {
       if (row) {
@@ -1390,7 +1416,7 @@ export default {
     },
     // 点击文件列表中已上传的文件时的钩子
     handlePreview(file) {
-      console.log(file);
+      // console.log(file);
     },
     // 模板下载
     downloadTemplate() {
@@ -1490,5 +1516,16 @@ export default {
 
 ::v-deep .el-progress__text {
   color: white !important;
+}
+
+.el-dropdown {
+  float: left;
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+.el-dropdown-link {
+  cursor: pointer;
+  color: #1890ff;
 }
 </style>

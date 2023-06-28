@@ -546,9 +546,9 @@ export function UpdateTicket(model) {
   });
 }
 // 获取公司
-export function GetCompany( CompanyId,CompanyName, PageIndex, PageSize) {
+export function GetCompany(CompanyId, CompanyName, PageIndex, PageSize) {
   return request({
-    url: '/SystemManagement/GetCompany?CompanyId=' + CompanyId + '&CompanyName=' + CompanyName+ '&PageIndex=' + PageIndex + '&PageSize=' + PageSize,
+    url: '/SystemManagement/GetCompany?CompanyId=' + CompanyId + '&CompanyName=' + CompanyName + '&PageIndex=' + PageIndex + '&PageSize=' + PageSize,
     method: 'post',
   });
 }
@@ -706,4 +706,10 @@ export function DeleteCompanyRelation(CompanyrelationName, ComID) {
     url: '/SystemManagement/DeleteCompanyRelation?CompanyrelationName=' + CompanyrelationName + '&ComID=' + ComID,
     method: 'post',
   });
+}
+export function GetUserAllChildList(flag) {
+  return request({
+    url: '/SystemManagement/GetUserAllChildList?Flag=' + flag,
+    method: 'post',
+  })
 }

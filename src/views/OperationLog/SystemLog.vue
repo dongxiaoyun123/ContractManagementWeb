@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 8px;">
+  <div style="padding: 16px;">
     <el-card>
       <el-row>
         <el-col :xs="8" :sm="5" :md="4" :lg="3" :xl="3">
@@ -36,10 +36,9 @@
             查 询</el-button>
           <!-- <el-button
             type="primary"
-            @click="exportContracts"
+            @click="checkSHA"
             icon="el-icon-download"
-            :loading="ExportLoading"
-            >导出</el-button
+            >验签</el-button
           > -->
         </el-col>
       </el-row>
@@ -87,11 +86,13 @@ import {
   GetAdmin_PermissionByRole,
 } from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
+import jsrsasign from 'jsrsasign'
 const moment = require("moment");
 export default {
   name: 'SystemLog',
   data() {
     return {
+      // sign:'',
       buttonStyle: '',
       permissionTree: [],
       LogPaymentList: [],
@@ -165,8 +166,62 @@ export default {
     this.fixedShowMethod(document.body.clientWidth);
     this.GetSystemLog();
     this.GetRole();
+    debugger
+    //测试SHA256withRSA 加密
+    let rsa = new jsrsasign.RSAKey() 
+    // SHA256withRSA私钥
+    const k = `-----BEGIN PRIVATE KEY-----
+    MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAI5m933WzhzsrJEpXk3oF3Pa5/fB5T0Ta7wo0BNZ8KegUkrUd4w72rOjYXLHQfqNBoGKxgFQZPTSOl2N7a7quBlelIrxt9NCtOaeF6tih14GpY+AkLc2m6KtKTDZfSF+AM4sg0Hw6UnFHNZKj9Ajg2TbPxaZLAGKgSkRD9QtlpJPAgMBAAECgYBee/tix4/iqTam6mfkEUbeXDTlswVDTQuCwSGudVK0Ji/z7p2TsnMeFh2mZodkkwXqFgXjAVC7EHIhePZnxN15E8nQPTNDgDyQVHYCO8d89v+YWJBqUQ7JCrMvND1kz4H0FgWlEvTizJPo6hTYHk4oaa08dZM7+ImEVqyh5L1rYQJBAO/LwQ0ly/j0Ygr3Ql94jxXpcS0b8GwGNSFEbRBahgRl0GL10vYLgIoOcKOLxDOaPgMS5LwQSWRrTGHZLEr7plUCQQCYBmRzNYAw6FXxHrjtJbGJZiUziv1edtleOyGDf2I+89H2hUp5woGQE0lVvPyWmZZriCoHZ2V4TzLNNYWpGlITAkEA0/3bs5XglzzlmDAzm1dnl8WC6pAyoi1ytvBZQwXkSOsBqRsN37sXbfWKGuurDrujavA/CwuS9pXtNuvZvohu6QJATTxyLFYyGqbvguEo8tMDr9rFa7phn2yiYs2H6Vb+gx08vxJZFCNNz/T8fSLW8Wx2j4tOTxSo6MbT+I4IqjFFIQJBAN7Zb7DYJBs8D8n5eYOveS85jxDZag482D7vFIhBXqL4UT391ISnbdVTMFVP5eekPKQRBg6YOsHzGyfAzf1kEjc=
+-----END PRIVATE KEY-----`
+ 
+     // 将私钥 转成16进制
+    rsa = jsrsasign.KEYUTIL.getKey(k) 
+    // 采用SHA256withRSA进行加密
+    const sig = new jsrsasign.KJUR.crypto.Signature({
+      alg: 'SHA256withRSA'
+    }) 
+    // 算法初始化
+    sig.init(rsa) 
+    const newStr = 'appId=ISV_GRZC&bizReq={\"payRequestId\":\"0062N202306160000000000009372148\",\"payAmount\":\"2\",\"discountAmount\":\"0\",\"payTradeNo\":\"2f755b83-1426-4ab4-84f0-3db889dc16e0\",\"tradeStatus\":\"WAIT_PAY\",\"httpUrl\":\"https://ms.ebm360.com/Amap/payOrder.html?orderid=40488252000340014192140256&payid=0062N202306160000000000009372148\"}&errorCode=API00000000&errorMsg=成功&success=true'
+    // 对123456进行加密
+    sig.updateString(newStr) 
+   // 加密后的16进制转成base64，这就是签名了
+    this.sign = jsrsasign.hextob64(sig.sign());
+    // console.log(this.sign);
   },
   methods: {
+//     checkSHA(){
+//       debugger
+//       let rsa = new jsrsasign.RSAKey()
+// // SHA256withRSA公钥
+// const k = `-----BEGIN PUBLIC KEY-----
+// MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCOZvd91s4c7KyRKV5N6Bdz2uf3weU9E2u8KNATWfCnoFJK1HeMO9qzo2Fyx0H6jQaBisYBUGT00jpdje2u6rgZXpSK8bfTQrTmnherYodeBqWPgJC3NpuirSkw2X0hfgDOLINB8OlJxRzWSo/QI4Nk2z8WmSwBioEpEQ/ULZaSTwIDAQAB
+// -----END PUBLIC KEY-----`
+ 
+//     // 将公钥转正16进制
+//     rsa = jsrsasign.KEYUTIL.getKey(k)  
+//     // 采用SHA256withRSA进行加密
+//     const sig = new jsrsasign.KJUR.crypto.Signature({
+//       alg: 'SHA256withRSA'
+//     }) 
+//     // 初始化SHA256withRSA算法的对象
+//     sig.init(rsa) 
+//     const newStr = 'appId=ISV_GRZC&bizReq={"payRequestId":"0062N202306150000000000009769054","payAmount":"544","requestTime":"2023-06-15 10:51:49","subject":"高德打车订单","notifyUrl":"http://sns.testing.amap.com/pay/channel/isv/cashierPay"}&nonceStr=ozcZG1jwY2PTl76iural'
+//     // 将123456进行加密
+//     sig.updateString(newStr)   
+//     // 需要验证的签名
+//     // const sign = 'BTu4WzyXcbLrf8j1+o6TeKQ3ZGjxRU1hO' 
+//    if(sig.verify(jsrsasign.b64tohex('QK8+ZyJTlWZmLaF6zXuU4GDUL49iXza/4UMIQaFqUb3Fh3DTARPQ6bevJw7Iq4CR3POS5UhFm+UyASd/JKGXDCkALtlM8Hr3x4wp8MxWteqYAO6pHLYuJ48hYE9X7bNGAkyx43mXXe0gpZ2Q+4SzanGaqDoguTnlibUUo8upcy8=')) ) 
+//    {
+//    return this.$message.success("验签成功");
+//    }
+//    else
+//    {
+//     return this.$message.error("验签失败");
+//    }
+ 
+//     //b为true 则表示验证通过
+//     },
     // tableRowClassName({ row, rowIndex }) {
     //   switch (row.MenuDescription) {
     //     case "添加数据":

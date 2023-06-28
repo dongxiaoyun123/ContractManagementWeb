@@ -484,4 +484,10 @@ export function RevokeInvoicing(IdStr) {
     method: 'post',
   });
 }
+export function UpdateYearBatch(Id,YearBatch) {
+  return request({
+    url: '/CollectionMangement/UpdateYearBatch?Id=' + Id+ '&YearBatch=' + YearBatch,
+    method: 'post',
+  });
+}
 

@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 8px;">
+  <div style="padding: 16px;">
     <el-card>
       <el-form label-width="60px">
         <!-- 合同信息 -->
@@ -77,8 +77,8 @@
             <el-button icon="el-icon-delete" type="text" size="mini"
               @click="deleteDialog(scope.row.User_ID)">删除</el-button>
             <el-dropdown @command="(command) => {
-                handleCommand(command, scope.row.User_ID);
-              }
+              handleCommand(command, scope.row.User_ID);
+            }
               ">
               <el-button type="text" size="mini">
                 更多操作<i class="el-icon-arrow-down el-icon--right" />
@@ -98,8 +98,8 @@
             <el-button icon="el-icon-delete" type="text" size="mini"
               @click="deleteDialog(scope.row.User_ID)">删除</el-button>
             <el-dropdown @command="(command) => {
-                handleCommand(command, scope.row.User_ID);
-              }
+              handleCommand(command, scope.row.User_ID);
+            }
               ">
               <el-button type="text" size="mini">
                 更多操作<i class="el-icon-arrow-down el-icon--right" />
@@ -159,7 +159,8 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingAdd" type="primary" @click="saveAdd">保 存
+            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingAdd" type="primary"
+              @click="saveAdd">保 存
             </el-button>
           </el-col>
         </el-row>
@@ -211,7 +212,8 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingUpdate" type="primary" @click="saveUpdate">保 存
+            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingUpdate" type="primary"
+              @click="saveUpdate">保 存
             </el-button>
           </el-col>
         </el-row>
@@ -231,7 +233,8 @@
       <el-divider />
       <el-row class="buttonCenter">
         <el-col>
-          <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="UpdatePasswordLoading" type="primary" @click="updatePasswordCommitClick">保 存
+          <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="UpdatePasswordLoading" type="primary"
+            @click="updatePasswordCommitClick">保 存
           </el-button>
         </el-col>
       </el-row>
@@ -251,7 +254,8 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>选择合同类型进行关联</span>
-          <el-button icon="el-icon-link" style="float: right;" type="primary" :loading="LoadingRoleUpdate" @click="saveUserUpdate">关 联
+          <el-button icon="el-icon-link" style="float: right;" type="primary" :loading="LoadingRoleUpdate"
+            @click="saveUserUpdate">关 联
           </el-button>
         </div>
         <el-tree ref="tree1" style="height: calc(100vh - 350px); overflow-y: scroll" :data="permissionTree"
@@ -269,15 +273,18 @@
             <el-input v-model="filterText" placeholder="输入用户进行过滤" clearable="" />
           </el-col>
           <el-col :span="8" style="text-align:right">
-            <el-switch v-model="PositionStatusFlag" style="margin-top: 7px;margin-right: 40px;" active-color="#13ce66"
-              inactive-color="#ff4949" active-text="在职" inactive-text="离职" @change="changePositionStatus" />
-            <el-button  icon="el-icon-link" style="float: right;" type="primary" :loading="LoadingRoleUpdate1" @click="saveUserUpdate1">关 联
+            <!-- <el-switch v-model="PositionStatusFlag" style="margin-top: 7px;margin-right: 40px;" active-color="#13ce66"
+              inactive-color="#ff4949" active-text="在职" inactive-text="离职" @change="changePositionStatus" /> -->
+              <el-checkbox style="margin-top: 7px;margin-right: 40px;" v-model="PositionStatusFlag" @change="changePositionStatus">在职</el-checkbox>
+            <el-button icon="el-icon-link" style="float: right;" type="primary" :loading="LoadingRoleUpdate1"
+              @click="saveUserUpdate1">关 联
             </el-button>
           </el-col>
         </el-row>
         <el-tree ref="tree2" style="height: calc(100vh - 300px); overflow-y: scroll;margin-top: 20px;"
-          :data="permissionTree" show-checkbox:true show-checkbox default-expand-all node-key="id" highlight-current
-          :filter-node-method="filterNode" />
+          :data="permissionTree" show-checkbox:true show-checkbox  node-key="id" highlight-current
+          :filter-node-method="filterNode" accordion>
+        </el-tree>
       </el-card>
     </el-dialog>
     <!-- 绑定导出权限 -->
@@ -291,15 +298,19 @@
             <el-input v-model="filterTextExport" placeholder="输入用户进行过滤" clearable="" />
           </el-col>
           <el-col :span="8" style="text-align:right">
-            <el-switch v-model="PositionStatusFlag" style="margin-top: 7px;margin-right: 40px;" active-color="#13ce66"
-              inactive-color="#ff4949" active-text="在职" inactive-text="离职" @change="changePositionStatusExport" />
-            <el-button  icon="el-icon-link" style="float: right;" type="primary" :loading="LoadingRoleUpdate2" @click="saveUserUpdateExport">关 联
+            <!-- <el-switch v-model="PositionStatusFlag" style="margin-top: 7px;margin-right: 40px;" active-color="#13ce66"
+              inactive-color="#ff4949" active-text="在职" inactive-text="离职" @change="changePositionStatusExport" /> -->
+
+              <el-checkbox style="margin-top: 7px;margin-right: 40px;" v-model="PositionStatusFlag" @change="changePositionStatusExport">在职</el-checkbox>
+
+            <el-button icon="el-icon-link" style="float: right;" type="primary" :loading="LoadingRoleUpdate2"
+              @click="saveUserUpdateExport">关 联
             </el-button>
           </el-col>
         </el-row>
         <el-tree ref="treeExport" style="height: calc(100vh - 300px); overflow-y: scroll;margin-top: 20px;"
-          :data="permissionTreeExport" show-checkbox:true show-checkbox default-expand-all node-key="id" highlight-current
-          :filter-node-method="filterNode" />
+          :data="permissionTreeExport" show-checkbox:true show-checkbox node-key="id" highlight-current
+          :filter-node-method="filterNode" accordion />
       </el-card>
     </el-dialog>
   </div>
@@ -339,10 +350,9 @@ export default {
       callback(new Error("请输入合法的手机号码"));
     };
     return {
-      filterTextExport:'',
+      filterTextExport: '',
       formShow: '',
       fixedLeftShow: true,
-      UserAllList: [],
       UserAllListExport: [],
       PositionStatusFlag: true,
       DepartmentCode: "",
@@ -596,6 +606,8 @@ export default {
     saveUserUpdate1() {
       this.LoadingRoleUpdate1 = true;
       this.bingdArray1.PermissionsArray = this.$refs.tree2.getCheckedKeys();
+      console.log(this.bingdArray1.PermissionsArray);
+      debugger
       BindUser(this.bingdArray1).then((res) => {
         if (res.success) {
           this.updateRoleDialogVisible1 = false;
@@ -629,13 +641,14 @@ export default {
       GetUserAllList(0).then((res) => {
         if (res.success) {
           this.permissionTree = res.result.data;
-          this.UserAllList = res.result.getDataList;
           GetBindUser(User_ID).then((res) => {
             if (res.success) {
               this.$refs.tree2.setCheckedKeys(res.result);
             } else {
             }
           });
+          this.filterText='';
+          this.PositionStatusFlag = true;
           this.updateRoleDialogVisible1 = true;
         } else {
           return this.$message.error("数据获取失败！");
@@ -654,6 +667,8 @@ export default {
             } else {
             }
           });
+          this.filterTextExport='';
+          this.PositionStatusFlag = true;
           this.updateRoleDialogVisible2 = true;
         } else {
           return this.$message.error("数据获取失败！");
@@ -863,7 +878,6 @@ export default {
       GetUserAllList(this.PositionStatusFlag == true ? 0 : 1).then((res) => {
         if (res.success) {
           this.permissionTree = res.result.data;
-          this.UserAllList = res.result.getDataList;
           this.updateRoleDialogVisible1 = true;
         } else {
           return this.$message.error("数据获取失败！");
@@ -872,7 +886,7 @@ export default {
     },
     // 筛选部门信息
     changePositionStatusExport() {
-      this.filterText = '';
+      this.filterTextExport = '';
       GetUserAllList(this.PositionStatusFlag == true ? 0 : 1).then((res) => {
         if (res.success) {
           this.permissionTreeExport = res.result.data;
@@ -921,5 +935,4 @@ export default {
 
 .FormClass {
   width: 100%;
-}
-</style>
+}</style>

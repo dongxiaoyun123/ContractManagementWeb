@@ -1,31 +1,68 @@
 <template>
   <div class="dashboardCalss">
-    <el-radio-group v-model="ContractsOption" size="medium">
-      <el-radio-button label="客户合同录入" />
-      <el-radio-button label="供应商合同录入" />
-    </el-radio-group>
+
+    <el-card>
+      <el-form label-width="0">
+        <!-- 合同信息 -->
+        <div slot="header" class="clearfix">
+          <span>合同信息</span>
+        </div>
+        <el-row>
+          <el-row>
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+              <el-form-item style="margin-bottom:0">
+                <el-radio-group v-model="ContractsOption">
+                  <el-radio-button label="客户合同录入" />
+                  <el-radio-button label="供应商合同录入" />
+                </el-radio-group>
+                <el-divider direction="vertical" v-if="RoleName != '财务'"></el-divider>
+                <el-cascader v-if="RoleName != '财务'" :options="permissionTree" :props="props" collapse-tags clearable
+                  getCheckedNodes :show-all-levels="false" v-model="UserArray" placeholder="选择员工">
+                  <template slot-scope="{ node, data }">
+                    <span style="float: left">{{ data.label }}</span>
+                    <span v-if="data.PositionStatus == 0" style="float: right; color: #13ce66">在职</span>
+                    <span v-if="data.PositionStatus == 1" style="float: right; color: #909399">离职</span>
+                  </template>
+                </el-cascader>
+                <el-divider direction="vertical" v-if="RoleName != '财务'"></el-divider>
+                <el-checkbox v-if="RoleName != '财务'" v-model="PositionStatus"
+                  @change="PositionStatusChange">在职</el-checkbox>
+                <el-divider direction="vertical"></el-divider>
+                <el-button type="primary" icon="el-icon-search" @click="GetAdmin_UserSearch">查 询
+                </el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-row>
+      </el-form>
+    </el-card>
     <!-- 审核状态组件 -->
-    <panel-group />
+    <panel-group :WhereParameter="WhereParameter" />
     <!-- 销售统计分析图表 -->
-    <el-row :gutter="20">
-      <el-col :xs="24" :sm="24" :lg="8">
+    <el-row :gutter="16">
+      <el-col :xs="24" :sm="24" :lg="24" :xl="8" v-if="ContractsOptionCatch == '客户合同录入'">
         <div class="chart-wrapper">
-          <CollectionCountChart />
+          <CollectionCountChart :key="datekey" :WhereParameter="WhereParameter" Title="近一年合同录入统计" />
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
+      <el-col :xs="24" :sm="24" :lg="24" v-if="ContractsOptionCatch == '供应商合同录入'">
         <div class="chart-wrapper">
-          <CollectionMoneyChart />
+          <CollectionCountChart :key="datekey" :WhereParameter="WhereParameter" Title="近一年供应商合同录入统计" />
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
+      <el-col :xs="24" :sm="24" :lg="24" :xl="8" v-show="ContractsOptionCatch == '客户合同录入'">
         <div class="chart-wrapper">
-          <CollectionStateChart />
+          <CollectionMoneyChart :WhereParameter="WhereParameter" />
+        </div>
+      </el-col>
+      <el-col :xs="24" :sm="24" :lg="24" :xl="8" v-show="ContractsOptionCatch == '客户合同录入'">
+        <div class="chart-wrapper">
+          <CollectionStateChart :WhereParameter="WhereParameter" />
         </div>
       </el-col>
     </el-row>
     <!-- 客服统计分析图表 -->
-    <el-row :gutter="20">
+    <!-- <el-row :gutter="16">
       <el-col :xs="24" :sm="24" :lg="16">
         <div class="chart-wrapper">
           <CollectionDataChart />
@@ -36,25 +73,40 @@
           <CollectionDataTable />
         </div>
       </el-col>
-    </el-row>
+    </el-row> -->
     <!-- 财务统计分析图表 -->
-    <el-row>
+    <!-- <el-row>
       <el-col :xs="24" :sm="24" :lg="24">
         <div class="chart-wrapper">
           <InvoiceListChart />
         </div>
       </el-col>
+    </el-row> -->
+
+    <!-- 只有财务角色能看到这两个统计 -->
+    <el-row :gutter="16" v-if="RoleName == '财务' || RoleName == '超级管理员'">
+      <el-col :xs="24" :sm="24" :lg="24" :xl="12">
+        <div class="chart-wrapper">
+          <CollectionDatastatisticsChart :key="datekey" :WhereParameter="WhereParameter" />
+        </div>
+      </el-col>
+      <el-col :xs="24" :sm="24" :lg="24" :xl="12">
+        <div class="chart-wrapper">
+          <InvoiceListDatastatisticsChart :key="datekey" :WhereParameter="WhereParameter" />
+        </div>
+      </el-col>
     </el-row>
+
     <!-- 综合哪个角色都能看到 -->
-    <el-row :gutter="20">
-      <el-col :xs="24" :sm="24" :lg="12">
+    <el-row :gutter="16">
+      <el-col :xs="24" :sm="24" :lg="24" :xl="12">
         <div class="chart-wrapper">
           <CommonSuggestions />
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="12">
+      <el-col :xs="24" :sm="24" :lg="24" :xl="12">
         <div class="chart-wrapper">
-          <CommonOperationLog />
+          <CommonOperationLog :key="datekey" :WhereParameter="WhereParameter" />
         </div>
       </el-col>
     </el-row>
@@ -66,7 +118,9 @@
   </div>
 </template>
 <script>
-
+import {
+  GetUserAllChildList,
+} from "@/api/SystemManagement";
 import PanelGroup from './Components/PanelGroup'
 import CollectionCountChart from './Components/CollectionCountChart'
 import CollectionMoneyChart from './Components/CollectionMoneyChart'
@@ -76,6 +130,9 @@ import CollectionDataTable from './Components/CollectionDataTable'
 import InvoiceListChart from './Components/InvoiceListChart'
 import CommonSuggestions from './Components/CommonSuggestions'
 import CommonOperationLog from './Components/CommonOperationLog'
+import CollectionDatastatisticsChart from './Components/CollectionDatastatisticsChart'
+import InvoiceListDatastatisticsChart from './Components/InvoiceListDatastatisticsChart'
+
 export default {
   name: 'dashboard',
   components: {
@@ -87,25 +144,99 @@ export default {
     CollectionDataTable,
     InvoiceListChart,
     CommonSuggestions,
-    CommonOperationLog
+    CommonOperationLog,
+    CollectionDatastatisticsChart,
+    InvoiceListDatastatisticsChart
   },
   data() {
     return {
+      RoleName: sessionStorage.getItem("RoleName"),
       ContractsOption: '客户合同录入',
+      ContractsOptionCatch: '客户合同录入',
+      props: { multiple: true, emitPath: false },
+      permissionTree: [],
+      PositionStatus: true,
+      UserArray: [],
+      datekey: Date.now(),
+      WhereParameter: {
+        ContractsOption: '',
+        UserArray: [],
+        PositionStatus: null,
+      },
     }
   },
-
   created() {
+    this.GetPermissionTreeData();
+    this.GetData();//这个是为了渲染合同录入统计（组件要刷新，所以这个要再写一遍，不会导致重复加载数据的）
+  },
+  mounted() {
+    this.GetData();//这个是为了渲染除了合同录入统计其它的
+  },
+  methods: {
+    // //浅对比（这里不需要深对比）
+    // //参考地址http://wiki.i-fanr.com/2021/05/05/%E4%B8%A4%E4%B8%AA%E5%AF%B9%E8%B1%A1%E6%AF%94%E8%BE%83%E6%9C%89%E5%93%AA%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/
+    // shallowEqual(object1, object2) {
+    //   debugger
+    //   const keys1 = Object.keys(object1);
+    //   const keys2 = Object.keys(object2);
 
+    //   if (keys1.length !== keys2.length) {
+    //     return false;
+    //   }
+
+    //   for (let key of keys1) {
+    //     if (object1[key] !== object2[key]) {
+    //       return false;
+    //     }
+    //   }
+    //   return true;
+    // },
+    GetData() {
+      let WhereParameter = {
+        ContractsOption: this.ContractsOption,
+        UserArray: this.UserArray,//选择人员集合
+        PositionStatus: this.PositionStatus,
+      }
+      // if (!this.shallowEqual(this.WhereParameter, WhereParameter))
+      this.WhereParameter = WhereParameter;
+    },
+    //查询事件并更新组件
+    GetAdmin_UserSearch() {
+      this.ContractsOptionCatch = this.ContractsOption;
+      //这里更新了datekey ，组件就会刷新
+      this.datekey = Date.now();
+      this.GetData();
+    },
+    // //切换合同和供应商合同来更新子组件（不更新会导致合同录入统计不能独占一行）
+    // ContractsChange() {
+
+    // },
+    // 获取当前登录人绑定的下级人员（包括他自己，超级管理员获取所有）
+    GetPermissionTreeData() {
+      GetUserAllChildList(this.PositionStatus).then((res) => {
+        if (res.success) {
+          this.permissionTree = res.result;
+        } else {
+          this.permissionTree = [];
+        }
+      });
+    },
+    //复选框在职按钮跟更改事件
+    PositionStatusChange(val) {
+      this.PositionStatus = val;
+      //清空一下选中的值并重新加载数据
+      this.UserArray = [];
+      this.GetPermissionTreeData();
+    }
   }
 }
 </script>
 <style lang="scss"  >
 .dashboardCalss {
-  background-color: #EFF1F4;
+  background-color: #F0F2F5;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding: 102px 20px 0 20px;
+  padding: 102px 16px 0 16px;
   position: absolute;
   left: 0;
   top: 0;
@@ -115,13 +246,25 @@ export default {
   .chart-wrapper {
     background: #fff;
     padding: 16px 16px 0;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+    // background:url("https://www.toptal.com/designers/subtlepatterns/uploads/dot-grid.png");
   }
 }
 
 @media (max-width:1024px) {
   .chart-wrapper {
     padding: 8px;
+    //background:url("https://www.toptal.com/designers/subtlepatterns/uploads/double-bubble-outline.png");
   }
 }
+
+.el-cascader-menu__wrap {
+  height: 300px;
+}
+
+.el-divider--vertical {
+  margin: 0 1rem;
+}
 </style>
+
+

@@ -1,8 +1,8 @@
 <template>
-  <div class="containerClass">
+  <div class="containerClass" :style="{backgroundImage:'url('+userlogo+')'}">
     <vue-particles style="background: rgba(0,0,0,.4);position: absolute;min-width: 100%; min-height: 100%;"
       color="#dedede" :particle-opacity="0.9" lines-color="#ffffff" :particles-number="80" shape-type="circle"
-      :particle-size="1" :lines-width="1" :line-linked="true" :line-opacity="1" :lines-distance="80" :move-speed="1"
+      :particle-size="1.2" :lines-width="1.2" :line-linked="true" :line-opacity="1" :lines-distance="80" :move-speed="1"
       :hover-effect="true" hover-mode="grab" :click-effect="true" click-mode="push" />
 
     <div class="box">
@@ -136,6 +136,31 @@ export default {
         return `${this.timer}秒后重发`;
       }
     },
+    userlogo() {
+      // 存放要换的图片
+      const imgs = [
+        require('@/assets/i-mages/background1.png'),
+        require('@/assets/i-mages/background2.png'),
+        require('@/assets/i-mages/background3.png'),
+        require('@/assets/i-mages/background4.png'),
+        require('@/assets/i-mages/background5.png'),
+        require('@/assets/i-mages/background6.png'),
+        require('@/assets/i-mages/background7.png'),
+        require('@/assets/i-mages/background8.png'),
+        require('@/assets/i-mages/background9.png'),
+        require('@/assets/i-mages/background10.png'),
+        require('@/assets/i-mages/background11.png'),
+        require('@/assets/i-mages/background12.png'),
+        require('@/assets/i-mages/background13.png'),
+        require('@/assets/i-mages/background14.png'),
+        require('@/assets/i-mages/background15.png'),
+        require('@/assets/i-mages/background16.png'),
+        require('@/assets/i-mages/background17.png'),
+        require('@/assets/i-mages/background18.png'),
+        // require('@/assets/i-mages/background19.jpg'),
+      ];
+      return imgs[Math.floor(Math.random() * 18)]; // 进行计算随机
+    },
   },
   watch: {
     timer(num) {
@@ -252,20 +277,13 @@ export default {
         .then((data) => {
           this.loading = false;
           if (data.success) {
-            // //延时0.1秒
-            // setTimeout(() => {
-            //   this.$message({
-            //     message: "登录成功",
-            //     type: "success",
-            //     duration: 800, //0.8秒后关闭
-            //   });
-            // }, 100)
-            if (sessionStorage.getItem("RoleCode") === "01F70224-6886-38A2-DA3F-7073E49E4359") {
-              this.$router.push("CollectionMangement/CollectionData");
-            }
-            else {
-              this.$router.push("ContractEntry/ContractsList");
-            }
+            this.$router.push("dashboard");
+            // if (sessionStorage.getItem("RoleCode") === "01F70224-6886-38A2-DA3F-7073E49E4359") {
+            //   this.$router.push("CollectionMangement/CollectionData");
+            // }
+            // else {
+            //   this.$router.push("ContractEntry/ContractsList");
+            // }
           } else {
             this.$message.error(data.resultMessage);
           }
@@ -293,7 +311,7 @@ $bg: #ffffff;
 .containerClass {
   min-width: 100%;
   min-height: 100%;
-  background-image: url("../../assets/img/xingkong.jpg");
+  // background-image: url("../../assets/img/cool-background (9).png");
   overflow: hidden;
   position: absolute;
   background-repeat: no-repeat;
