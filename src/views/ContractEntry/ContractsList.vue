@@ -624,7 +624,7 @@
 
     <!-- 添加合同、补充协议弹出页面 -->
     <el-dialog :visible.sync="detailAddDialogVisible" top="5vh" width="65%" :append-to-body="true"
-      @close="detailAddDialogVisibleClosed">
+               @close="detailAddDialogVisibleClosed">
       <!-- 上面两个属性用来重置滚动条 -->
       <div slot="title" class="dialog-title">
         <span>{{ addContractsTitle }}</span>
@@ -857,7 +857,7 @@
             </el-row>
             <el-form-item v-if="addContractsForm.ContractTypesOf != 3">
               <el-button size="mini" icon="el-icon-plus" class="addItemClass" @click="addDomain">新增条目</el-button>
-              <el-button type="text" style="margin-left: 10px;color:#9DA0A5" @click="showMessage = !showMessage">{{
+              <el-button type="text" style="margin-left: 10px;color:#6959CD" @click="showMessage = !showMessage">{{
                 showMessage ? "收起说明" : "展开说明" }}
                 <i v-if="showMessage" class="el-icon-arrow-up"></i>
                 <i v-if="!showMessage" class="el-icon-arrow-down"></i>
@@ -1060,8 +1060,29 @@
                     <el-button icon="el-icon-position" size="mini" plain slot="trigger" type="primary">选取文件</el-button>
                     <el-button icon="el-icon-upload2" size="mini" plain style="margin-left: 10px;margin-bottom: 7px;"
                       type="success" :loading="uploadServerLoading" @click="submitUpload">上传到服务器</el-button>
-                    <h3 style="margin:14px 0 10px 0 ;">注：合同或协议{{ "\xa0\xa0" }}<span
-                        style="color:#ff4949 ;">双方盖章完成后</span>{{ "\xa0\xa0" }}，请上传电子版扫描件
+                    <h3>注：合同或协议{{ "\xa0\xa0" }}
+                      <span class="magic">
+                        <span class="magic-star">
+                          <svg viewBox="0 0 512 512">
+                            <path
+                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
+                          </svg>
+                        </span>
+                        <span class="magic-star">
+                          <svg viewBox="0 0 512 512">
+                            <path
+                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
+                          </svg>
+                        </span>
+                        <span class="magic-star">
+                          <svg viewBox="0 0 512 512">
+                            <path
+                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
+                          </svg>
+                        </span>
+                        <span class="magic-text">双方盖章完成后</span>
+                      </span>
+                      {{ "\xa0\xa0" }}，请上传电子版扫描件
                     </h3>
                     <div slot="tip" class="uploadClass">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span>
                     </div>
@@ -1359,7 +1380,7 @@
             <el-form-item v-if="updateContractsForm.ContractTypesOf != 3">
               <el-button size="mini" icon="el-icon-plus" class="addItemClass" @click="addDomainUpt"
                 :disabled="UnitPriceFlag">新增条目</el-button>
-              <el-button type="text" style="margin-left: 10px;color:#9DA0A5" @click="showMessage = !showMessage">{{
+              <el-button type="text" style="margin-left: 10px;color:#6959CD" @click="showMessage = !showMessage">{{
                 showMessage ? "收起说明" : "展开说明" }}
                 <i v-if="showMessage" class="el-icon-arrow-up"></i>
                 <i v-if="!showMessage" class="el-icon-arrow-down"></i>
@@ -1596,8 +1617,29 @@
                     <el-button icon="el-icon-upload2" size="mini" plain v-if="updateContractsForm.ArchivedType != 3"
                       style="margin-left: 10px;margin-bottom: 7px;" type="success" :loading="uploadServerLoading"
                       @click="submitUploadUpdate">上传到服务器</el-button>
-                    <h3 style="margin:14px 0 10px 0 ;">注：合同或协议{{ "\xa0\xa0" }}<span
-                        style="color:#ff4949 ;">双方盖章完成后</span>{{ "\xa0\xa0" }}，请上传电子版扫描件
+                    <h3>注：合同或协议{{ "\xa0\xa0" }}
+                      <span class="magic">
+                        <span class="magic-star">
+                          <svg viewBox="0 0 512 512">
+                            <path
+                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
+                          </svg>
+                        </span>
+                        <span class="magic-star">
+                          <svg viewBox="0 0 512 512">
+                            <path
+                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
+                          </svg>
+                        </span>
+                        <span class="magic-star">
+                          <svg viewBox="0 0 512 512">
+                            <path
+                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
+                          </svg>
+                        </span>
+                        <span class="magic-text">双方盖章完成后</span>
+                      </span>
+                      {{ "\xa0\xa0" }}，请上传电子版扫描件
                     </h3>
                     <div slot="tip" class="uploadClass">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span>
                     </div>
@@ -2488,6 +2530,7 @@ export default {
     // ];
     // 获取合同数据
     this._getContractData();
+
   },
   methods: {
     saveYearBatch() {
@@ -3369,6 +3412,15 @@ export default {
               return;
             }
           }
+          //有可能选中的主合同关联的乙方公司和销售人员为空，所以在此处判断，如果为空那么不让他添加
+          if (this.addContractsForm.ContractTypesOf != 1) {
+            if (!this.addContractsForm.SaleId || !this.addContractsForm.SecondPartyName) {
+              this.LoadingAdd = false;
+              this.$message.warning("主合同关联的乙方公司和销售人员不能为空，请维护或者联系管理员");
+              return;
+            }
+          }
+
           // 正向对比
           if (this.fileList.length != 0 || this.addContractsForm.FileList.length != 0) {
             for (const index in this.fileList) {
@@ -3459,7 +3511,36 @@ export default {
           // 值有auto、instant,smooth，缓动动画（当前是慢速的）
           behavior: "smooth",
         });
-      }
+      };
+      this.AddStar();
+    },
+    AddStar() {
+      //附件说明加星
+      setTimeout(() => {
+        let index = 0,
+          interval = 1000;
+
+        const rand = (min, max) =>
+          Math.floor(Math.random() * (max - min + 1)) + min;
+
+        const animate = star => {
+          star.style.setProperty("--star-left", `${rand(-10, 100)}%`);
+          star.style.setProperty("--star-top", `${rand(-40, 80)}%`);
+
+          star.style.animation = "none";
+          star.offsetHeight;
+          star.style.animation = "";
+        }
+
+        for (const star of document.getElementsByClassName("magic-star")) {
+          setTimeout(() => {
+            animate(star);
+
+            setInterval(() => animate(star), 1000);
+          }, index++ * (interval / 3))
+        }
+
+      }, 200)
     },
     // 复选框选中事件
     TableSelect(selection) {
@@ -3874,6 +3955,7 @@ export default {
           this.updateContractsForm.FileLists = [];
         }
       });
+      this.AddStar();
     },
     // 只有未送审的有删除功能
     async deleteDialog(Id) {
@@ -4710,5 +4792,75 @@ export default {
   font-size: 12px;
   color: #606266;
   margin-top: 7px;
+}
+</style>
+
+<style scoped>
+@keyframes background-pan {
+  from {
+    background-position: 0% center;
+  }
+
+  to {
+    background-position: -200% center;
+  }
+}
+
+@keyframes scale {
+
+  from,
+  to {
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(1);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(180deg);
+  }
+}
+
+h3>.magic {
+  display: inline-block;
+  position: relative;
+}
+
+h3>.magic>.magic-star {
+  --size: clamp(15px, 1vw, 25px);
+  fill: #13C2C2;
+  animation: scale 700ms ease forwards;
+  display: block;
+  height: var(--size);
+  left: var(--star-left);
+  position: absolute;
+  top: var(--star-top);
+  width: var(--size);
+}
+
+h3>.magic>.magic-star>svg {
+  animation: rotate 1000ms linear infinite;
+  display: block;
+  opacity: 0.7;
+}
+
+h3>.magic>.magic-text {
+  animation: background-pan 3s linear infinite;
+  background: linear-gradient(to right,
+      #ff4949,
+      #ffba00,
+      #6959CD,
+      #ff4949);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
 }
 </style>

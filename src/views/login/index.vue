@@ -1,10 +1,9 @@
 <template>
-  <div class="containerClass" :style="{backgroundImage:'url('+userlogo+')'}">
+  <div class="containerClass" :style="{ backgroundImage: 'url(' + userlogo + ')' }">
     <vue-particles style="background: rgba(0,0,0,.4);position: absolute;min-width: 100%; min-height: 100%;"
       color="#dedede" :particle-opacity="0.9" lines-color="#ffffff" :particles-number="80" shape-type="circle"
       :particle-size="1.2" :lines-width="1.2" :line-linked="true" :line-opacity="1" :lines-distance="80" :move-speed="1"
       :hover-effect="true" hover-mode="grab" :click-effect="true" click-mode="push" />
-
     <div class="box">
       <div class="login-box">
         <el-form ref="loginForm" :model="loginForm" class="login-form" auto-complete="on" label-position="left"
@@ -65,11 +64,8 @@
           <el-button size="medium" :loading="loading" type="primary" style="width: 100%"
             @click.native.prevent="handleLogin">登 录</el-button>
         </el-form>
-
       </div>
     </div>
-
-
   </div>
 </template>
 
