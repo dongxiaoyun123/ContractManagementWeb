@@ -1,5 +1,5 @@
 <template>
-    <div ref="chart1" style="width:100%;height:376px" />
+  <div ref="chart1" style="width:100%;height:376px" />
 </template>
 <script>
 import {
@@ -22,7 +22,7 @@ export default {
     },
     methods: {
         GetCollectionCount() {
-            //初始化echarts
+            // 初始化echarts
             var chart1 = this.$refs.chart1
             this.myChart1 = echarts.init(chart1);
             this.myChart1.clear();
@@ -40,8 +40,7 @@ export default {
                     this.countData = res.result.countData;
                     this.totalMoneyData = res.result.totalMoneyData;
                     this.getEchartData()
-                }
-                else {
+                } else {
                     this.$message.error("获取失败");
                 }
             });
@@ -99,9 +98,9 @@ export default {
                     {
                         type: 'value',
                         name: '导入金额',
-                        axisLabel: {
-                            formatter: '{value}'
-                        },
+                        // axisLabel: {
+                        //     formatter: '{value}'
+                        // },
                         axisLabel: {
                             formatter: function (value, index) {
                                 if (value >= 100000000) {
@@ -137,7 +136,7 @@ export default {
                         itemStyle: {
                             normal: {
                                 color: function (params) {
-                                    var colorList = ['#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc',];
+                                    var colorList = ['#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
                                     var index = params.dataIndex % colorList.length;
                                     return colorList[index]
                                 }

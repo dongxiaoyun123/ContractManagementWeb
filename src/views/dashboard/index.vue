@@ -15,19 +15,21 @@
                   <el-radio-button label="客户合同录入" />
                   <el-radio-button label="供应商合同录入" />
                 </el-radio-group>
-                <el-divider direction="vertical" v-if="RoleName != '财务'"></el-divider>
-                <el-cascader v-if="RoleName != '财务'" :options="permissionTree" :props="props" collapse-tags clearable
-                  getCheckedNodes :show-all-levels="false" v-model="UserArray" placeholder="选择员工">
+                <el-divider v-if="RoleName != '财务'" direction="vertical" />
+                <el-cascader v-if="RoleName != '财务'" v-model="UserArray" :options="permissionTree" :props="props"
+                             collapse-tags clearable get-checked-nodes :show-all-levels="false" placeholder="选择员工"
+                >
                   <template slot-scope="{ node, data }">
                     <span style="float: left">{{ data.label }}</span>
                     <span v-if="data.PositionStatus == 0" style="float: right; color: #13ce66">在职</span>
                     <span v-if="data.PositionStatus == 1" style="float: right; color: #909399">离职</span>
                   </template>
                 </el-cascader>
-                <el-divider direction="vertical" v-if="RoleName != '财务'"></el-divider>
+                <el-divider v-if="RoleName != '财务'" direction="vertical" />
                 <el-checkbox v-if="RoleName != '财务'" v-model="PositionStatus"
-                  @change="PositionStatusChange">在职</el-checkbox>
-                <el-divider direction="vertical"></el-divider>
+                             @change="PositionStatusChange"
+                >在职</el-checkbox>
+                <el-divider direction="vertical" />
                 <el-button type="primary" icon="el-icon-search" @click="GetAdmin_UserSearch">查 询
                 </el-button>
               </el-form-item>
@@ -37,27 +39,27 @@
       </el-form>
     </el-card>
     <!-- 审核状态组件 -->
-    <panel-group :WhereParameter="WhereParameter" />
+    <panel-group :where-parameter="WhereParameter" />
     <!-- 销售统计分析图表 -->
     <el-row :gutter="16">
-      <el-col :xs="24" :sm="24" :lg="24" :xl="8" v-if="ContractsOptionCatch == '客户合同录入'">
+      <el-col v-if="ContractsOptionCatch == '客户合同录入'" :xs="24" :sm="24" :lg="24" :xl="8">
         <div class="chart-wrapper">
-          <CollectionCountChart :key="datekey" :WhereParameter="WhereParameter" Title="近一年合同录入统计" />
+          <CollectionCountChart :key="datekey" :where-parameter="WhereParameter" title="近一年合同录入统计" />
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="24" v-if="ContractsOptionCatch == '供应商合同录入'">
+      <el-col v-if="ContractsOptionCatch == '供应商合同录入'" :xs="24" :sm="24" :lg="24">
         <div class="chart-wrapper">
-          <CollectionCountChart :key="datekey" :WhereParameter="WhereParameter" Title="近一年供应商合同录入统计" />
+          <CollectionCountChart :key="datekey" :where-parameter="WhereParameter" title="近一年供应商合同录入统计" />
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="24" :xl="8" v-show="ContractsOptionCatch == '客户合同录入'">
+      <el-col v-show="ContractsOptionCatch == '客户合同录入'" :xs="24" :sm="24" :lg="24" :xl="8">
         <div class="chart-wrapper">
-          <CollectionMoneyChart :WhereParameter="WhereParameter" />
+          <CollectionMoneyChart :where-parameter="WhereParameter" />
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="24" :xl="8" v-show="ContractsOptionCatch == '客户合同录入'">
+      <el-col v-show="ContractsOptionCatch == '客户合同录入'" :xs="24" :sm="24" :lg="24" :xl="8">
         <div class="chart-wrapper">
-          <CollectionStateChart :WhereParameter="WhereParameter" />
+          <CollectionStateChart :where-parameter="WhereParameter" />
         </div>
       </el-col>
     </el-row>
@@ -84,15 +86,15 @@
     </el-row> -->
 
     <!-- 只有财务角色能看到这两个统计 -->
-    <el-row :gutter="16" v-if="RoleName == '财务' || RoleName == '超级管理员'">
+    <el-row v-if="RoleName == '财务' || RoleName == '超级管理员'" :gutter="16">
       <el-col :xs="24" :sm="24" :lg="24" :xl="12">
         <div class="chart-wrapper">
-          <CollectionDatastatisticsChart :key="datekey" :WhereParameter="WhereParameter" />
+          <CollectionDatastatisticsChart :key="datekey" :where-parameter="WhereParameter" />
         </div>
       </el-col>
       <el-col :xs="24" :sm="24" :lg="24" :xl="12">
         <div class="chart-wrapper">
-          <InvoiceListDatastatisticsChart :key="datekey" :WhereParameter="WhereParameter" />
+          <InvoiceListDatastatisticsChart :key="datekey" :where-parameter="WhereParameter" />
         </div>
       </el-col>
     </el-row>
@@ -106,7 +108,7 @@
       </el-col>
       <el-col :xs="24" :sm="24" :lg="24" :xl="12">
         <div class="chart-wrapper">
-          <CommonOperationLog :key="datekey" :WhereParameter="WhereParameter" />
+          <CommonOperationLog :key="datekey" :where-parameter="WhereParameter" />
         </div>
       </el-col>
     </el-row>
@@ -125,24 +127,24 @@ import PanelGroup from './Components/PanelGroup'
 import CollectionCountChart from './Components/CollectionCountChart'
 import CollectionMoneyChart from './Components/CollectionMoneyChart'
 import CollectionStateChart from './Components/CollectionStateChart'
-import CollectionDataChart from './Components/CollectionDataChart'
-import CollectionDataTable from './Components/CollectionDataTable'
-import InvoiceListChart from './Components/InvoiceListChart'
+// import CollectionDataChart from './Components/CollectionDataChart'
+// import CollectionDataTable from './Components/CollectionDataTable'
+// import InvoiceListChart from './Components/InvoiceListChart'
 import CommonSuggestions from './Components/CommonSuggestions'
 import CommonOperationLog from './Components/CommonOperationLog'
 import CollectionDatastatisticsChart from './Components/CollectionDatastatisticsChart'
 import InvoiceListDatastatisticsChart from './Components/InvoiceListDatastatisticsChart'
 
 export default {
-  name: 'dashboard',
+  name: 'Dashboard',
   components: {
     PanelGroup,
     CollectionCountChart,
     CollectionMoneyChart,
     CollectionStateChart,
-    CollectionDataChart,
-    CollectionDataTable,
-    InvoiceListChart,
+    // CollectionDataChart,
+    // CollectionDataTable,
+    // InvoiceListChart,
     CommonSuggestions,
     CommonOperationLog,
     CollectionDatastatisticsChart,
@@ -167,16 +169,15 @@ export default {
   },
   created() {
     this.GetPermissionTreeData();
-    this.GetData();//这个是为了渲染合同录入统计（组件要刷新，所以这个要再写一遍，不会导致重复加载数据的）
+    this.GetData();// 这个是为了渲染合同录入统计（组件要刷新，所以这个要再写一遍，不会导致重复加载数据的）
   },
   mounted() {
-    this.GetData();//这个是为了渲染除了合同录入统计其它的
+    this.GetData();// 这个是为了渲染除了合同录入统计其它的
   },
   methods: {
     // //浅对比（这里不需要深对比）
     // //参考地址http://wiki.i-fanr.com/2021/05/05/%E4%B8%A4%E4%B8%AA%E5%AF%B9%E8%B1%A1%E6%AF%94%E8%BE%83%E6%9C%89%E5%93%AA%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/
     // shallowEqual(object1, object2) {
-    //   debugger
     //   const keys1 = Object.keys(object1);
     //   const keys2 = Object.keys(object2);
 
@@ -192,18 +193,18 @@ export default {
     //   return true;
     // },
     GetData() {
-      let WhereParameter = {
+      const WhereParameter = {
         ContractsOption: this.ContractsOption,
-        UserArray: this.UserArray,//选择人员集合
+        UserArray: this.UserArray, // 选择人员集合
         PositionStatus: this.PositionStatus,
       }
       // if (!this.shallowEqual(this.WhereParameter, WhereParameter))
       this.WhereParameter = WhereParameter;
     },
-    //查询事件并更新组件
+    // 查询事件并更新组件
     GetAdmin_UserSearch() {
       this.ContractsOptionCatch = this.ContractsOption;
-      //这里更新了datekey ，组件就会刷新
+      // 这里更新了datekey ，组件就会刷新
       this.datekey = Date.now();
       this.GetData();
     },
@@ -221,10 +222,10 @@ export default {
         }
       });
     },
-    //复选框在职按钮跟更改事件
+    // 复选框在职按钮跟更改事件
     PositionStatusChange(val) {
       this.PositionStatus = val;
-      //清空一下选中的值并重新加载数据
+      // 清空一下选中的值并重新加载数据
       this.UserArray = [];
       this.GetPermissionTreeData();
     }
@@ -266,5 +267,4 @@ export default {
   margin: 0 1rem;
 }
 </style>
-
 

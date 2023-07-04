@@ -6,9 +6,9 @@
           <h4 style="float: left;margin: 0;">操作建议</h4>
         </div>
         <div class="infoClass">
-         <span class="messageClass">
-          {{ description }}
-         </span> 
+          <span class="messageClass">
+            {{ description }}
+          </span>
         </div>
         <el-form ref="addRef" :model="AddMoneyFrom" label-width="100px">
           <el-form-item label="菜单名称" prop="MenuCode">
@@ -20,7 +20,8 @@
           </el-form-item>
           <el-form-item label="意见与建议" prop="ProblemDescription">
             <el-input v-model="AddMoneyFrom.ProblemDescription" type="textarea"
-              placeholder="珍贵而稀少的东西只会留给用心去寻觅它们的人 o(≧▽≦)o " :autosize="{ minRows: 5, maxRows: 8 }" />
+                      placeholder="珍贵而稀少的东西只会留给用心去寻觅它们的人 o(≧▽≦)o " :autosize="{ minRows: 5, maxRows: 8 }"
+            />
           </el-form-item>
           <el-divider />
           <el-row class="buttonCenter">
@@ -42,13 +43,12 @@ import {
 import {
   AddMessageLog,
 } from "@/api/Dashboards";
-import { Message } from "element-ui";
-const optionUnitClick = async (data) => {
-   formData.unitDesc = data;
-};
+// import { Message } from "element-ui";
+// const optionUnitClick = async (data) => {
+//    formData.unitDesc = data;
+// };
 export default {
   data() {
-
     return {
       LoadingAdd: false,
       AddMoneyFrom: {
@@ -65,7 +65,7 @@ export default {
     this.GetRole();
   },
   methods: {
-    //通过点击事件获取label的值
+    // 通过点击事件获取label的值
     labelOn(e) {
       this.AddMoneyFrom.MenuName = e;
     },
@@ -79,7 +79,7 @@ export default {
         }
       });
     },
-    //提交意见与建议
+    // 提交意见与建议
     SaveMessage(value) {
       if (!this.AddMoneyFrom.MenuCode) {
         this.$message.warning("请选择菜单");
@@ -92,7 +92,7 @@ export default {
       this.LoadingAdd = true;
         AddMessageLog(this.AddMoneyFrom).then((res) => {
           if (res.success) {
-            //重置data的数据
+            // 重置data的数据
             Object.assign({}, this.AddMoneyFrom);
             this.$message.success("已收到反馈");
           } else {

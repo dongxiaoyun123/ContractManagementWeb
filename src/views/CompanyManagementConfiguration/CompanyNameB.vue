@@ -9,7 +9,10 @@
         </el-col>
         <el-col :xs="24" :sm="19" :md="19" :lg="19" :xl="19">
           <el-button style="margin-left: 18px;" type="primary" icon="el-icon-circle-plus-outline"
-            @click="AddDicCategoryC">添 加</el-button> <el-tag style="margin-left:15px" type="danger">乙方公司名称请勿随意更改，如果修改请联系管理员！！！</el-tag>
+                     @click="AddDicCategoryC"
+          >添 加</el-button> <el-tag style="margin-left:15px"
+                                   type="danger"
+          >乙方公司名称请勿随意更改，如果修改请联系管理员！！！</el-tag>
         </el-col>
       </el-row>
     </el-card>
@@ -27,8 +30,9 @@
       </el-table>
       <!-- 分页区域 -->
       <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
-        :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      />
     </el-card>
     <el-dialog title="添加乙方公司" :visible.sync="addDialogVisible" width="30%">
       <el-form ref="addRef" :model="AddDicCategoryCFrom" :rules="AddDicCategoryCRules" label-width="120px">
@@ -39,13 +43,14 @@
           <el-input v-model="AddDicCategoryCFrom.Remarks" maxlength="4" minlength="4" @input="completeAdd" />
         </el-form-item>
         <el-form-item label="排序">
-          <el-input-number v-model="AddDicCategoryCFrom.Sort" precision="0" :min="1" />
+          <el-input-number v-model="AddDicCategoryCFrom.Sort" :min="1" />
         </el-form-item>
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingAdd" type="primary"
-              @click="saveAdd">保 存
+            <el-button v-loading.fullscreen.lock="LoadingAdd" icon="el-icon-circle-check" type="primary"
+                       @click="saveAdd"
+            >保 存
             </el-button>
           </el-col>
         </el-row>
@@ -57,20 +62,22 @@
       </div>
       <el-form ref="updateRef" :model="UpdateDicCategoryCFrom" :rules="UpdateDicCategoryCRules" label-width="120px">
         <el-form-item label="乙方公司名称" prop="Name">
-          <el-input :disabled="RoleName!='超级管理员'" v-model="UpdateDicCategoryCFrom.Name" />
+          <el-input v-model="UpdateDicCategoryCFrom.Name" :disabled="RoleName != '超级管理员'" />
         </el-form-item>
         <el-form-item label="合同编号前缀" prop="Remarks">
-          <el-input disabled="" v-model="UpdateDicCategoryCFrom.Remarks" maxlength="4" minlength="4"
-            @input="completeUpdate" />
+          <el-input v-model="UpdateDicCategoryCFrom.Remarks" disabled="" maxlength="4" minlength="4"
+                    @input="completeUpdate"
+          />
         </el-form-item>
         <el-form-item label="排序">
-          <el-input-number v-model="UpdateDicCategoryCFrom.Sort" precision="0" :min="1" />
+          <el-input-number v-model="UpdateDicCategoryCFrom.Sort" :min="1" />
         </el-form-item>
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingUpdate" type="primary"
-              @click="saveUpdate">保 存
+            <el-button v-loading.fullscreen.lock="LoadingUpdate" icon="el-icon-circle-check" type="primary"
+                       @click="saveUpdate"
+            >保 存
             </el-button>
           </el-col>
         </el-row>
@@ -88,12 +95,12 @@ import {
   DeleteDicCategoryC,
 } from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
-const moment = require("moment");
+// const moment = require("moment");
 export default {
   name: 'CompanyNameB',
   data() {
     return {
-      RoleName:sessionStorage.getItem("RoleName"),
+      RoleName: sessionStorage.getItem("RoleName"),
       formShow: "",
       Name: "",
       LoadingUpdate: false,

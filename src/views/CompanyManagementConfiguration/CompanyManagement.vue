@@ -9,7 +9,8 @@
         </el-col>
         <el-col :xs="6" :sm="15" :md="15" :lg="15" :xl="15">
           <el-button type="primary" style="margin-left: 15px" icon="el-icon-circle-plus-outline"
-            @click="AddDialog(true, null)">添 加
+                     @click="AddDialog(true, null)"
+          >添 加
           </el-button>
         </el-col>
         <el-col :xs="8" :sm="4" :md="4" :lg="4" :xl="4" style="text-align:right">
@@ -42,27 +43,29 @@
                 }}</span>
               </el-form-item>
               <el-form-item label="最后修改时间：">
-                  <div v-if="props.row.BillingUpdateTime">
-                    <i class="el-icon-time" />
-                    <span style="margin-left: 6px">{{ dateFormat(props.row.BillingUpdateTime) }}</span>
-                  </div>
+                <div v-if="props.row.BillingUpdateTime">
+                  <i class="el-icon-time" />
+                  <span style="margin-left: 6px">{{ dateFormat(props.row.BillingUpdateTime) }}</span>
+                </div>
               </el-form-item>
               <el-form-item label="已上传文件：">
                 <div>
-                  <el-link icon="el-icon-document" style="margin-right:1rem ;" v-for="item in props.row.FileListUpload"
-                    :href="item.url" target="_blank">{{ item.name }}</el-link>
+                  <el-link v-for="item in props.row.FileListUpload" :key="item" icon="el-icon-document" style="margin-right:1rem ;"
+                           :href="item.url" target="_blank"
+                  >{{ item.name }}</el-link>
                 </div>
               </el-form-item>
               <el-form-item label="曾用名：">
                 <div>
-                  <el-tag :type="colorArray[index]" :key="tag" v-for="(tag, index) in props.row.childrenStr" closable
-                    :disable-transitions="false" @close="handleClose(tag, props)">
+                  <el-tag v-for="(tag, index) in props.row.childrenStr" :key="index" :type="colorArray[index]" closable
+                          :disable-transitions="false" @close="handleClose(tag, props)"
+                  >
                     {{ tag }}
                   </el-tag>
-                  <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
-                    @keyup.enter.native="handleInputConfirm(props)" @blur="handleInputConfirm(props)">
-                  </el-input>
-                  <el-button icon="el-icon-plus" v-else class="button-new-tag" size="small" @click="showInput">
+                  <el-input v-if="inputVisible" ref="saveTagInput" v-model="inputValue" class="input-new-tag" size="small"
+                            @keyup.enter.native="handleInputConfirm(props)" @blur="handleInputConfirm(props)"
+                  />
+                  <el-button v-else icon="el-icon-plus" class="button-new-tag" size="small" @click="showInput">
                     添加公司曾用名</el-button>
                 </div>
 
@@ -106,8 +109,9 @@
       </el-table>
       <!-- 分页区域 -->
       <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
-        :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      />
     </el-card>
 
     <el-dialog :title="UpdateTitle" :visible.sync="addDialogVisible" top="5vh" width="50%" @close="addDialogClosed">
@@ -144,7 +148,8 @@
         </el-row>
         <el-form-item label="公司地图">
           <baidu-map class="bm-view" scroll-wheel-zoom :center="location" :zoom="zoom"
-            ak="eRCv7o5j4Rmj4U2GsODMb71V2r4t4FIt" @ready="mapReady">
+                     ak="eRCv7o5j4Rmj4U2GsODMb71V2r4t4FIt" @ready="mapReady"
+          >
             <bm-view class="map" style="width: 100%; height:100%; flex: 1" />
             <!-- 自定义控件 -->
             <bm-control :offset="{ width: '50px', height: '10px' }">
@@ -186,23 +191,27 @@
         </el-form-item>
         <el-form-item label="状态" prop="IsUsed">
           <el-switch v-model="updateCompanyNameAForm.IsUsed" active-color="#1E90FF" inactive-color="#FFB6C1"
-            active-text="启用" inactive-text="禁用" />
+                     active-text="启用" inactive-text="禁用"
+          />
         </el-form-item>
         <el-form-item label="已上传文件">
           <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
-            accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :before-remove="beforeRemove"
-            :on-remove="handleRemove" :file-list="updateCompanyNameAForm.FileLists" :on-preview="AttachmentCodePreview">
+                     accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :before-remove="beforeRemove"
+                     :on-remove="handleRemove" :file-list="updateCompanyNameAForm.FileLists" :on-preview="AttachmentCodePreview"
+          >
             <div slot="tip" style="margin-top:-30px" class="el-upload__tip">之前上传的文件，可对其进行删除操作（执行确定会立马删除）</div>
           </el-upload>
         </el-form-item>
         <el-form-item label="附件上传">
           <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
-            accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
-            :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
-            :file-list="fileListUpload" :on-change="handleChangeUpdate">
-            <el-button icon="el-icon-position" plain slot="trigger" type="primary">选取文件</el-button>
+                     accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
+                     :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
+                     :file-list="fileListUpload" :on-change="handleChangeUpdate"
+          >
+            <el-button slot="trigger" icon="el-icon-position" plain type="primary">选取文件</el-button>
             <el-button icon="el-icon-upload2" plain style="margin-left: 10px;" type="success"
-              :loading="uploadServerLoading" @click="submitUploadUpdate">上传到服务器</el-button>
+                       :loading="uploadServerLoading" @click="submitUploadUpdate"
+            >上传到服务器</el-button>
             <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span></div>
             <div slot="tip" class="el-upload__tip">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
             <div slot="tip" class="el-upload__tip">下面为新上传的文件</div>
@@ -212,7 +221,8 @@
         <el-row class="buttonCenter">
           <el-col>
             <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingUpdate || uploadServerLoading"
-              @click="saveUpdate">保 存</el-button>
+                       @click="saveUpdate"
+            >保 存</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -247,7 +257,6 @@ export default {
         pagesize: 20,
       },
       total: 0,
-      addDialogVisible: false,
       DicCategoryList: [],
       AddCompanyForm: {
         ComID: "",
@@ -292,7 +301,6 @@ export default {
         lat: 39.92
       },
       zoom: 12,
-      inputValue: "",
       keyword: '',
       ComID: null,
       addDialogVisible: false,
@@ -334,8 +342,7 @@ export default {
   },
   watch: {},
   created() {
-    if (sessionStorage.getItem("RoleName") == "超级管理员")
-      this.disabledFlag = false;
+    if (sessionStorage.getItem("RoleName") == "超级管理员") { this.disabledFlag = false; }
     this.GetCompany();
   },
   methods: {
@@ -391,13 +398,13 @@ export default {
     },
 
     handleInputConfirm(props) {
-      let inputValue = this.inputValue;
+      const inputValue = this.inputValue;
       if (inputValue) {
         AddCompanyRelation(props.row.ComID, inputValue).then((res) => {
           if (res.success) {
             this.$message.success("操作成功！");
             props.row.childrenStr = props.row.childrenStr ? props.row.childrenStr : [];
-            let inputValuecatch = inputValue;
+            const inputValuecatch = inputValue;
             props.row.childrenStr.push(inputValuecatch);
           } else {
             this.$message.error(res.resultMessage);
@@ -407,7 +414,6 @@ export default {
       this.inputVisible = false;
       this.inputValue = '';
     },
-
 
     AttachmentCodePreview(file) {
       window.open(file.url);
@@ -448,7 +454,7 @@ export default {
       })
         .catch(err => {
           this.uploadServerLoading = false;
-          this.$message.error("上传失败");
+          this.$message.error(err);
         })
     },
     AttachmentCodeRemoveUpdate(file, fileList) {
@@ -478,10 +484,10 @@ export default {
         }
         if (this.fileListUpload.length != 0 || this.updateCompanyNameAForm.FileList.length != 0) {
           for (const index in this.fileListUpload) {
-            var flag = this.updateCompanyNameAForm.FileList.filter((item) => {
+            var flagz = this.updateCompanyNameAForm.FileList.filter((item) => {
               return item.FileName == this.fileListUpload[index].name;
             });
-            if (flag.length == 0) {
+            if (flagz.length == 0) {
               this.LoadingUpdate = false;
               this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
               return;
@@ -491,10 +497,10 @@ export default {
         // 反向对比
         if (this.fileListUpload.length != 0 || this.updateCompanyNameAForm.FileList.length != 0) {
           for (const index in this.updateCompanyNameAForm.FileList) {
-            var flag = this.fileListUpload.filter((item) => {
+            var flagf = this.fileListUpload.filter((item) => {
               return item.name == this.updateCompanyNameAForm.FileList[index].FileName;
             });
-            if (flag.length == 0) {
+            if (flagf.length == 0) {
               this.LoadingUpdate = false;
               this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
               return;
@@ -512,13 +518,8 @@ export default {
           } else {
             this.$message.error(res.resultMessage);
           }
-
         });
       });
-    },
-    // 监听 添加用户对话框的关闭事件
-    addDialogClosed() {
-      this.$refs.addRef.resetFields();
     },
     // 删除信息
     async deleteDialog(row) {
@@ -576,10 +577,7 @@ export default {
     // 添加模块
     AddDialog(flag, row) {
       this.flag = flag;
-      if (flag)
-        this.UpdateTitle = "添加公司";
-      else
-        this.UpdateTitle = "修改公司";
+      if (flag) { this.UpdateTitle = "添加公司"; } else { this.UpdateTitle = "修改公司"; }
       // this.$options.data()//是原始data中的数据
       // this.$data //是改变后的data中的数据
       // this.$root //表示app.vue中data的数据
@@ -591,8 +589,7 @@ export default {
         this.AddCompanyForm.ComAddress = "";
         this.AddCompanyForm.TaxpayerIdentificationNumber = "";
         this.inputValue = '';
-      }
-      else {
+      } else {
         this.AddCompanyForm.ComID = row.ComID;
         this.AddCompanyForm.ComName = row.ComName;
         this.AddCompanyForm.ShortName = row.ShortName;
@@ -639,8 +636,7 @@ export default {
             }
             this.LoadingAdd = false;
           });
-        }
-        else {
+        } else {
           UpdateCompany(this.AddCompanyForm).then((res) => {
             if (res.success) {
               this.addDialogVisible = false;
@@ -651,9 +647,7 @@ export default {
             }
             this.LoadingAdd = false;
           });
-
         }
-
       });
     },
     GetCompanySearch() {
@@ -665,7 +659,7 @@ export default {
     GetCompany() {
       this.loading = true;
       GetCompany(
-        null,//公司编号
+        null, // 公司编号
         this.Name,
         this.queryInfo.pagenum,
         this.queryInfo.pagesize
@@ -673,7 +667,7 @@ export default {
         if (res.success) {
           this.DicCategoryList = res.result.list;
           this.colorArray = this.$options.data().colorArray;
-          //默认添加100个颜色先,此目的是为了为不同的曾用名设置不同的颜色
+          // 默认添加100个颜色先,此目的是为了为不同的曾用名设置不同的颜色
           for (let s = 0; s < 100; s++) {
             this.colorArray.push(this.colorArr[Math.floor(Math.random() * this.colorArr.length)]);
           }
@@ -698,7 +692,7 @@ export default {
       // 因为上面搜索框是change事件，变化的太快了看起来效果不好所以添加了延时
       // setTimeout(() => {
       // 搜索时把需要标点的地址传入local.search中
-      var local = new BMap.LocalSearch(this.map, {
+      var local = new this.BMap.LocalSearch(this.map, {
         renderOptions: { map: this.map }
       });
       local.search(this.keyword);
@@ -711,7 +705,7 @@ export default {
       this.map = map;
 
       geocoder = new BMap.Geocoder(); // 创建地址解析器的实例
-      if (this.model.hasOwnProperty('address')) { // 如果当前model中包含address 则证明是修改弹框里面的地址数据（地址存在，打开弹框显示地址标点）
+      if (Object.prototype.hasOwnProperty.call(this.model, 'address')) { // 如果当前model中包含address 则证明是修改弹框里面的地址数据（地址存在，打开弹框显示地址标点）
         this.keyword = this.model.address
         this.inputValue = this.model.address
       } else { // 否则显示默认标点（这里的经纬度代表成都）
@@ -761,7 +755,6 @@ export default {
   top: 10px !important;
   left: 10px !important;
 }
-
 
 .demo-table-expand label {
   color: #99a9bf;

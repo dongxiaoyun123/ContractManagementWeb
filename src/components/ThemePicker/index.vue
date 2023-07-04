@@ -1,9 +1,7 @@
 <template>
-  <el-color-picker
-    v-model="theme"
-    :predefine="['#409EFF', '#1890ff', '#304156','#212121','#11a983', '#13c2c2', '#6959CD', '#f5222d', ]"
-    class="theme-picker"
-    popper-class="theme-picker-dropdown"
+  <el-color-picker v-model="theme"
+                   :predefine="['#409EFF', '#1890ff', '#304156', '#212121', '#11a983', '#13c2c2', '#6959CD', '#f5222d',]"
+                   class="theme-picker" popper-class="theme-picker-dropdown"
   />
 </template>
 
@@ -25,13 +23,12 @@ export default {
   },
   watch: {
     defaultTheme: {
-      handler: function(val, oldVal) {
+      handler: function (val, oldVal) {
         this.theme = val
       },
       immediate: true
     },
     async theme(val) {
-      debugger
       const oldVal = this.chalk ? this.theme : ORIGINAL_THEME
       if (typeof val !== 'string') return
       const themeCluster = this.getThemeCluster(val.replace('#', ''))

@@ -1,13 +1,28 @@
 <template>
-    <div ref="chart1" style="width:100%;height:376px" />
+  <div ref="chart1" style="width:100%;height:376px" />
 </template>
 <script>
 import {
     GetContractEnterCount,
 } from "@/api/Dashboards";
 import echarts from 'echarts'
-import { string } from "yargs";
+// import { string } from "yargs";
 export default {
+    // 父组件传过来的数据
+    props: {
+        whereParameter: {
+            type: Object,
+            default() {
+                return [];
+            }
+        },
+        title: {
+            type: String,
+            default() {
+                return '';
+            }
+        },
+    },
     data() {
         return {
             myChart1: null,
@@ -16,19 +31,9 @@ export default {
             CollectionCountData: [],
         }
     },
-    //父组件传过来的数据
-    props: {
-        WhereParameter: {
-            type: Object
-        },
-        Title: {
-            type: String
-        },
-    },
     // watch: {
     //     WhereParameter: {
     //         handler() {
-    //             debugger
     //             this.GetCollectionCount();
     //         },
     //         deep: true,  // 可以深度检测到 obj 对象的属性值的变化
@@ -42,7 +47,7 @@ export default {
     },
     methods: {
         GetCollectionCount() {
-            //初始化echarts
+            // 初始化echarts
             var chart1 = this.$refs.chart1
             this.myChart1 = echarts.init(chart1);
             this.myChart1.clear();
@@ -53,11 +58,11 @@ export default {
                 maskColor: 'rgba(255, 255, 255, 0.8)',
                 zlevel: 0,
             });
-            //获取数据
+            // 获取数据
             var parameter = {
-                ContractsOption: this.WhereParameter.ContractsOption,
-                UserArray: this.WhereParameter.UserArray,
-                PositionStatus: this.WhereParameter.PositionStatus
+                ContractsOption: this.whereParameter.ContractsOption,
+                UserArray: this.whereParameter.UserArray,
+                PositionStatus: this.whereParameter.PositionStatus,
             }
             GetContractEnterCount(parameter).then((res) => {
                 this.loading = false;
@@ -65,8 +70,7 @@ export default {
                     this.MonthData = res.result.monthData;
                     this.CollectionCountData = res.result.contractEnterData;
                     this.getEchartData()
-                }
-                else {
+                } else {
                     this.$message.error("获取失败");
                 }
             });
@@ -113,7 +117,7 @@ export default {
                         itemStyle: {
                             normal: {
                                 color: function (params) {
-                                    var colorList = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc',];
+                                    var colorList = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
                                     var index = params.dataIndex % colorList.length;
                                     return colorList[index]
                                 }

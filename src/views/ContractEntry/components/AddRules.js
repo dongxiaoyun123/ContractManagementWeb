@@ -307,16 +307,3 @@ export function addContractsRules() {
       callback(new Error("合同金额不能为空"));
     }
   };
-  // 合同金额规则（修改时如果修改了合同金额，那么这个备注要必填，不填返回提示）
-  var checkContractAmountDetail = (rule, value, callback) => {
-    if (value) {
-      if (this.updateDepFrom.ContractAmount != this.OldContractAmount && !this.updateDepFrom.ContractAmountDetail) {
-        // 返回一个错误提示
-        callback(new Error("如果修改了合同金额，那么此备注要必填"));
-      } else {
-        return callback();
-      }
-    }
-    else
-      return callback();
-  };

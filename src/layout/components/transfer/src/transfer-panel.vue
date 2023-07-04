@@ -8,29 +8,16 @@
     </p>
 
     <div :class="['el-transfer-panel__body', hasFooter ? 'is-with-footer' : '']">
-      <el-input
-        v-if="filterable"
-        v-model="query"
-
-        class="el-transfer-panel__filter"
-        :placeholder="placeholder"
-        @mouseenter.native="inputHover = true"
-        @mouseleave.native="inputHover = false"
+      <el-input v-if="filterable" v-model="query" class="el-transfer-panel__filter" :placeholder="placeholder"
+                @mouseenter.native="inputHover = true" @mouseleave.native="inputHover = false"
       >
         <i slot="prefix" :class="['el-input__icon', 'el-icon-' + inputIcon]" @click="clearQuery" />
       </el-input>
-      <el-checkbox-group
-        v-show="!hasNoMatch && data.length > 0"
-        v-model="checked"
-        :class="{ 'is-filterable': filterable }"
-        class="el-transfer-panel__list"
+      <el-checkbox-group v-show="!hasNoMatch && data.length > 0" v-model="checked"
+                         :class="{ 'is-filterable': filterable }" class="el-transfer-panel__list"
       >
-        <RecycleScroller
-          v-slot="{ item }"
-          class="scroller"
-          :items="filteredData"
-          :item-size="30"
-          :key-field="keyProp"
+        <RecycleScroller v-slot="{ item }" class="scroller" :items="filteredData" :item-size="30"
+                         :key-field="keyProp"
         >
           <el-checkbox class="el-transfer-panel__item" :label="item[keyProp]" :disabled="item[disabledProp]">
             <option-content :option="item" />
@@ -108,13 +95,21 @@ export default {
                 return [];
             }
         },
+        // eslint-disable-next-line vue/require-default-prop
         renderContent: Function,
+        // eslint-disable-next-line vue/require-default-prop
         placeholder: String,
+        // eslint-disable-next-line vue/require-default-prop
         title: String,
+        // eslint-disable-next-line vue/require-default-prop
         filterable: Boolean,
+        // eslint-disable-next-line vue/require-default-prop
         format: Object,
+        // eslint-disable-next-line vue/require-default-prop
         filterMethod: Function,
+        // eslint-disable-next-line vue/require-default-prop
         defaultChecked: Array,
+        // eslint-disable-next-line vue/require-default-prop
         props: Object
     },
 

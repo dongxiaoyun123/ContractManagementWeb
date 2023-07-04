@@ -69,7 +69,6 @@ import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';// 穿梭框样式
 Vue.component('RecycleScroller', RecycleScroller);
 Vue.use(ElVirtualTransfer);
 
-
 // import 'element-ui/lib/theme-chalk/index.css';
 
 new Vue({

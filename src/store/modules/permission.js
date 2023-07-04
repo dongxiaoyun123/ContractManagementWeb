@@ -1,6 +1,6 @@
-import { asyncRoutes, constantRoutes } from '@/router'
+import { constantRoutes } from '@/router'
 import Layout from '@/layout'
-import { fetchUserMenuList } from '@/api/user'
+// import { fetchUserMenuList } from '@/api/user'
 import { getUserPermissionsNew }  from '@/api/login'
 /**
  * Use meta.role to determine if the current user has permission

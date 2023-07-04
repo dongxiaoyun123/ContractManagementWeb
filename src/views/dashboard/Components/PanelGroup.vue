@@ -70,12 +70,22 @@
 
 <script>
 import {
-    GetContractStatisticsCount,
+  GetContractStatisticsCount,
 } from "@/api/Dashboards";
 import CountTo from 'vue-count-to'
 export default {
   components: {
     CountTo
+  },
+
+  // 父组件传过来的数据
+  props: {
+    whereParameter: {
+      type: Object,
+      default() {
+                return [];
+            }
+    },
   },
   data() {
     return {
@@ -86,15 +96,8 @@ export default {
     }
   },
 
-  //父组件传过来的数据
-  props: {
-    WhereParameter: {
-      type: Object
-    },
-  },
-
   watch: {
-    WhereParameter: {
+    whereParameter: {
       handler() {
         this.GetCollectionCount();
       },
@@ -103,11 +106,11 @@ export default {
   },
   methods: {
     GetCollectionCount() {
-      //获取数据
+      // 获取数据
       var parameter = {
-        ContractsOption: this.WhereParameter.ContractsOption,
-        UserArray: this.WhereParameter.UserArray,
-        PositionStatus:this.WhereParameter.PositionStatus
+        ContractsOption: this.whereParameter.ContractsOption,
+        UserArray: this.whereParameter.UserArray,
+        PositionStatus: this.whereParameter.PositionStatus
       }
       GetContractStatisticsCount(parameter).then((res) => {
         this.loading = false;
@@ -116,8 +119,7 @@ export default {
           this.InReview = res.result.InReview;
           this.AuditFailed = res.result.AuditFailed;
           this.AuditSuccessful = res.result.AuditSuccessful;
-        }
-        else {
+        } else {
           this.$message.error("获取失败");
         }
       });

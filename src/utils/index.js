@@ -372,10 +372,9 @@ export function getDateByTimesLast(Times) {
   }
   var firstDay = new Date(new_year, new_month, 1) // 取当年当月中的第一天
   var lastDay = new Date(firstDay.getTime() - 1000 * 60 * 60 * 24).getDate() // 获取当月最后一天日期
+  var mon = firstDay.getMonth()
   if (firstDay.getMonth() < 10) {
-    var mon = "0" + firstDay.getMonth()
-  } else {
-    var mon = firstDay.getMonth()
+     mon = "0" + firstDay.getMonth()
   }
   var nowMonth = [];
   nowMonth[0] = firstDay.getFullYear() + '-' + mon + '-' + "0" + firstDay.getDate();

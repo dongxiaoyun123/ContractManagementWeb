@@ -42,7 +42,6 @@ export function UpdateDataRemark(InsProductPayCode, Remark) {
   });
 }
 
-
 // 根据回款公司名称获取账单(客服)
 export function GetCollectionOrderNyName(EnterPriseName) {
   return request({
@@ -484,9 +483,9 @@ export function RevokeInvoicing(IdStr) {
     method: 'post',
   });
 }
-export function UpdateYearBatch(Id,YearBatch) {
+export function UpdateYearBatch(Id, YearBatch) {
   return request({
-    url: '/CollectionMangement/UpdateYearBatch?Id=' + Id+ '&YearBatch=' + YearBatch,
+    url: '/CollectionMangement/UpdateYearBatch?Id=' + Id + '&YearBatch=' + YearBatch,
     method: 'post',
   });
 }

@@ -1,8 +1,8 @@
 // import { login, logout, getInfo } from '@/api/user'
-import { SendPhoneMessage, adminLogin, GetUserInfo } from '@/api/login'
+import { adminLogin, GetUserInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
-import md5 from "js-md5";
+// import md5 from "js-md5";
 const state = {
   token: getToken(),
   name: '',
@@ -105,8 +105,6 @@ const actions = {
           sessionStorage.setItem("userid", User_ID);
           sessionStorage.setItem("User_RealName", User_RealName);
         } else { reject("") }
-      }).catch(error => {
-        reject("")
       })
     })
   },

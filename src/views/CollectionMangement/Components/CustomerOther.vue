@@ -1,97 +1,109 @@
 <template>
-    <el-dialog :visible.sync="ChildVisible" title="详情" @close="cancel" top="5vh" width="70%">
-        <el-descriptions v-if="ClickRow" class="margin-top" :column="3" border>
-            <el-descriptions-item>
-                <template slot="label">
-                    <i class="el-icon-office-building"></i>
-                    收款公司
-                </template>
-                {{ ClickRow.SecondPartyName }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-                <template slot="label">
-                    <i class="el-icon-office-building"></i>
-                    公司名称
-                </template>
-                {{ ClickRow.EnterPriseName }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-                <template slot="label">
-                    <i class="el-icon-date"></i>
-                    到账时间
-                </template>
-                {{ ClickRow.PaymentDate }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-                <template slot="label">
-                    <i class="el-icon-money"></i>
-                    总金额
-                </template>
-                <span style="font-weight:bolder;">{{ ClickRow.AmountMoney }}</span>
-            </el-descriptions-item>
-            <el-descriptions-item>
-                <template slot="label">
-                    <i class="el-icon-money"></i>
-                    剩余金额
-                </template>
-                <span style="font-weight: bolder;">{{ ClickRow.RemainingAmount }}</span>
-            </el-descriptions-item>
-        </el-descriptions>
-        <el-divider></el-divider>
-        <el-tag type="">回款详情只会记录最终结果，对于多次操作回款不需要进行明细展示(同一条数据客服回款和其它回款不冲突)</el-tag>
-        <el-divider></el-divider>
-        <el-table :data="CollectionOrderData" border :span-method="rowSpanMethod" v-loading="loading">
-            <el-table-column type="index" width="50">
-            </el-table-column>
-            <el-table-column label="账单名称" prop="ContractOrderName" show-overflow-tooltip min-width="200"></el-table-column>
-            <el-table-column label="账单申请日期" prop="ApplicationTime" show-overflow-tooltip width="120">
-                <template slot-scope="scope">
-                    <i class="el-icon-time" />
-                    <span style="margin-left: 6px">{{ dateFormat(scope.row.ApplicationTime) }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="主公司名称" prop="CompanyName" show-overflow-tooltip min-width="200"></el-table-column>
-            <el-table-column label="收款项目" prop="CustomAmountName" min-width="200"></el-table-column>
-            <el-table-column label="收款金额" prop="CustomAmount" width="90">
-                <template slot-scope="scope">
-                    <span v-format="'¥#,##0.00'">{{ scope.row.CustomAmount }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="回款金额" prop="OrderAmount" width="90">
-                <template slot-scope="scope">
-                    <span v-format="'¥#,##0.00'">{{ scope.row.OrderAmount }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="回款状态" prop="OrderState" width="90">
-                <template slot-scope="scope">
-                    <el-tag v-if="scope.row.OrderState == 2" effect="plain" type="success">已回款</el-tag>
-                    <el-tag v-if="scope.row.OrderState == 3" effect="plain">部分回款</el-tag>
-                </template>
-            </el-table-column>
-        </el-table>
-        <el-divider></el-divider>
-        <el-form ref="updateRef" label-width="40px">
-            <el-form-item label="备注">
-                <el-input v-if="ClickRow" disabled="" v-model="ClickRow.Remark" type="textarea" :rows="3" />
-                <el-input v-else disabled="" v-model="Remark" type="textarea" :rows="3" />
-            </el-form-item>
-        </el-form>
-        <el-divider />
-        <el-row v-if="CancelShow" style="text-align:center;">
-            <el-col :span="24">
-                <el-button icon="el-icon-refresh-left" :disabled="DisabledShow" :loading="CancelLoading" type="danger"
-                    @click="CancelSubmit">全部撤回</el-button>
-            </el-col>
-        </el-row>
-    </el-dialog>
+  <el-dialog :visible.sync="ChildVisible" title="详情" top="5vh" width="70%" @close="cancel">
+    <el-descriptions v-if="clickRow" class="margin-top" :column="3" border>
+      <el-descriptions-item>
+        <template slot="label">
+          <i class="el-icon-office-building" />
+          收款公司
+        </template>
+        {{ clickRow.SecondPartyName }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template slot="label">
+          <i class="el-icon-office-building" />
+          公司名称
+        </template>
+        {{ clickRow.EnterPriseName }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template slot="label">
+          <i class="el-icon-date" />
+          到账时间
+        </template>
+        {{ clickRow.PaymentDate }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template slot="label">
+          <i class="el-icon-money" />
+          总金额
+        </template>
+        <span style="font-weight:bolder;">{{ clickRow.AmountMoney }}</span>
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template slot="label">
+          <i class="el-icon-money" />
+          剩余金额
+        </template>
+        <span style="font-weight: bolder;">{{ clickRow.RemainingAmount }}</span>
+      </el-descriptions-item>
+    </el-descriptions>
+    <el-divider />
+    <el-tag type="">回款详情只会记录最终结果，对于多次操作回款不需要进行明细展示(同一条数据客服回款和其它回款不冲突)</el-tag>
+    <el-divider />
+    <el-table v-loading="loading" :data="CollectionOrderData" border :span-method="rowSpanMethod">
+      <el-table-column type="index" width="50" />
+      <el-table-column label="账单名称" prop="ContractOrderName" show-overflow-tooltip min-width="200" />
+      <el-table-column label="账单申请日期" prop="ApplicationTime" show-overflow-tooltip width="120">
+        <template slot-scope="scope">
+          <i class="el-icon-time" />
+          <span style="margin-left: 6px">{{ dateFormat(scope.row.ApplicationTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="主公司名称" prop="CompanyName" show-overflow-tooltip min-width="200" />
+      <el-table-column label="收款项目" prop="CustomAmountName" min-width="200" />
+      <el-table-column label="收款金额" prop="CustomAmount" width="90">
+        <template slot-scope="scope">
+          <span v-format="'¥#,##0.00'">{{ scope.row.CustomAmount }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="回款金额" prop="OrderAmount" width="90">
+        <template slot-scope="scope">
+          <span v-format="'¥#,##0.00'">{{ scope.row.OrderAmount }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="回款状态" prop="OrderState" width="90">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.OrderState == 2" effect="plain" type="success">已回款</el-tag>
+          <el-tag v-if="scope.row.OrderState == 3" effect="plain">部分回款</el-tag>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-divider />
+    <el-form ref="updateRef" label-width="40px">
+      <el-form-item label="备注">
+        <el-input v-if="clickRow" v-model="clickRow.Remark" disabled="" type="textarea" :rows="3" />
+        <el-input v-else v-model="Remark" disabled="" type="textarea" :rows="3" />
+      </el-form-item>
+    </el-form>
+    <el-divider />
+    <el-row v-if="CancelShow" style="text-align:center;">
+      <el-col :span="24">
+        <el-button icon="el-icon-refresh-left" :disabled="DisabledShow" :loading="CancelLoading" type="danger"
+                   @click="CancelSubmit"
+        >全部撤回</el-button>
+      </el-col>
+    </el-row>
+  </el-dialog>
 </template>
-  
+
 <script>
 import {
     GetOtherOrderById,
     UpdateDataOtherCancel
 } from "@/api/CollectionMangement";
 export default {
+    props: {
+        visible: {
+            type: Boolean,
+            default: false
+        },
+        clickRow: {
+            type: Object,
+            default() {
+                return [];
+            }
+        },
+    },
     data() {
         return {
             CancelLoading: false,
@@ -103,20 +115,11 @@ export default {
             DisabledShow: true,
         }
     },
-    props: {
-        visible: {
-            type: Boolean,
-            default: false
-        },
-        ClickRow: {
-            type: Object,
-        },
-    },
     watch: {
         visible(newVal, oldVal) {
             this.ChildVisible = newVal;
         },
-        ClickRow: {
+        clickRow: {
             handler() {
                 this.GetOtherOrderById();
             },
@@ -141,19 +144,15 @@ export default {
                 return this.$moment(row).format("YYYY-MM-DD");
             } else { return null; }
         },
-        //根据回款编号和账单编号获取账单
+        // 根据回款编号和账单编号获取账单
         GetOtherOrderById() {
             this.loading = true;
-            GetOtherOrderById(this.ClickRow.InsProductPayCode).then((res) => {
+            GetOtherOrderById(this.clickRow.InsProductPayCode).then((res) => {
                 this.loading = false;
                 if (res.success) {
                     this.CollectionOrderData = res.result;
-                    if (this.CollectionOrderData.length != 0)
-                        this.DisabledShow = false;
-                    else
-                        this.DisabledShow = true;
-                }
-                else {
+                    if (this.CollectionOrderData.length != 0) { this.DisabledShow = false; } else { this.DisabledShow = true; }
+                } else {
                     this.CollectionOrderData = [];
                 }
             });
@@ -166,7 +165,7 @@ export default {
             this.ChildVisible = false;
             this.$emit('CloseDialogReflesh');
         },
-        //全部撤回
+        // 全部撤回
         async CancelSubmit() {
             const confirmResult = await this.$confirm(
                 "此操作将撤回此条数据的全部账单回款数据, 是否继续?",
@@ -181,7 +180,7 @@ export default {
                 return this.$message.warning("已取消操作");
             }
             this.CancelLoading = true;
-            UpdateDataOtherCancel(this.ClickRow.InsProductPayCode).then((res) => {
+            UpdateDataOtherCancel(this.clickRow.InsProductPayCode).then((res) => {
                 this.CancelLoading = false;
                 if (res.success) {
                     this.$message.success("操作成功！");
@@ -208,8 +207,7 @@ export default {
                 } else {
                     return { rowspan: 0, colspan: 0 };
                 }
-            }
-            else if (columnIndex === 3) {
+            } else if (columnIndex === 3) {
                 // 合并第一列的相同行
                 if (rowIndex === 0 || row.CompanyName !== this.CollectionOrderData[rowIndex - 1].CompanyName) {
                     const rowspan = this.CollectionOrderData.filter(item => item.CompanyName === row.CompanyName).length;
@@ -217,8 +215,7 @@ export default {
                 } else {
                     return { rowspan: 0, colspan: 0 };
                 }
-            }
-            else {
+            } else {
                 return { rowspan: 1, colspan: 1 };
             }
         },

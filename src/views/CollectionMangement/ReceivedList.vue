@@ -11,15 +11,17 @@
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item label="到账时间">
                 <el-date-picker v-model="PaymentDate" style="width:100% ;" class="comentClass" type="daterange"
-                  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions"
-                  clearable="" @input="datetimeChange" />
+                                range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions"
+                                clearable="" @input="datetimeChange"
+                />
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item label="收取时间">
                 <el-date-picker v-model="CollectionTime" style="width:100% ;" class="comentClass" type="daterange"
-                  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions"
-                  clearable="" @input="datetimeChange" />
+                                range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions"
+                                clearable="" @input="datetimeChange"
+                />
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
@@ -46,18 +48,18 @@
         </el-row>
       </el-form>
       <el-descriptions style="margin-left: 1.3rem;" class="margin-top" :column="descriptionColumn" border>
-        <el-descriptions-item v-for="item in TotalSecondPartyNameList" labelStyle="width:170px">
+        <el-descriptions-item v-for="item in TotalSecondPartyNameList" :key="item" label-style="width:170px">
           <template slot="label">
-            <i class="el-icon-money"></i>
+            <i class="el-icon-money" />
             {{ item.SecondPartyName }}
           </template>
           <div>
             <el-tooltip v-if="item.Sum > 0" class="item" :content="item.SumDetail" placement="bottom">
-              <span style="color: #ff4949;" v-format="'¥#,##0.00'">{{
+              <span v-format="'¥#,##0.00'" style="color: #ff4949;">{{
                 item.Sum
               }}</span>
             </el-tooltip>
-            <span style="color: #ff4949;" v-else v-format="'¥#,##0.00'">{{
+            <span v-else v-format="'¥#,##0.00'" style="color: #ff4949;">{{
               item.Sum
             }}</span>
           </div>
@@ -102,27 +104,32 @@
           <template slot-scope="scope">
             <el-button icon="el-icon-edit" type="text" size="mini" @click="
               UpdateDialog(scope.row.InsProductPayCode, scope.row.Remark)
-            ">修改</el-button>
+            "
+            >修改</el-button>
             <el-button icon="el-icon-view" type="text" size="mini" @click="
               ShowDialog(scope.row)
-            ">详情</el-button>
+            "
+            >详情</el-button>
           </template>
         </el-table-column>
         <el-table-column v-else-if="StatesShow && !fixedLeftShow" label="操作" width="150">
           <template slot-scope="scope">
             <el-button icon="el-icon-edit" type="text" size="mini" @click="
               UpdateDialog(scope.row.InsProductPayCode, scope.row.Remark)
-            ">修改</el-button>
+            "
+            >修改</el-button>
             <el-button icon="el-icon-view" type="text" size="mini" @click="
               ShowDialog(scope.row)
-            ">详情</el-button>
+            "
+            >详情</el-button>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
       <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]" :page-size="queryInfo.pagesize"
-        layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
-        @current-change="handleCurrentChange" />
+                     layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
+                     @current-change="handleCurrentChange"
+      />
     </el-card>
 
     <el-dialog title="修改备注" :visible.sync="updateDialogVisible" width="30%">
@@ -145,6 +152,7 @@
 </template>
 
 <script>
+import { getDateByTimes } from "@/utils"; // 时间日期格式化成字符串
 import {
   GetAdmin_Permission,
   UpdateDataRemark,

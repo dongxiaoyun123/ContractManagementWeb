@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import QRCode from "qrcodejs2";
+// import QRCode from "qrcodejs2";
 import vueQr from "vue-qr";
 import yuanfu from '@/assets/i-mages/logo.png';
 export default {

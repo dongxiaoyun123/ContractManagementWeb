@@ -20,7 +20,7 @@
       </el-row>
     </el-card>
     <el-card class="CardTableClass">
-      <el-table class="tableCheckClass" ref="multipleTable" v-loading="loading" :data="BindingUserList" fit
+      <el-table ref="multipleTable" v-loading="loading" class="tableCheckClass" :data="BindingUserList" fit
                 :cell-style="isRed" @selection-change="TableSelect" @row-click="toggleSelection"
       >
         <el-table-column type="selection" width="50" />
@@ -98,9 +98,10 @@ export default {
   methods: {
     // 点击当前行数据进行选中或取消复选框
     toggleSelection(row, column, event) {
-      if (column.label != "操作")
+      if (column.label != "操作") {
         // 通过ref绑定后这里使用$refs.table来操作bom元素
-        { this.$refs.multipleTable.toggleRowSelection(row); }
+        this.$refs.multipleTable.toggleRowSelection(row);
+      }
     },
     TableSelect(selection) {
       this.multipleSelection = selection;

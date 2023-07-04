@@ -71,7 +71,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingAdd" type="primary" @click="saveAdd">保 存
+            <el-button v-loading.fullscreen.lock="LoadingAdd" icon="el-icon-circle-check" type="primary" @click="saveAdd">保 存
             </el-button>
           </el-col>
         </el-row>
@@ -100,7 +100,7 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingUpdate" type="primary" @click="saveUpdate">保 存
+            <el-button v-loading.fullscreen.lock="LoadingUpdate" icon="el-icon-circle-check" type="primary" @click="saveUpdate">保 存
             </el-button>
           </el-col>
         </el-row>
@@ -115,7 +115,7 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>选择模块进行关联</span>
-          <el-button icon="el-icon-link" v-loading.fullscreen.lock="LoadingRoleUpdate" style="float: right;" type="primary"
+          <el-button v-loading.fullscreen.lock="LoadingRoleUpdate" icon="el-icon-link" style="float: right;" type="primary"
                      @click="saveRoleUpdate"
           >绑 定</el-button>
         </div>
@@ -276,7 +276,6 @@ export default {
       this.bingdArray.PermissionsArray = this.$refs.tree
         .getCheckedKeys()
         .concat(this.$refs.tree.getHalfCheckedKeys());
-      console.log(this.bingdArray.PermissionsArray);
       BindRole_Permissions(this.bingdArray).then((res) => {
         if (res.success) {
           this.updateRoleDialogVisible = false;
@@ -368,7 +367,6 @@ export default {
           GetAdmin_PermissionByRoleID(RoleCode).then((res) => {
             if (res.success) {
               this.$refs.tree.setCheckedKeys(res.result);
-            } else {
             }
           });
           if (res.result.IfParentPermission) this.parentShowUpdate = true;

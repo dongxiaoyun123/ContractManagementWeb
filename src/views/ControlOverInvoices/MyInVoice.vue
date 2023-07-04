@@ -14,7 +14,7 @@
                   <el-form-item class="whereFormClass" label="发票种类">
                     <el-select v-model="InvoiceType" class="timeClass" filterable placeholder="发票种类" clearable>
                       <el-option v-for="item in InvoiceTypeList" :key="item.Code" :label="item.Name" :value="item.Code">
-                        <template slot-scope="scope">
+                        <template>
                           <div style="display: flex;  align-items: center;">
                             <span slot="reference" style="margin-right: 8px;">
                               <i v-if="item.Name == '增值税专用发票'" class="dotClass" style="background-color: #13ce66" />
@@ -32,7 +32,8 @@
                   <el-form-item class="whereFormClass" label="发票状态">
                     <el-select v-model="IvState" class="timeClass" filterable placeholder="发票状态" clearable>
                       <el-option v-for="item in InvoiceStatusList" :key="item.Code" :class="item.Class" :label="item.Name"
-                        :value="item.Code">
+                                 :value="item.Code"
+                      >
                         <el-tag v-if="item.Code == 0" effect="plain" type="danger">未开</el-tag>
                         <el-tag v-if="item.Code == 1" effect="plain" type="success">已开</el-tag>
                         <el-tag v-if="item.Code == 5" effect="plain" type="info">作废</el-tag>
@@ -45,13 +46,15 @@
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="应收年份">
                     <el-date-picker v-model="SYear" style="width:100% ;" class="timeClass" type="year"
-                      placeholder="选择年" />
+                                    placeholder="选择年"
+                    />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="应收月份">
                     <el-date-picker v-model="SMonth" style="width:100% ;" class="timeClass" type="month" placeholder="选择月"
-                      format="MM" />
+                                    format="MM"
+                    />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
@@ -63,7 +66,8 @@
                   <el-form-item class="whereFormClass" label="乙方公司">
                     <el-select v-model="SecondPartyName" class="timeClass" filterable placeholder="乙方公司" clearable="">
                       <el-option v-for="item in DicCategoryListAll" :key="item.Code" :label="item.Name"
-                        :value="item.Code" />
+                                 :value="item.Code"
+                      />
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -91,14 +95,16 @@
                 <el-button type="warning" icon="el-icon-circle-close" @click="RevokeInvoice">撤 销
                 </el-button>
                 <el-button type="text" style="margin-left: 10px;"
-                  :icon="isActive ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
-                  @click="collapseClick">{{ isActive ? "收起" : "展开" }}</el-button>
+                           :icon="isActive ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
+                           @click="collapseClick"
+                >{{ isActive ? "收起" : "展开" }}</el-button>
               </el-button-group>
               <el-tooltip class="item" :content="MaxMoney" placement="bottom">
                 <h5 style="width: 350px;color: #FF4949;margin: 0 0 0 15px;display: inline-block;">当前数据发票总金额：<span
-                    v-format="'¥#,##0.00'">{{
-                      MinMoney
-                    }}</span></h5>
+                  v-format="'¥#,##0.00'"
+                >{{
+                  MinMoney
+                }}</span></h5>
               </el-tooltip>
             </el-col>
           </el-row>
@@ -106,34 +112,38 @@
       </el-form>
     </el-card>
     <el-card class="CardTableClass">
-      <el-table v-loading="loading" class="tableCheckClass" :data="InvoiceData" fit ref="multipleTable"
-        :cell-style="isRed" @selection-change="TableSelect" @row-click="toggleSelection">
+      <el-table ref="multipleTable" v-loading="loading" class="tableCheckClass" :data="InvoiceData" fit
+                :cell-style="isRed" @selection-change="TableSelect" @row-click="toggleSelection"
+      >
         <!-- <el-table-column type="index" label="#" >
           </el-table-column> -->
         <!-- <el-table-column type="selection" width="40"> </el-table-column> -->
         <el-table-column v-if="fixedLeftShow" key="column" type="selection" width="50" fixed="left" />
         <el-table-column v-else key="columnFalse" type="selection" width="50" />
         <el-table-column v-if="fixedLeftShow" prop="CompanyName" label="公司名称" min-width="220" fixed="left"
-          show-overflow-tooltip />
+                         show-overflow-tooltip
+        />
         <el-table-column v-else prop="CompanyName" label="公司名称" min-width="220" show-overflow-tooltip />
         <el-table-column v-if="fixedLeftShow" prop="SecondPartyName" label="乙方公司" min-width="90" fixed="left"
-          show-overflow-tooltip />
+                         show-overflow-tooltip
+        />
         <el-table-column v-else prop="SecondPartyName" label="乙方公司" min-width="90" show-overflow-tooltip />
         <el-table-column v-if="fixedLeftShow" prop="InvoiceHeader" label="发票抬头" min-width="220" fixed="left"
-          show-overflow-tooltip />
+                         show-overflow-tooltip
+        />
         <el-table-column v-else prop="InvoiceHeader" label="发票抬头" min-width="220" show-overflow-tooltip />
         <el-table-column prop="InvoiceTypeStr" label="发票种类" min-width="150" show-overflow-tooltip>
-          <template slot-scope="{}" slot="header">
+          <template slot="header" slot-scope="{}">
             <span>发票种类</span>
             <el-tooltip class="item" effect="light" placement="bottom" style="margin-left: 5px;margin-bottom: 0.2rem">
-              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
+              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;" />
               <div slot="content">
                 <div style="display: flex;  align-items: center;">
                   <span slot="reference" style="margin-right: 10px;" class="SecondPartyNameClass">
-                    <div> <i class="dotClass" style="background-color: #13ce66" />{{ "\xa0\xa0" }}增值税专用发票<br /></div>
-                    <div><i class="dotClass" style="background-color: #ffba00" />{{ "\xa0\xa0" }}增值税普通发票<br /></div>
+                    <div> <i class="dotClass" style="background-color: #13ce66" />{{ "\xa0\xa0" }}增值税专用发票<br></div>
+                    <div><i class="dotClass" style="background-color: #ffba00" />{{ "\xa0\xa0" }}增值税普通发票<br></div>
                     <div style="margin-bottom: 0;"><i class="dotClass" style="background-color: #ff4949" />{{ "\xa0\xa0"
-                    }}增值税电子普通发票<br /></div>
+                    }}增值税电子普通发票<br></div>
                   </span>
                 </div>
               </div>
@@ -156,10 +166,10 @@
           </template>
         </el-table-column>
         <el-table-column prop="IvStateStr" label="发票状态" min-width="100">
-          <template slot-scope="{}" slot="header">
+          <template slot="header" slot-scope="{}">
             <span>发票状态</span>
             <el-tooltip class="item" effect="light" placement="bottom" style="margin-left: 5px;margin-bottom: 0.2rem">
-              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
+              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;" />
               <div slot="content">
                 <div style="display: flex;  align-items: center;">
                   <span slot="reference" style="margin: 0 10px 0 6px;" class="SecondPartyNameClass">
@@ -198,7 +208,7 @@
           <template slot-scope="scope">
             <span v-if="scope.row.InvoiceTypes == 1">全额</span>
             <span v-else-if="scope.row.InvoiceTypes == 2">差额</span>
-            <span v-else></span>
+            <span v-else />
           </template>
         </el-table-column>
         <el-table-column prop="InvoiceAccountName" label="发票科目" align="left" min-width="200" show-overflow-tooltip />
@@ -206,8 +216,9 @@
       </el-table>
       <!-- 分页区域 -->
       <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
-        :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      />
     </el-card>
   </div>
 </template>
@@ -225,7 +236,7 @@ import {
   GetDicCategoryC,
 } from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
-import { parseTime, getDateByTimes } from "@/utils"; // 时间日期格式化成字符串
+import { parseTime } from "@/utils"; // 时间日期格式化成字符串
 import collapse from '../../assets/js/collapse'
 export default {
   name: 'MyInVoice',
@@ -300,7 +311,7 @@ export default {
         }
       });
     },
-    //撤销
+    // 撤销
     async RevokeInvoice() {
       if (!this.IdStr) {
         this.$message.warning("请勾选要撤销开票的数据！");
@@ -308,8 +319,7 @@ export default {
       }
       let flagFinlished = false;
       this.multipleSelection.forEach((item) => {
-        if (item.IvState == 1)
-          flagFinlished = true;
+        if (item.IvState == 1) { flagFinlished = true; }
       })
       if (flagFinlished) {
         this.$message.warning("撤销开票的数据中不能包含已完成的发票！");
@@ -372,9 +382,10 @@ export default {
     },
     // 点击当前行数据进行选中或取消复选框
     toggleSelection(row, column, event) {
-      if (column.label != "操作")
-      // 通过ref绑定后这里使用$refs.table来操作bom元素
-      { this.$refs.multipleTable.toggleRowSelection(row); }
+      if (column.label != "操作") {
+        // 通过ref绑定后这里使用$refs.table来操作bom元素
+        this.$refs.multipleTable.toggleRowSelection(row);
+      }
     },
     isRed({ row }) {
       const checkIdList = this.multipleSelection.map((item) => item.Id);
@@ -567,8 +578,6 @@ export default {
 .formClass {
   width: 100%;
 }
-
-
 .info {
   background-color: #FEF0F0;
 }

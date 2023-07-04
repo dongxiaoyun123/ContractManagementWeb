@@ -1,44 +1,28 @@
 <template>
   <div class="el-transfer">
-    <transfer-panel
-      ref="leftPanel"
-      v-bind="$props"
-      :data="sourceData"
-      :title="titles[0] || t('el.transfer.titles.0')"
-      :default-checked="leftDefaultChecked"
-      :placeholder="filterPlaceholder || t('el.transfer.filterPlaceholder')"
-      @checked-change="onSourceCheckedChange"
+    <transfer-panel ref="leftPanel" v-bind="$props" :data="sourceData" :title="titles[0] || t('el.transfer.titles.0')"
+                    :default-checked="leftDefaultChecked" :placeholder="filterPlaceholder || t('el.transfer.filterPlaceholder')"
+                    @checked-change="onSourceCheckedChange"
     >
       <slot name="left-footer" />
     </transfer-panel>
     <div class="el-transfer__buttons">
-      <el-button
-        type="primary"
-        :class="['el-transfer__button', hasButtonTexts ? 'is-with-texts' : '']"
-        :disabled="rightChecked.length === 0"
-        @click.native="addToLeft"
+      <el-button type="primary" :class="['el-transfer__button', hasButtonTexts ? 'is-with-texts' : '']"
+                 :disabled="rightChecked.length === 0" @click.native="addToLeft"
       >
         <i class="el-icon-arrow-left" />
         <span v-if="buttonTexts[0] !== undefined">{{ buttonTexts[0] }}</span>
       </el-button>
-      <el-button
-        type="primary"
-        :class="['el-transfer__button', hasButtonTexts ? 'is-with-texts' : '']"
-        :disabled="leftChecked.length === 0"
-        @click.native="addToRight"
+      <el-button type="primary" :class="['el-transfer__button', hasButtonTexts ? 'is-with-texts' : '']"
+                 :disabled="leftChecked.length === 0" @click.native="addToRight"
       >
         <span v-if="buttonTexts[1] !== undefined">{{ buttonTexts[1] }}</span>
         <i class="el-icon-arrow-right" />
       </el-button>
     </div>
-    <transfer-panel
-      ref="rightPanel"
-      v-bind="$props"
-      :data="targetData"
-      :title="titles[1] || t('el.transfer.titles.1')"
-      :default-checked="rightDefaultChecked"
-      :placeholder="filterPlaceholder || t('el.transfer.filterPlaceholder')"
-      @checked-change="onTargetCheckedChange"
+    <transfer-panel ref="rightPanel" v-bind="$props" :data="targetData" :title="titles[1] || t('el.transfer.titles.1')"
+                    :default-checked="rightDefaultChecked" :placeholder="filterPlaceholder || t('el.transfer.filterPlaceholder')"
+                    @checked-change="onTargetCheckedChange"
     >
       <slot name="right-footer" />
     </transfer-panel>
@@ -85,6 +69,7 @@ export default {
             type: String,
             default: ''
         },
+        // eslint-disable-next-line vue/require-default-prop
         filterMethod: Function,
         leftDefaultChecked: {
             type: Array,
@@ -98,6 +83,7 @@ export default {
                 return [];
             }
         },
+        // eslint-disable-next-line vue/require-default-prop
         renderContent: Function,
         value: {
             type: Array,

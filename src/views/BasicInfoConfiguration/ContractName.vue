@@ -29,7 +29,7 @@
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination background  :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
+      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
                      :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
                      @size-change="handleSizeChange" @current-change="handleCurrentChange"
       />
@@ -41,12 +41,14 @@
           <el-input v-model="AddContractNameconfigFrom.ContractName" />
         </el-form-item>
         <el-form-item label="排序">
-          <el-input-number v-model="AddContractNameconfigFrom.Sort" precision="0" :min="1" />
+          <el-input-number v-model="AddContractNameconfigFrom.Sort" :min="1" />
         </el-form-item>
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingAdd" type="primary" @click="saveAdd">保 存
+            <el-button v-loading.fullscreen.lock="LoadingAdd" icon="el-icon-circle-check" type="primary"
+                       @click="saveAdd"
+            >保 存
             </el-button>
           </el-col>
         </el-row>
@@ -63,12 +65,14 @@
           <el-input v-model="UpdateContractNameconfigFrom.ContractName" />
         </el-form-item>
         <el-form-item label="排序">
-          <el-input-number v-model="UpdateContractNameconfigFrom.Sort" precision="0" :min="1" />
+          <el-input-number v-model="UpdateContractNameconfigFrom.Sort" :min="1" />
         </el-form-item>
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingUpdate" type="primary" @click="saveUpdate">保 存
+            <el-button v-loading.fullscreen.lock="LoadingUpdate" icon="el-icon-circle-check" type="primary"
+                       @click="saveUpdate"
+            >保 存
             </el-button>
           </el-col>
         </el-row>
@@ -86,7 +90,7 @@ import {
   DeleteContractNameconfig,
 } from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
-const moment = require("moment");
+// const moment = require("moment");
 export default {
   name: 'ContractName',
   data() {

@@ -72,7 +72,7 @@ import {
   DeleteSupplier,
 } from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
-const moment = require("moment");
+// const moment = require("moment");
 export default {
   data() {
     return {

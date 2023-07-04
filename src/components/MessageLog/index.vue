@@ -2,7 +2,7 @@
   <div>
     <!-- <el-badge :is-dot="true" style="line-height: 25px;margin-top: -5px;" @click.native="dialogTableVisible=true"> -->
     <!-- <el-button style="padding: 8px 10px;"  type="danger"> -->
-    <svg-icon icon-class="question" @click.native="dialogTableVisible = true" style="font-weight:bloder ;"/>
+    <svg-icon icon-class="question" style="font-weight:bloder ;" @click.native="dialogTableVisible = true" />
     <!-- </el-button> -->
     <!-- </el-badge> -->
 
@@ -58,6 +58,9 @@ export default {
       return this.$store.getters.errorLogs
     }
   },
+  mounted() {
+    this.GetMessageLog();
+  },
   methods: {
     // 列表时间格式化
     dateFormat(row) {
@@ -69,7 +72,7 @@ export default {
     //   this.dialogTableVisible = false
     //   this.$store.dispatch('errorLog/clearErrorLog')
     // },
-    //获取数据
+    // 获取数据
     GetMessageLog() {
       GetMessageLog().then((res) => {
         if (res.success) {
@@ -79,10 +82,6 @@ export default {
         }
       });
     },
-  },
-  mounted() {
-    this.GetMessageLog();
-
   },
 }
 </script>

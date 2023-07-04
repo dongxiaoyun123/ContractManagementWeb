@@ -29,7 +29,8 @@
                   <el-form-item class="whereFormClass" label="合同类型">
                     <el-select v-model="ContractType" class="timeClass" filterable placeholder="合同类型" clearable="">
                       <el-option v-for="item in GetContractTypeArray" :key="item.Code" :label="item.Name"
-                        :value="item.Code" />
+                                 :value="item.Code"
+                      />
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -38,27 +39,31 @@
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="开始时间">
                     <el-date-picker v-model="BeginTime" class="timeClass" style="width:100% ;" type="date"
-                      placeholder="合同开始时间" />
+                                    placeholder="合同开始时间"
+                    />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="结束时间">
                     <el-date-picker v-model="EndTime" class="timeClass" style="width:100% ;" type="date"
-                      placeholder="合同结束时间" />
+                                    placeholder="合同结束时间"
+                    />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="添加时间">
                     <el-date-picker v-model="ContractSignTime" style="width:100% ;" class="rangeTimeClass"
-                      type="daterange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间"
-                      :picker-options="pickerOptions" clearable="" @input="datetimeChange" />
+                                    type="daterange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间"
+                                    :picker-options="pickerOptions" clearable="" @input="datetimeChange"
+                    />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item label="添加人员">
                     <el-select v-model="CreateUserId" class="timeClass" filterable placeholder="添加人员" clearable="">
                       <el-option v-for="item in UserList" :key="item.UserID" :label="item.UserName"
-                        :value="item.UserID" />
+                                 :value="item.UserID"
+                      />
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -131,8 +136,9 @@
                   出
                 </el-button>
                 <el-button type="text" style="margin-left: 10px;"
-                  :icon="isActive ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
-                  @click="collapseClick">{{ isActive ? "收起" : "展开" }}</el-button>
+                           :icon="isActive ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
+                           @click="collapseClick"
+                >{{ isActive ? "收起" : "展开" }}</el-button>
               </el-button-group>
             </el-col>
           </el-row>
@@ -140,32 +146,38 @@
       </el-form>
     </el-card>
     <el-card class="CardTableClass">
-      <el-table class="tableCheckClass" ref="multipleTable" v-loading="loading" :data="ContractData" fit
-        :cell-style="isRed" @selection-change="TableSelect" @row-click="toggleSelection">
+      <el-table ref="multipleTable" v-loading="loading" class="tableCheckClass" :data="ContractData" fit
+                :cell-style="isRed" @selection-change="TableSelect" @row-click="toggleSelection"
+      >
         <el-table-column v-if="fixedLeftShow" key="checked" type="selection" width="50" fixed="left" />
         <el-table-column v-else key="checkedFalse" type="selection" width="50" />
         <el-table-column v-if="fixedLeftShow" key="ContractCode" prop="ContractCode" label="合同编号" width="200" fixed="left"
-          show-overflow-tooltip>
+                         show-overflow-tooltip
+        >
           <template slot-scope="scope">
             <span>{{ scope.row.ContractCode }}</span>
             <el-button v-if="scope.row.ContractCode" size="mini" style="padding:4px 0 4px 5px" type="text"
-              icon="el-icon-document-copy" @click="SecondClick(scope.row.ContractCode)"></el-button>
+                       icon="el-icon-document-copy" @click="SecondClick(scope.row.ContractCode)"
+            />
           </template>
         </el-table-column>
         <el-table-column v-else key="ContractCodeFalse" prop="ContractCode" label="合同编号" width="200"
-          show-overflow-tooltip>
+                         show-overflow-tooltip
+        >
           <template slot-scope="scope">
             <span>{{ scope.row.ContractCode }}</span>
             <el-button v-if="scope.row.ContractCode" size="mini" style="padding:4px 0 4px 5px" type="text"
-              icon="el-icon-document-copy" @click="SecondClick(scope.row.ContractCode)"></el-button>
+                       icon="el-icon-document-copy" @click="SecondClick(scope.row.ContractCode)"
+            />
           </template>
         </el-table-column>
         <el-table-column v-if="fixedLeftShow" key="AuditStatusName" prop="AuditStatusName" label="审核状态" width="120"
-          fixed="left">
-          <template slot-scope="{}" slot="header">
+                         fixed="left"
+        >
+          <template slot="header" slot-scope="{}">
             <span>审核状态</span>
             <el-tooltip class="item" effect="light" placement="bottom" style="margin-left: 5px;margin-bottom: 0.2rem">
-              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
+              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;" />
               <div slot="content">
                 <div style="display: flex;  align-items: center;">
                   <span slot="reference" style="margin: 0 10px 0 6px;" class="SecondPartyNameClass">
@@ -220,10 +232,10 @@
           </template>
         </el-table-column>
         <el-table-column v-else key="AuditStatusNameFalse" prop="AuditStatusName" label="审核状态" width="120" sortable>
-          <template slot-scope="{}" slot="header">
+          <template slot="header" slot-scope="{}">
             <span>审核状态</span>
             <el-tooltip class="item" effect="light" placement="bottom" style="margin-left: 5px;margin-bottom: 0.2rem">
-              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
+              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;" />
               <div slot="content">
                 <div style="display: flex;  align-items: center;">
                   <span slot="reference" style="margin: 0 10px 0 6px;" class="SecondPartyNameClass">
@@ -276,10 +288,10 @@
           </template>
         </el-table-column>
         <el-table-column key="ArchivedType" prop="ArchivedType" label="合同归档" small min-width="90">
-          <template slot-scope="{}" slot="header">
+          <template slot="header" slot-scope="{}">
             <span>合同归档</span>
             <el-tooltip class="item" effect="light" placement="bottom" style="margin-left: 5px;margin-bottom: 0.2rem">
-              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;"></i>
+              <i class="el-icon-question" style="font-size: 14px; vertical-align: middle;" />
               <div slot="content">
                 <div style="display: flex;  align-items: center;">
                   <span slot="reference" style="margin: 0 10px 0 6px;" class="SecondPartyNameClass">
@@ -289,12 +301,12 @@
                       </span>
                     </div>
                     <div>
-                      <span  style="border-color: #A29BC4;color:#6959CD">
+                      <span style="border-color: #A29BC4;color:#6959CD">
                         待归档
                       </span>
                     </div>
                     <div style="margin-bottom: 0;">
-                      <span   style="border-color: #8BC6C6;color:#11A983">
+                      <span style="border-color: #8BC6C6;color:#11A983">
                         已归档
                       </span>
                     </div>
@@ -305,16 +317,19 @@
           </template>
           <template slot-scope="scope">
             <div :style="tableTagClass">
-              <span v-if="scope.row.ArchivedType == 1" :key="scope.$index + 'a' + scope.row.ArchivedType" 
-              style="border-color: #F7C695;color:#FA8C16">
+              <span v-if="scope.row.ArchivedType == 1" :key="scope.$index + 'a' + scope.row.ArchivedType"
+                    style="border-color: #F7C695;color:#FA8C16"
+              >
                 待上传
               </span>
               <span v-if="scope.row.ArchivedType == 2" :key="scope.$index + 'b' + scope.row.ArchivedType"
-                 style="border-color: #A29BC4;color:#6959CD">
+                    style="border-color: #A29BC4;color:#6959CD"
+              >
                 待归档
               </span>
-              <span v-if="scope.row.ArchivedType == 3" :key="scope.$index + 'c' + scope.row.ArchivedType" 
-                 style="border-color: #8BC6C6;color:#13C2C2">
+              <span v-if="scope.row.ArchivedType == 3" :key="scope.$index + 'c' + scope.row.ArchivedType"
+                    style="border-color: #8BC6C6;color:#13C2C2"
+              >
                 已归档
               </span>
             </div>
@@ -378,19 +393,22 @@
       </el-table>
       <!-- 分页区域 -->
       <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
-        :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      />
     </el-card>
 
     <!-- 添加合同弹出页面 -->
     <el-dialog :visible.sync="detailAddDialogVisible" top="5vh" width="60%" :lock-scroll="false" :append-to-body="true"
-      @close="detailAddDialogVisibleClosed">
+               @close="detailAddDialogVisibleClosed"
+    >
       <!-- 上面两个属性用来重置滚动条 -->
       <div slot="title" class="dialog-title">
         <span>添加供应商合同</span>
       </div>
       <el-form ref="addContractsRef" :model="addSupplierForm" :rules="addContractsRules" label-width="120px"
-        class="formClass">
+               class="formClass"
+      >
 
         <el-row>
           <el-col :span="12">
@@ -439,14 +457,17 @@
           <el-col :span="12">
             <el-form-item label="乙方公司" prop="SupplierCmpanyBCode">
               <el-select v-model="addSupplierForm.SupplierCmpanyBCode" class="CompanySelectClass" filterable
-                placeholder="乙方公司" clearable="">
+                         placeholder="乙方公司" clearable=""
+              >
                 <el-option v-for="item in SupplierCmpanyBList" :key="item.SupplierCmpanyBCode"
-                  :label="item.SupplierCmpanyBName" :value="item.SupplierCmpanyBCode" />
+                           :label="item.SupplierCmpanyBName" :value="item.SupplierCmpanyBCode"
+                />
               </el-select>
               <div class="CompanyClass">
                 <el-tooltip class="item" effect="dark" content="添加乙方公司" placement="top-start">
                   <el-button style="font-size: 20px;" type="text" icon="el-icon-circle-plus-outline" circle
-                    @click="AddSupplierCmpanyB" />
+                             @click="AddSupplierCmpanyB"
+                  />
                 </el-tooltip>
               </div>
             </el-form-item>
@@ -469,12 +490,14 @@
             <el-col :span="24">
               <el-form-item label="附件上传">
                 <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
-                  accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
-                  :on-exceed="handleExceedAdd" :on-remove="AttachmentCodeRemove" :auto-upload="false"
-                  :file-list="fileList" :on-change="handleChange">
-                  <el-button icon="el-icon-position" size="mini" plain slot="trigger" type="primary">选取文件</el-button>
-                  <el-button icon="el-icon-upload2"  size="mini" plain style="margin-left: 10px;" type="success" :loading="uploadServerLoading"
-                    @click="submitUpload">上传到服务器</el-button>
+                           accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
+                           :on-exceed="handleExceedAdd" :on-remove="AttachmentCodeRemove" :auto-upload="false"
+                           :file-list="fileList" :on-change="handleChange"
+                >
+                  <el-button slot="trigger" icon="el-icon-position" size="mini" plain type="primary">选取文件</el-button>
+                  <el-button icon="el-icon-upload2" size="mini" plain style="margin-left: 10px;" type="success"
+                             :loading="uploadServerLoading" @click="submitUpload"
+                  >上传到服务器</el-button>
                   <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span></div>
                   <div slot="tip" class="el-upload__tip">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
                 </el-upload>
@@ -485,19 +508,22 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check"  type="primary" :loading="LoadingAddSupplier" @click="addContracts">保 存</el-button>
-            <el-button icon="el-icon-refresh"  type="info" @click="detailAddDialogVisibleClosed">重 置</el-button>
+            <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingAddSupplier" @click="addContracts">保
+              存</el-button>
+            <el-button icon="el-icon-refresh" type="info" @click="detailAddDialogVisibleClosed">重 置</el-button>
           </el-col>
         </el-row>
       </el-form>
     </el-dialog>
     <el-dialog :visible.sync="updateDialogVisible" top="5vh" :append-to-body="true" width="60%"
-      @close="detailUpdateDialogVisibleClosed">
+               @close="detailUpdateDialogVisibleClosed"
+    >
       <div slot="title" class="dialog-title">
         <span>编辑供应商合同</span>
       </div>
       <el-form ref="updateContractsRef" :model="updateSupplierFrom" :rules="addContractsRules" label-width="120px"
-        class="formClass">
+               class="formClass"
+      >
 
         <el-row>
           <el-col :span="12">
@@ -515,7 +541,8 @@
           <el-col :span="12">
             <el-form-item label="公司名称" prop="CompanyId">
               <el-select v-model="updateSupplierFrom.CompanyId" :disabled="ConCompany" filterable placeholder="合同类型"
-                clearable="">
+                         clearable=""
+              >
                 <el-option v-for="item in DicCategoryList" :key="item.Id" :label="item.Name" :value="item.Id" />
               </el-select>
             </el-form-item>
@@ -544,14 +571,17 @@
           <el-col :span="12">
             <el-form-item label="乙方公司" prop="SupplierCmpanyBCode">
               <el-select v-model="updateSupplierFrom.SupplierCmpanyBCode" class="CompanySelectClass" filterable
-                placeholder="乙方公司" clearable="">
+                         placeholder="乙方公司" clearable=""
+              >
                 <el-option v-for="item in SupplierCmpanyBList" :key="item.SupplierCmpanyBCode"
-                  :label="item.SupplierCmpanyBName" :value="item.SupplierCmpanyBCode" />
+                           :label="item.SupplierCmpanyBName" :value="item.SupplierCmpanyBCode"
+                />
               </el-select>
               <div class="CompanyClass">
                 <el-tooltip class="item" effect="dark" content="添加乙方公司" placement="top-start">
                   <el-button style="font-size: 20px;" type="text" icon="el-icon-circle-plus-outline" circle
-                    @click="AddSupplierCmpanyB" />
+                             @click="AddSupplierCmpanyB"
+                  />
                 </el-tooltip>
               </div>
             </el-form-item>
@@ -573,13 +603,15 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="已上传文件">
-                <el-button icon="el-icon-receiving" size="mini" style="margin-bottom:13px" plain v-if="updateSupplierFrom.ArchivedType == 2" :loading="placeFileLoading" type="warning"
-                  @click="placeFile">归档</el-button>
-                <div class="bottom clearfix" v-for="item in updateSupplierFrom.FileLists">
+                <el-button v-if="updateSupplierFrom.ArchivedType == 2" icon="el-icon-receiving" size="mini"
+                           style="margin-bottom:13px" plain :loading="placeFileLoading" type="warning"
+                           @click="placeFile"
+                >归档</el-button>
+                <div v-for="item in updateSupplierFrom.FileLists" :key="item.name" class="bottom clearfix">
                   <!-- <el-link type="primary" class="time" :href="item.url" target="_blank">{{ item.name }}
                     </el-link> -->
                   {{ item.name }}
-                  <el-button icon="el-icon-view"  type="text" class="button" @click="clickView(item)">在线预览</el-button>
+                  <el-button icon="el-icon-view" type="text" class="button" @click="clickView(item)">在线预览</el-button>
                   <el-button icon="el-icon-download" type="text" class="button" @click="downView(item)">下载</el-button>
                 </div>
                 <!-- <div v-for="item in updateSupplierFrom.FileLists" style="height:30px ;">
@@ -593,12 +625,17 @@
             <el-col :span="24">
               <el-form-item label="附件上传">
                 <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
-                  accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
-                  :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
-                  :file-list="fileListUpload" :on-change="handleChangeUpdate">
-                  <el-button icon="el-icon-position"  size="mini" plain v-if="updateSupplierFrom.ArchivedType != 3" slot="trigger" type="primary">选取文件</el-button>
-                  <el-button icon="el-icon-upload2" size="mini" plain v-if="updateSupplierFrom.ArchivedType != 3" style="margin-left: 10px;" type="success"
-                    :loading="uploadServerLoading" @click="submitUploadUpdate">上传到服务器</el-button>
+                           accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
+                           :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
+                           :file-list="fileListUpload" :on-change="handleChangeUpdate"
+                >
+                  <el-button v-if="updateSupplierFrom.ArchivedType != 3" slot="trigger" icon="el-icon-position"
+                             size="mini" plain type="primary"
+                  >选取文件</el-button>
+                  <el-button v-if="updateSupplierFrom.ArchivedType != 3" icon="el-icon-upload2" size="mini" plain
+                             style="margin-left: 10px;" type="success" :loading="uploadServerLoading"
+                             @click="submitUploadUpdate"
+                  >上传到服务器</el-button>
                   <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span></div>
                   <div slot="tip" class="el-upload__tip">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
                   <div slot="tip" class="el-upload__tip">下面为新上传的文件</div>
@@ -610,7 +647,8 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check"  type="primary" :loading="LoadingUpdate" @click="saveUpdate">保 存</el-button>
+            <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingUpdate" @click="saveUpdate">保
+              存</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -648,7 +686,9 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" type="primary" :loading="auditStatusCheckLoading" @click="saveAuditStatusCheck">确 定
+            <el-button icon="el-icon-circle-check" type="primary" :loading="auditStatusCheckLoading"
+                       @click="saveAuditStatusCheck"
+            >确 定
             </el-button>
           </el-col>
         </el-row>
@@ -663,7 +703,9 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingAddSupplier" type="primary" @click="saveAdd">确
+            <el-button v-loading.fullscreen.lock="LoadingAddSupplier" icon="el-icon-circle-check" type="primary"
+                       @click="saveAdd"
+            >确
               定</el-button>
           </el-col>
         </el-row>
@@ -671,7 +713,8 @@
     </el-dialog>
     <div v-if="isShowProgress" class="popContainer">
       <el-progress type="circle" :percentage="parseInt(fakes.progress * 100)" :stroke-width="9" :color="customColors"
-        style="top: 30%; left: calc(50vw - 58px);color:white"></el-progress>
+                   style="top: 30%; left: calc(50vw - 58px);color:white"
+      />
     </div>
     <el-dialog append-to-body :visible="isshowpdf" width="65%" top="5vh" @close="isshowpdf = false">
       <iframe v-if="isshowpdf" style="width: 100%; height: calc(100vh - 200px);" :src="srcDocx" />
@@ -713,7 +756,7 @@ export default {
   },
   data() {
     return {
-      SupplierCmpanyBCode:'',
+      SupplierCmpanyBCode: '',
       ArchivedTypeList: [],
       placeFileLoading: false,
       ArchivedType: '',
@@ -1003,7 +1046,7 @@ export default {
     SecondClick(ContractCode) {
       this.copys("合同编号", ContractCode);
     },
-    //复制通用方法
+    // 复制通用方法
     copys(title, option) {
       var input = document.createElement("input"); // 创建input对象
       input.value = option; // 设置复制内容
@@ -1016,9 +1059,10 @@ export default {
 
     // 点击当前行数据进行选中或取消复选框
     toggleSelection(row, column, event) {
-      if (column.label != "操作" && column.label != "合同编号")
-      // 通过ref绑定后这里使用$refs.table来操作bom元素
-      { this.$refs.multipleTable.toggleRowSelection(row); }
+      if (column.label != "操作" && column.label != "合同编号") {
+        // 通过ref绑定后这里使用$refs.table来操作bom元素
+        this.$refs.multipleTable.toggleRowSelection(row);
+      }
     },
     // 添加
     AddSupplierCmpanyB() {
@@ -1213,9 +1257,9 @@ export default {
         }
         this.uploadServerLoading = false;
       })
-        .catch(err => {
+        .catch((err) => {
           this.uploadServerLoading = false;
-          this.$message.error("上传失败");
+          this.$message.error(err);
         })
     },
     AttachmentCodeRemove(file, fileList) {
@@ -1260,19 +1304,15 @@ export default {
       })
         .catch(err => {
           this.uploadServerLoading = false;
-          this.$message.error("上传失败");
+          this.$message.error(err);
         })
     },
     AttachmentCodeRemoveUpdate(file, fileList) {
       this.fileListUpload = fileList
     },
-
-    addDialogClosed() {
-      this.$refs.addRef.resetFields();
-    },
     // 重置数据
     reseatData() {
-      this.SupplierCmpanyBCode='';
+      this.SupplierCmpanyBCode = '';
       this.ArchivedType = '';
       this.ContractCode = '';
       this.ContractName = '';
@@ -1283,8 +1323,8 @@ export default {
       this.AuditStatus = '';
       this.CreateUserId = '';
       this.ContractSignTime = [];
-      this.BeginSignTime = "",
-        this.EndSignTime = "",
+      this.BeginSignTime = "";
+        this.EndSignTime = "";
         this.queryInfo.pagesize = 20;
       this.queryInfo.pagenum = 1;
       this._getContractData();
@@ -1349,10 +1389,10 @@ export default {
           // 正向对比
           if (this.fileList.length != 0 || this.addSupplierForm.FileList.length != 0) {
             for (const index in this.fileList) {
-              var flag = this.addSupplierForm.FileList.filter((item) => {
+              var flagz = this.addSupplierForm.FileList.filter((item) => {
                 return item.FileName == this.fileList[index].name;
               });
-              if (flag.length == 0) {
+              if (flagz.length == 0) {
                 this.LoadingAdd = false;
                 this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
                 return;
@@ -1362,11 +1402,11 @@ export default {
           // 反向对比
           if (this.fileList.length != 0 || this.addSupplierForm.FileList.length != 0) {
             for (const index in this.addSupplierForm.FileList) {
-              var flag = this.fileList.filter((item) => {
+              var flagf = this.fileList.filter((item) => {
                 return item.name == this.addSupplierForm.FileList[index].FileName;
               });
 
-              if (flag.length == 0) {
+              if (flagf.length == 0) {
                 this.LoadingAdd = false;
                 this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
                 return;
@@ -1463,11 +1503,11 @@ export default {
           // 正向对比
           if (this.fileListUpload.length != 0 || this.updateSupplierFrom.FileList.length != 0) {
             for (const index in this.fileListUpload) {
-              var flag = this.updateSupplierFrom.FileList.filter((item) => {
+              var flagz = this.updateSupplierFrom.FileList.filter((item) => {
                 return item.FileName == this.fileListUpload[index].name;
               });
 
-              if (flag.length == 0) {
+              if (flagz.length == 0) {
                 this.LoadingUpdate = false;
                 this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
                 return;
@@ -1477,11 +1517,11 @@ export default {
           // 反向对比
           if (this.fileListUpload.length != 0 || this.updateSupplierFrom.FileList.length != 0) {
             for (const index in this.updateSupplierFrom.FileList) {
-              var flag = this.fileListUpload.filter((item) => {
+              var flagf = this.fileListUpload.filter((item) => {
                 return item.name == this.updateSupplierFrom.FileList[index].FileName;
               });
 
-              if (flag.length == 0) {
+              if (flagf.length == 0) {
                 this.LoadingUpdate = false;
                 this.$message.warning("文件上传完成或者修改需要点击一下上传服务器");
                 return;
@@ -1586,7 +1626,7 @@ export default {
         this.SupplierCmpanyBCode,
       ).then((res) => {
         this.fakes.end();
-        //初始化进度条
+        // 初始化进度条
         setTimeout(() => {
           this.fakes = new FakeProgress({
             timeConstant: 10000,
@@ -1747,8 +1787,12 @@ export default {
 ::v-deep .el-progress__text {
   color: white !important;
 }
+
 .SecondPartyNameClass div {
   margin-bottom: 10px;
+}
+.button {
+  margin-left: 1rem;
 }
 </style>
 

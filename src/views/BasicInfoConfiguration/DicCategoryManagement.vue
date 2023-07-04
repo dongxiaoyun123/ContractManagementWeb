@@ -8,9 +8,8 @@
           </el-input>
         </el-col>
         <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-          <el-button type="primary" style="margin-left: 15px" icon="el-icon-circle-plus-outline"
-                     @click="AddDicCategory"
-          >添 加</el-button>
+          <el-button type="primary" style="margin-left: 15px" icon="el-icon-circle-plus-outline" @click="AddDicCategory">添
+            加</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -41,12 +40,13 @@
           <el-input v-model="AddDicCategoryFrom.Name" />
         </el-form-item>
         <el-form-item label="排序">
-          <el-input-number v-model="AddDicCategoryFrom.Sort" precision="0" :min="1" />
+          <el-input-number v-model="AddDicCategoryFrom.Sort" :min="1" />
         </el-form-item>
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingAdd" type="primary" @click="saveAdd"> 保 存
+            <el-button v-loading.fullscreen.lock="LoadingAdd" icon="el-icon-circle-check" type="primary" @click="saveAdd">
+              保 存
             </el-button>
           </el-col>
         </el-row>
@@ -56,19 +56,19 @@
       <div slot="title" class="dialog-title">
         <span>编辑合同类型</span>
       </div>
-      <el-form ref="updateRef" :model="UpdateDicCategoryFrom" :rules="updateDicCategoryRules"
-               label-width="120px"
-      >
+      <el-form ref="updateRef" :model="UpdateDicCategoryFrom" :rules="updateDicCategoryRules" label-width="120px">
         <el-form-item label="合同类型名称" prop="Name">
           <el-input v-model="UpdateDicCategoryFrom.Name" />
         </el-form-item>
         <el-form-item label="排序">
-          <el-input-number v-model="UpdateDicCategoryFrom.Sort" precision="0" :min="1" />
+          <el-input-number v-model="UpdateDicCategoryFrom.Sort" :min="1" />
         </el-form-item>
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button icon="el-icon-circle-check" v-loading.fullscreen.lock="LoadingUpdate" type="primary" @click="saveUpdate"> 保 存
+            <el-button v-loading.fullscreen.lock="LoadingUpdate" icon="el-icon-circle-check" type="primary"
+                       @click="saveUpdate"
+            > 保 存
             </el-button>
           </el-col>
         </el-row>
@@ -86,7 +86,7 @@ import {
   DeleteDicCategory,
 } from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
-const moment = require("moment");
+// const moment = require("moment");
 export default {
   name: 'DicCategoryManagement',
   data() {

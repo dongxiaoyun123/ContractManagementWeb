@@ -16,7 +16,9 @@
               <!-- <bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP']" anchor="BMAP_ANCHOR_TOP_LEFT">
                                         </bm-map-type> -->
               <!-- //定位 -->
-              <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
+              <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true"
+                              :auto-location="true"
+              />
               <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
               <!-- <bm-label v-for="item in mapData" :content="item.ComName"
                             :position="{ lng: item.lng, lat: item.lat }" :labelStyle="{ color: 'red', fontSize: '12px' }"
@@ -54,13 +56,13 @@
                             </bm-info-window>
                                                     </bm-marker> -->
 
-              <bm-marker v-for="item in mapData" :position="{ lng: item.lng, lat: item.lat }"
+              <bm-marker v-for="item in mapData" :key="item" :position="{ lng: item.lng, lat: item.lat }"
                          @click="collectionOpen(item)"
               />
 
               <!-- <bm-point-collection :points="mapData" :shape='BMAP_POINT_SHAPE_STAR'
                                                         :size="BMAP_POINT_SIZE_BIGGER" color="red" @click="collectionOpen"></bm-point-collection> -->
-              <bm-info-window v-for="item in mapData" :position="{ lng: item.lng, lat: item.lat }"
+              <bm-info-window v-for="item in mapData" :key="item" :position="{ lng: item.lng, lat: item.lat }"
                               :show="item.show" style="font-size:13px" @close="infoWindowClose(item)"
                               @open="infoWindowOpen(item)"
               >
@@ -99,7 +101,7 @@
 import {
     GetCompanyAddress,
 } from "@/api/SystemManagement";
-import { showLoading, hideLoading } from "@/common/loading";
+// import { showLoading, hideLoading } from "@/common/loading";
 export default {
     name: 'ContractsMap',
     data() {
@@ -112,17 +114,15 @@ export default {
             BMAP_POINT_SIZE_BIGGER: 'BMAP_POINT_SIZE_BIGGER',
             mapShow: false,
             typeParameter: this.$route.query.type,
-            mapHeight: 'calc(100vh - 185px)'
         };
     },
     computed: {
         // 动态设置样式
         mapHeights() {
             if (!this.$route.query.type) {
-                this.mapHeight = 'calc(100vh - 145px)';
-                return 'height:' + this.mapHeight;
+                return 'height:' + 'calc(100vh - 145px)';
             } else {
-                return 'height:' + this.mapHeight;
+                return 'height:' + 'calc(100vh - 185px)';
             }
         }
     },
