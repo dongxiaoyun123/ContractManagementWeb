@@ -376,9 +376,7 @@
             <el-button icon="el-icon-upload2" plain style="margin-left: 10px;" type="success"
                        :loading="uploadServerLoading" @click="submitUploadUpdate"
             >上传到服务器</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span></div>
-            <div slot="tip" class="el-upload__tip">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
-            <div slot="tip" class="el-upload__tip">下面为新上传的文件</div>
+            <div slot="tip" class="el-upload__tip">只能上传office文件，且不超过<span style="color:#ff4949 ;">20M</span>，可一次选取多个文件，上传完成请点击上传到服务器。</div>
           </el-upload>
         </el-form-item>
         <el-divider v-if="updateInvoiceFrom.OrderData.length > 0" />

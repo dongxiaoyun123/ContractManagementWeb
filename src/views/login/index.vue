@@ -1,15 +1,13 @@
 <template>
-  <div class="containerClass" :style="{ backgroundImage: 'url(' + userlogo + ')' }">
+  <div class="containerClass" :style="{ backgroundImage: 'url(' + userlogo + ')' }" @click="ToggleImg">
     <vue-particles style="background: rgba(0,0,0,.4);position: absolute;min-width: 100%; min-height: 100%;"
-                   color="#dedede" :particle-opacity="0.9" lines-color="#ffffff" :particles-number="80" shape-type="circle"
-                   :particle-size="1.2" :lines-width="1.2" :line-linked="true" :line-opacity="1" :lines-distance="80" :move-speed="1"
-                   :hover-effect="true" hover-mode="grab" :click-effect="true" click-mode="push"
-    />
-    <div class="box">
+      color="#dedede" :particle-opacity="0.9" lines-color="#ffffff" :particles-number="80" shape-type="circle"
+      :particle-size="1.2" :lines-width="1.2" :line-linked="true" :line-opacity="1" :lines-distance="80" :move-speed="1"
+      :hover-effect="true" hover-mode="grab" :click-effect="true" click-mode="push" />
+    <div class="box" v-on:click.stop>
       <div class="login-box">
         <el-form ref="loginForm" :model="loginForm" class="login-form" auto-complete="on" label-position="left"
-                 :rules="loginFormRules"
-        >
+          :rules="loginFormRules">
           <div class="title-container">
             <h3 class="title">合同管理系统</h3>
             <div class="login_header">
@@ -25,8 +23,7 @@
                   <i class="el-icon-user" />
                 </span>
                 <el-input ref="username" v-model="loginForm.username" placeholder="请输入用户名" name="username" type="text"
-                          tabindex="1" auto-complete="on" clearable @clear="clearAll"
-                />
+                  tabindex="1" auto-complete="on" clearable @clear="clearAll" />
               </el-form-item>
 
               <el-form-item prop="password">
@@ -34,8 +31,7 @@
                   <i class="el-icon-unlock" />
                 </span>
                 <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType"
-                          placeholder="请输入密码" name="password" tabindex="2" auto-complete="on" show-password clearable
-                />
+                  placeholder="请输入密码" name="password" tabindex="2" auto-complete="on" show-password clearable />
                 <span class="show-pwd" @click="showPwd">
                   <!-- <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" /> -->
                 </span>
@@ -48,17 +44,15 @@
                   <i class="el-icon-phone-outline" />
                 </span>
                 <el-input ref="mobile" v-model="loginForm.mobile" placeholder="请输入手机号" name="mobile" type="text"
-                          tabindex="1" auto-complete="on" clearable
-                />
+                  tabindex="1" auto-complete="on" clearable />
               </el-form-item>
               <el-form-item prop="code">
                 <span class="svg-container">
                   <i class="el-icon-key" />
                 </span>
                 <el-input ref="code" v-model="loginForm.code" type="text" placeholder="请输入验证码" name="code" abindex="2"
-                          maxlength="6" auto-complete="on" onkeyup="this.value=this.value.replace(/\D/g,'')"
-                          onafterpaste="this.value=this.value.replace(/\D/g,'')" clearable style="width:205px"
-                />
+                  maxlength="6" auto-complete="on" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                  onafterpaste="this.value=this.value.replace(/\D/g,'')" clearable style="width:205px" />
                 <span class="show-pwd">
                   <el-button type="success" :loading="sending" :disabled="sendDisabled" @click="onSendSms">{{
                     sendButtonText
@@ -68,8 +62,7 @@
             </div>
           </div>
           <el-button size="medium" :loading="loading" type="primary" style="width: 100%"
-                     @click.native.prevent="handleLogin"
-          >登 录</el-button>
+            @click.native.prevent="handleLogin">登 录</el-button>
         </el-form>
       </div>
     </div>
@@ -129,19 +122,7 @@ export default {
         ],
         code: [{ required: true, message: "请输入验证码", trigger: "blur" }],
       },
-    };
-  },
-  computed: {
-    sendButtonText() {
-      if (this.timer === 0) {
-        return "发送验证码";
-      } else {
-        return `${this.timer}秒后重发`;
-      }
-    },
-    userlogo() {
-      // 存放要换的图片
-      const imgs = [
+      imgs: [
         require('@/assets/i-mages/background1.png'),
         require('@/assets/i-mages/background2.png'),
         require('@/assets/i-mages/background3.png'),
@@ -161,8 +142,17 @@ export default {
         require('@/assets/i-mages/background17.png'),
         require('@/assets/i-mages/background18.png'),
         // require('@/assets/i-mages/background19.jpg'),
-      ];
-      return imgs[Math.floor(Math.random() * 18)]; // 进行计算随机
+      ],
+      userlogo: null,
+    };
+  },
+  computed: {
+    sendButtonText() {
+      if (this.timer === 0) {
+        return "发送验证码";
+      } else {
+        return `${this.timer}秒后重发`;
+      }
     },
   },
   watch: {
@@ -193,9 +183,16 @@ export default {
         that.handleLogin();
       }
     };
+    this.ToggleImg();
   },
 
   methods: {
+    ToggleImg() {
+      this.userlogo = this.imgs[Math.floor(Math.random() * 18)];
+    },
+    doThis(){
+      //console.log("阻止子元素冒泡事件");
+    },
     clearAll() {
       this.loginForm.username = '';
       this.loginForm.password = '';

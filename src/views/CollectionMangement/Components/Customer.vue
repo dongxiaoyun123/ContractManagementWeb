@@ -111,7 +111,7 @@ export default {
             loading: false,
             CollectionOrderData: [],
             Remark: '',
-            CancelShow: false,
+            CancelShow: true,
             DisabledShow: true,
         }
     },
@@ -127,15 +127,15 @@ export default {
         },
     },
     mounted() {
-        switch (sessionStorage.getItem("RoleName")) {
-            case "超级管理员":
-            case "总客服":
-                this.CancelShow = true;
-                break;
-            default:
-                this.CancelShow = false;
-                break;
-        }
+        // switch (sessionStorage.getItem("RoleName")) {
+        //     case "超级管理员":
+        //     case "总客服":
+        //         this.CancelShow = true;
+        //         break;
+        //     default:
+        //         this.CancelShow = false;
+        //         break;
+        // }
     },
     methods: {
         // 根据回款编号和账单编号获取账单

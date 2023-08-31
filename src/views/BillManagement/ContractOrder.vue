@@ -970,13 +970,11 @@
                      :file-list="fileListUpload" :on-change="handleChangeAddUpload"
           >
             <el-button slot="trigger" icon="el-icon-position" plain type="primary">选取文件</el-button>
-            <el-button icon="el-icon-upload2" plain style="margin-left: 10px;" type="success"
+          </el-upload>
+          <el-button v-if="UploadServerFlag" icon="el-icon-upload2" plain style="margin-top: 0.8rem;" type="success"
                        :loading="uploadServerLoading" @click="submitUploadUpdate"
             >上传到服务器</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span></div>
-            <div slot="tip" class="el-upload__tip">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
-            <div slot="tip" class="el-upload__tip">下面为新上传的文件</div>
-          </el-upload>
+            <div slot="tip" class="el-upload__tip">只能上传office文件，且不超过<span style="color:#ff4949 ;">20M</span>，可一次选取多个文件，上传完成请点击上传到服务器。</div>
         </el-form-item>
       </el-form>
       <el-divider />
@@ -1029,6 +1027,7 @@ export default {
   },
   data() {
     return {
+      UploadServerFlag:false,
       SecondPartyName: "",
       DicCategoryListAll: [],
       DicCategoryList: [],
@@ -1454,6 +1453,7 @@ export default {
             // 给添加表单的列表赋值
             this.updateInvoiceFrom.FileList.push(addForm);
           }
+          this.UploadServerFlag = false;
           this.$message.success("上传成功");
         } else {
           this.$message.error(response.resultMessage);
@@ -1467,13 +1467,45 @@ export default {
     },
     // 修改-上传文件
     handleChangeAddUpload(file, fileList) {
-      this.fileListUpload = fileList
+      this.fileListUpload = fileList;
+      this.addIfShowUploadButton();
+    },
+    addIfShowUploadButton() {
+      this.UploadServerFlag = false;
+      // 正向对比
+      if (this.fileListUpload.length != 0 || this.updateInvoiceFrom.FileList.length != 0) {
+        for (const index in this.fileListUpload) {
+          var flagz = this.updateInvoiceFrom.FileList.filter((item) => {
+            return item.FileName == this.fileListUpload[index].name;
+          });
+          if (flagz.length == 0)
+            return this.UploadServerFlag = true;
+        }
+      }
+      // 反向对比
+      if (this.fileListUpload.length != 0 || this.updateInvoiceFrom.FileList.length != 0) {
+        for (const index in this.updateInvoiceFrom.FileList) {
+          var flagf = this.fileListUpload.filter((item) => {
+            return item.name == this.updateInvoiceFrom.FileList[index].FileName;
+          });
+          if (flagf.length == 0)
+            return this.UploadServerFlag = true;
+        }
+      }
     },
     handleExceedAddUpdate(files, fileList) {
       this.$message.warning('当前文件数量超过限制');
     },
     AttachmentCodeRemoveUpdate(file, fileList) {
-      this.fileListUpload = fileList
+      this.fileListUpload = fileList;
+      let addNew = [];
+      fileList.map((item) => {
+        addNew.push(item.name);
+      });
+      this.updateInvoiceFrom.FileList = this.updateInvoiceFrom.FileList.filter((f) => {
+        return addNew.includes(f.FileName)
+      })
+      this.addIfShowUploadButton();
     },
     InvoicingVisibleClosed() {
       this.$refs.updateInvoiceRef.resetFields();
@@ -2012,6 +2044,7 @@ export default {
     },
     // 弹出添加窗口
     ShowContractAddDialog() {
+      this.UploadServerFlag=false;
       this.CompanyList = [];
       this.addContractOrderForm.CollectionState = 1;
       this.addDialogVisible = true;

@@ -14,11 +14,9 @@
                   <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                     <el-form-item label="领取状态">
                       <el-select v-model="States" class="comentClass" filterable placeholder="领取状态" clearable=""
-                                 collapse-tags
-                      >
+                        collapse-tags>
                         <el-option v-for="item in PaymentCollectionStateArray" :key="item.Code" :label="item.Name"
-                                   :value="item.Code"
-                        >
+                          :value="item.Code">
                           <template>
                             <!-- <el-tag effect="plain" key="全部"  type="info" v-if="item.Code == 0">全部</el-tag> -->
                             <el-tag v-if="item.Code == 1" key="未领取" effect="plain" type="danger">未领取</el-tag>
@@ -37,9 +35,8 @@
                   <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                     <el-form-item label="到账时间">
                       <el-date-picker v-model="PaymentDate" class="comentClass" type="daterange" range-separator="至"
-                                      start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" clearable=""
-                                      @input="datetimeChange"
-                      />
+                        start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" clearable=""
+                        @input="datetimeChange" />
                     </el-form-item>
                   </el-col>
                   <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
@@ -59,8 +56,7 @@
                 <el-dropdown trigger="click" style="margin-left: 0;" @command="(command) => {
                   handleButtonCommand(command);
                 }
-                "
-                >
+                  ">
                   <el-button type="success">
                     更 多<i class="el-icon-arrow-down el-icon--right" />
                   </el-button>
@@ -78,9 +74,8 @@
                   </el-dropdown-menu>
                 </el-dropdown>
                 <el-button type="text" style="margin-left: 10px;"
-                           :icon="isActive ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
-                           @click="collapseClick"
-                >{{ isActive ? "收起" : "展开" }}</el-button>
+                  :icon="isActive ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
+                  @click="collapseClick">{{ isActive ? "收起" : "展开" }}</el-button>
               </el-button-group>
             </el-col>
             <el-col :span="tipWidth" style="text-align: right;">
@@ -104,11 +99,9 @@
           <collapse>
             <div v-show="isActive">
               <el-descriptions style="margin-left: 1.3rem;margin-top: 18px;" class="margin-top"
-                               :column="descriptionColumn" border
-              >
-                <el-descriptions-item v-for="(item,index) in TotalSecondPartyNameList" :key="index"
-                                      :label-style="DescriptionStyle"
-                >
+                :column="descriptionColumn" border>
+                <el-descriptions-item v-for="(item, index) in TotalSecondPartyNameList" :key="index"
+                  :label-style="DescriptionStyle">
                   <template slot="label">
                     <i class="el-icon-money" />
                     {{ item.SecondPartyName }}
@@ -132,8 +125,7 @@
     </el-card>
     <el-card class="CardTableClass">
       <el-table ref="multipleTable" v-loading="loading" class="tableCheckClass" :data="CollectionList" fit
-                :cell-style="showBackground" @selection-change="TableSelect" @row-click="toggleSelection"
-      >
+        :cell-style="showBackground" @selection-change="TableSelect" @row-click="toggleSelection">
         <el-table-column type="selection" width="50" />
         <el-table-column prop="EnterPriseName" label="公司名称" min-width="200" show-overflow-tooltip />
         <el-table-column prop="SecondPartyName" label="收款公司" min-width="100" show-overflow-tooltip>
@@ -146,15 +138,18 @@
                   <span slot="reference" style="margin-right: 10px;" class="SecondPartyNameClass">
                     <div> <i class="dotClass" style="background-color: #EB2F96" />{{ "\xa0\xa0" }}格信诺诚<br></div>
                     <div><i class="dotClass" style="background-color: #1890FF" />{{ "\xa0\xa0" }}格锐智诚<br></div>
-                    <div><i class="dotClass" style="background-color: #304156" />{{ "\xa0\xa0" }}人保直投<br></div>
+                    <div> <i class="dotClass" style="background-color: #ffba00" />{{ "\xa0\xa0" }}格锐商业<br></div>
+                    <div> <i class="dotClass" style="background-color: #13C2C2" />{{ "\xa0\xa0" }}格锐博金<br></div>
+                    <div> <i class="dotClass" style="background-color: #F5222D" />{{ "\xa0\xa0" }}南京公司<br></div>
+                    <div> <i class="dotClass" style="background-color: #FA8C16" />{{ "\xa0\xa0"
+                    }}安欣智诚</div>
+                    <div> <i class="dotClass" style="background-color: #11A983" />{{ "\xa0\xa0" }}安欣诺诚<br></div>
+                    <div style="margin-bottom: 0;"> <i class="dotClass" style="background-color: #6959CD" />{{ "\xa0\xa0"
+                    }}格锐（河南）人力<br></div>
+                    <!-- <div><i class="dotClass" style="background-color: #304156" />{{ "\xa0\xa0" }}人保直投<br></div>
                     <div> <i class="dotClass" style="background-color: #212121" />{{ "\xa0\xa0" }}点米科技<br></div>
                     <div> <i class="dotClass" style="background-color: #11A983" />{{ "\xa0\xa0" }}其他保司直投<br></div>
-                    <div> <i class="dotClass" style="background-color: #13C2C2" />{{ "\xa0\xa0" }}格锐博金<br></div>
-                    <div> <i class="dotClass" style="background-color: #6959CD" />{{ "\xa0\xa0" }}马鞍山格信<br></div>
-                    <div> <i class="dotClass" style="background-color: #F5222D" />{{ "\xa0\xa0" }}南京公司<br></div>
-                    <div> <i class="dotClass" style="background-color: #ffba00" />{{ "\xa0\xa0" }}格锐商业<br></div>
-                    <div style="margin-bottom: 0;"> <i class="dotClass" style="background-color: #FA8C16" />{{ "\xa0\xa0"
-                    }}安欣智诚</div>
+                    <div> <i class="dotClass" style="background-color: #6959CD" />{{ "\xa0\xa0" }}马鞍山格信<br></div> -->
                   </span>
                 </div>
               </div>
@@ -165,14 +160,17 @@
               <span slot="reference" style="margin-right: 8px;">
                 <i v-if="scope.row.SecondPartyName == '格信诺诚'" class="dotClass" style="background-color: #EB2F96" />
                 <i v-if="scope.row.SecondPartyName == '格锐智诚'" class="dotClass" style="background-color: #1890FF" />
-                <i v-if="scope.row.SecondPartyName == '人保直投'" class="dotClass" style="background-color: #304156" />
+                <i v-if="scope.row.SecondPartyName == '格锐商业'" class="dotClass" style="background-color: #ffba00" />
+                <i v-if="scope.row.SecondPartyName == '格锐博金'" class="dotClass" style="background-color: #13C2C2" />
+                <i v-if="scope.row.SecondPartyName == '南京公司'" class="dotClass" style="background-color: #F5222D" />
+                <i v-if="scope.row.SecondPartyName == '安欣智诚'" class="dotClass" style="background-color: #FA8C16" />
+                <i v-if="scope.row.SecondPartyName == '安欣诺诚'" class="dotClass" style="background-color: #11A983" />
+                <i v-if="scope.row.SecondPartyName == '格锐（河南）人力'" class="dotClass" style="background-color: #6959CD" />
+                <!-- <i v-if="scope.row.SecondPartyName == '人保直投'" class="dotClass" style="background-color: #304156" />
                 <i v-if="scope.row.SecondPartyName == '点米科技'" class="dotClass" style="background-color: #212121" />
                 <i v-if="scope.row.SecondPartyName == '其他保司直投'" class="dotClass" style="background-color: #11A983" />
-                <i v-if="scope.row.SecondPartyName == '格锐博金'" class="dotClass" style="background-color: #13C2C2" />
                 <i v-if="scope.row.SecondPartyName == '马鞍山格信'" class="dotClass" style="background-color: #6959CD" />
-                <i v-if="scope.row.SecondPartyName == '南京公司'" class="dotClass" style="background-color: #F5222D" />
-                <i v-if="scope.row.SecondPartyName == '格锐商业'" class="dotClass" style="background-color: #ffba00" />
-                <i v-if="scope.row.SecondPartyName == '安欣智诚'" class="dotClass" style="background-color: #FA8C16" />
+              -->
               </span>
               {{ scope.row.SecondPartyName }}
             </div>
@@ -246,24 +244,20 @@
             <div v-if="RoleName == '客服'">
               <el-button v-if="scope.row.States != 2" icon="el-icon-refresh-left" type="text" size="mini" @click="
                 UpdateDialog(scope.row)
-              "
-              >回款</el-button>
+                ">回款</el-button>
               <el-button icon="el-icon-view" type="text" size="mini" @click="
                 ShowDialog(scope.row)
-              "
-              >详情</el-button>
+                ">详情</el-button>
               <el-button icon="el-icon-edit" type="text" size="mini" @click="
                 UpdateDetailDialog(scope.row.InsProductPayCode, scope.row.Remark)
-              "
-              >修改</el-button>
+                ">修改</el-button>
             </div>
             <div v-else-if="RoleName == '超级管理员' || RoleName == '总客服'">
               <el-button-group>
                 <el-dropdown trigger="click" @command="(command) => {
                   handleCommand(command, scope.row);
                 }
-                "
-                >
+                  ">
                   <el-button type="text" size="mini">
                     更多操作<i class="el-icon-arrow-down el-icon--right" />
                   </el-button>
@@ -284,16 +278,13 @@
             <div v-else>
               <el-button v-if="scope.row.States != 2" icon="el-icon-refresh-left" type="text" size="mini" @click="
                 UpdateOtherDialog(scope.row)
-              "
-              >回款</el-button>
+                ">回款</el-button>
               <el-button icon="el-icon-view" type="text" size="mini" @click="
                 ShowOtherDialog(scope.row)
-              "
-              >详情</el-button>
+                ">详情</el-button>
               <el-button icon="el-icon-edit" type="text" size="mini" @click="
                 UpdateDetailDialog(scope.row.InsProductPayCode, scope.row.Remark)
-              "
-              >修改</el-button>
+                ">修改</el-button>
             </div>
           </template>
         </el-table-column>
@@ -302,24 +293,20 @@
             <div v-if="RoleName == '客服'">
               <el-button v-if="scope.row.States != 2" icon="el-icon-refresh-left" type="text" size="mini" @click="
                 UpdateDialog(scope.row)
-              "
-              >回款</el-button>
+                ">回款</el-button>
               <el-button icon="el-icon-view" type="text" size="mini" @click="
                 ShowDialog(scope.row)
-              "
-              >详情</el-button>
+                ">详情</el-button>
               <el-button icon="el-icon-edit" type="text" size="mini" @click="
                 UpdateDetailDialog(scope.row.InsProductPayCode, scope.row.Remark)
-              "
-              >修改</el-button>
+                ">修改</el-button>
             </div>
             <div v-else-if="RoleName == '超级管理员' || RoleName == '总客服'">
               <el-button-group>
                 <el-dropdown trigger="click" @command="(command) => {
                   handleCommand(command, scope.row);
                 }
-                "
-                >
+                  ">
                   <el-button type="text" size="mini">
                     更多操作<i class="el-icon-arrow-down el-icon--right" />
                   </el-button>
@@ -340,25 +327,21 @@
             <div v-else>
               <el-button v-if="scope.row.States != 2" icon="el-icon-refresh-left" type="text" size="mini" @click="
                 UpdateOtherDialog(scope.row)
-              "
-              >回款</el-button>
+                ">回款</el-button>
               <el-button icon="el-icon-view" type="text" size="mini" @click="
                 ShowOtherDialog(scope.row)
-              "
-              >详情</el-button>
+                ">详情</el-button>
               <el-button icon="el-icon-edit" type="text" size="mini" @click="
                 UpdateDetailDialog(scope.row.InsProductPayCode, scope.row.Remark)
-              "
-              >修改</el-button>
+                ">修改</el-button>
             </div>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
       <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100, 500]"
-                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
-      />
+        :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
     <el-dialog title="客服回款" :visible.sync="updateDialogVisible" top="5vh" width="75%">
       <el-descriptions v-if="ClickRow" class="margin-top" :column="3" border>
@@ -402,8 +385,7 @@
       </el-descriptions>
       <el-divider />
       <el-table v-loading="CollectionLoading" :data="CollectionOrderData" border :span-method="rowSpanMethod"
-                :cell-style="showCollection" @cell-click="CollectionOrderClick"
-      >
+        :cell-style="showCollection" @cell-click="CollectionOrderClick">
         <el-table-column type="index" width="50" />
         <el-table-column label="通道名称" prop="ChName" width="100" />
         <el-table-column label="合同方名称" prop="ConName" show-overflow-tooltip min-width="90" />
@@ -436,8 +418,7 @@
         <el-table-column label="本次回款金额" prop="ServReceiveNew" width="120">
           <template slot-scope="scope">
             <el-input v-model="scope.row.ServReceiveNew" size="mini" placeholder="金额" clearable
-                      @input="handleChange(scope.row)"
-            />
+              @input="handleChange(scope.row)" />
           </template>
         </el-table-column>
         <el-table-column label="回款状态" prop="ReceiveState" width="90">
@@ -504,8 +485,7 @@
       </el-descriptions>
       <el-divider />
       <el-table v-loading="CollectionOtherLoading" :data="CollectionOrderOtherData" border
-                :span-method="rowSpanMethodOther" :cell-style="showCollectionOther" @cell-click="CollectionOrderClickOther"
-      >
+        :span-method="rowSpanMethodOther" :cell-style="showCollectionOther" @cell-click="CollectionOrderClickOther">
         <el-table-column type="index" width="50" />
         <el-table-column label="账单名称" prop="ContractOrderName" show-overflow-tooltip min-width="200" />
         <el-table-column label="账单申请日期" prop="ApplicationTime" show-overflow-tooltip width="120">
@@ -538,8 +518,7 @@
         <el-table-column label="本次回款金额" prop="ServReceiveNew" width="120">
           <template slot-scope="scope">
             <el-input v-model="scope.row.ServReceiveNew" size="mini" placeholder="金额" clearable
-                      @input="handleChangeOther(scope.row)"
-            />
+              @input="handleChangeOther(scope.row)" />
           </template>
         </el-table-column>
         <el-table-column label="回款状态" prop="OrderState" width="90">
@@ -570,9 +549,8 @@
         </el-form-item>
         <el-form-item label="文 件">
           <el-upload ref="upload" :action="actionUrl" :on-preview="handlePreview" :on-remove="handleRemove"
-                     :on-success="fileUploadSuccess" :on-error="fileUploadFail" :on-change="fileChange" :file-list="fileList"
-                     :limit="1" :auto-upload="false" :headers="myHeaders"
-          >
+            :on-success="fileUploadSuccess" :on-error="fileUploadFail" :on-change="fileChange" :file-list="fileList"
+            :limit="1" :auto-upload="false" :headers="myHeaders">
             <el-button slot="trigger" icon="el-icon-position" plain type="primary" class="buttonM">选取文件</el-button>
           </el-upload>
         </el-form-item>
@@ -580,8 +558,7 @@
         <el-row style="text-align:center;">
           <el-col :span="24">
             <el-button icon="el-icon-upload2" :loading="uploadLoading" type="success"
-                       @click="submitUpload"
-            >开始导入</el-button>
+              @click="submitUpload">开始导入</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -595,22 +572,18 @@
         <el-row class="buttonCenter">
           <el-col>
             <el-button v-loading.fullscreen.lock="LoadingDetailUpdate" icon="el-icon-circle-check" type="primary"
-                       @click="saveDetailUpdate"
-            >保 存</el-button>
+              @click="saveDetailUpdate">保 存</el-button>
           </el-col>
         </el-row>
       </el-form>
     </el-dialog>
     <Customer :visible="dialogVisible" :click-row="ClickRow" @CloseDialog="CloseComponentsDialog"
-              @CloseDialogReflesh="RenovateDataDialog"
-    />
+      @CloseDialogReflesh="RenovateDataDialog" />
     <CustomerOther :visible="dialogOtherVisible" :click-row="ClickRowOther" @CloseDialog="CloseComponentsOtherDialog"
-                   @CloseDialogReflesh="RenovateDataOtherDialog"
-    />
+      @CloseDialogReflesh="RenovateDataOtherDialog" />
     <div v-if="isShowProgress" class="popContainer">
       <el-progress type="circle" :percentage="parseInt(fakes.progress * 100)" :stroke-width="9" :color="customColors"
-                   style="top: 30%; left: calc(50vw - 58px);color:white"
-      />
+        style="top: 30%; left: calc(50vw - 58px);color:white" />
     </div>
   </div>
 </template>

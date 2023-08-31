@@ -9,8 +9,7 @@
         </el-col>
         <el-col :xs="6" :sm="15" :md="15" :lg="15" :xl="15">
           <el-button type="primary" style="margin-left: 15px" icon="el-icon-circle-plus-outline"
-                     @click="AddDialog(true, null)"
-          >添 加
+            @click="AddDialog(true, null)">添 加
           </el-button>
         </el-col>
         <el-col :xs="8" :sm="4" :md="4" :lg="4" :xl="4" style="text-align:right">
@@ -50,21 +49,18 @@
               </el-form-item>
               <el-form-item label="已上传文件：">
                 <div>
-                  <el-link v-for="item in props.row.FileListUpload" :key="item" icon="el-icon-document" style="margin-right:1rem ;"
-                           :href="item.url" target="_blank"
-                  >{{ item.name }}</el-link>
+                  <el-link v-for="item in props.row.FileListUpload" :key="item" icon="el-icon-document"
+                    style="margin-right:1rem ;" :href="item.url" target="_blank">{{ item.name }}</el-link>
                 </div>
               </el-form-item>
               <el-form-item label="曾用名：">
                 <div>
                   <el-tag v-for="(tag, index) in props.row.childrenStr" :key="index" :type="colorArray[index]" closable
-                          :disable-transitions="false" @close="handleClose(tag, props)"
-                  >
+                    :disable-transitions="false" @close="handleClose(tag, props)">
                     {{ tag }}
                   </el-tag>
                   <el-input v-if="inputVisible" ref="saveTagInput" v-model="inputValue" class="input-new-tag" size="small"
-                            @keyup.enter.native="handleInputConfirm(props)" @blur="handleInputConfirm(props)"
-                  />
+                    @keyup.enter.native="handleInputConfirm(props)" @blur="handleInputConfirm(props)" />
                   <el-button v-else icon="el-icon-plus" class="button-new-tag" size="small" @click="showInput">
                     添加公司曾用名</el-button>
                 </div>
@@ -109,9 +105,8 @@
       </el-table>
       <!-- 分页区域 -->
       <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
-                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
-      />
+        :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
 
     <el-dialog :title="UpdateTitle" :visible.sync="addDialogVisible" top="5vh" width="50%" @close="addDialogClosed">
@@ -148,8 +143,7 @@
         </el-row>
         <el-form-item label="公司地图">
           <baidu-map class="bm-view" scroll-wheel-zoom :center="location" :zoom="zoom"
-                     ak="eRCv7o5j4Rmj4U2GsODMb71V2r4t4FIt" @ready="mapReady"
-          >
+            ak="eRCv7o5j4Rmj4U2GsODMb71V2r4t4FIt" @ready="mapReady">
             <bm-view class="map" style="width: 100%; height:100%; flex: 1" />
             <!-- 自定义控件 -->
             <bm-control :offset="{ width: '50px', height: '10px' }">
@@ -191,38 +185,32 @@
         </el-form-item>
         <el-form-item label="状态" prop="IsUsed">
           <el-switch v-model="updateCompanyNameAForm.IsUsed" active-color="#1E90FF" inactive-color="#FFB6C1"
-                     active-text="启用" inactive-text="禁用"
-          />
+            active-text="启用" inactive-text="禁用" />
         </el-form-item>
         <el-form-item label="已上传文件">
           <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
-                     accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :before-remove="beforeRemove"
-                     :on-remove="handleRemove" :file-list="updateCompanyNameAForm.FileLists" :on-preview="AttachmentCodePreview"
-          >
+            accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :before-remove="beforeRemove"
+            :on-remove="handleRemove" :file-list="updateCompanyNameAForm.FileLists" :on-preview="AttachmentCodePreview">
             <div slot="tip" style="margin-top:-30px" class="el-upload__tip">之前上传的文件，可对其进行删除操作（执行确定会立马删除）</div>
           </el-upload>
         </el-form-item>
         <el-form-item label="附件上传">
           <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
-                     accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
-                     :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
-                     :file-list="fileListUpload" :on-change="handleChangeUpdate"
-          >
+            accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
+            :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
+            :file-list="fileListUpload" :on-change="handleChangeUpdate">
             <el-button slot="trigger" icon="el-icon-position" plain type="primary">选取文件</el-button>
             <el-button icon="el-icon-upload2" plain style="margin-left: 10px;" type="success"
-                       :loading="uploadServerLoading" @click="submitUploadUpdate"
-            >上传到服务器</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span></div>
-            <div slot="tip" class="el-upload__tip">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
-            <div slot="tip" class="el-upload__tip">下面为新上传的文件</div>
+              :loading="uploadServerLoading" @click="submitUploadUpdate">上传到服务器</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传office文件，且不超过<span
+                style="color:#ff4949 ;">20M</span>，可一次选取多个文件，上传完成请点击上传到服务器。</div>
           </el-upload>
         </el-form-item>
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
             <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingUpdate || uploadServerLoading"
-                       @click="saveUpdate"
-            >保 存</el-button>
+              @click="saveUpdate">保 存</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -323,7 +311,7 @@ export default {
         FileList: [],
         FileLists: [],
         AttachmentLists: [],
-        IsUsed: false,
+        IsUsed: true,
       },
       LoadingUpdate: false,
       uploadServerLoading: false,
@@ -360,7 +348,7 @@ export default {
           this.fileListUpload = [];
           this.updateCompanyNameAForm.FileList = [];
           this.updateCompanyNameAForm.IsUsed =
-            res.result.IsUsed == 1;
+            res.result.IsUsed == 1 ? true : false;
           this.updateDialogVisible = true;
         } else {
           return this.$message.error("获取失败！");

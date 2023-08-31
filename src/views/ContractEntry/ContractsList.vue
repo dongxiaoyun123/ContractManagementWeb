@@ -29,8 +29,7 @@
                       </el-option>
                     </el-select>
                     <el-date-picker v-model="ConMonth" class="timeHalfClass" format="yyyy-MM" type="month"
-                                    placeholder="选择月份" :clearable="false"
-                    />
+                      placeholder="选择月份" :clearable="false" />
                     <!-- <el-select class="timeClass" v-model="ConState" filterable placeholder="合同状态" clearable>
                       <el-option v-for="item in ConStateArray" :class="item.Class" :key="item.Code" :label="item.Name"
                         :value="item.Code">
@@ -61,8 +60,7 @@
                   <el-form-item class="whereFormClass" label="合同类型">
                     <el-select v-model="ContractType" class="timeClass" filterable placeholder="合同类型" clearable="">
                       <el-option v-for="item in GetContractTypeArray" :key="item.Code" :label="item.Name"
-                                 :value="item.Code"
-                      />
+                        :value="item.Code" />
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -71,15 +69,13 @@
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="开始时间">
                     <el-date-picker v-model="BeginTime" class="timeClass" style="width:100% ;" type="date"
-                                    placeholder="合同开始时间"
-                    />
+                      placeholder="合同开始时间" />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="结束时间">
                     <el-date-picker v-model="EndTime" class="timeClass" style="width:100% ;" type="date"
-                                    placeholder="合同结束时间"
-                    />
+                      placeholder="合同结束时间" />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
@@ -91,17 +87,15 @@
               </el-form-item> -->
                   <el-form-item class="whereFormClass" label="添加时间">
                     <el-date-picker v-model="ContractSignTime" style="width:100% ;" class="rangeTimeClass"
-                                    type="daterange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间"
-                                    :picker-options="pickerOptions" clearable="" @input="datetimeChange"
-                    />
+                      type="daterange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间"
+                      :picker-options="pickerOptions" clearable="" @input="datetimeChange" />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item label="添加人员">
                     <el-select v-model="CreateUserId" class="timeClass" filterable placeholder="添加人员" clearable="">
                       <el-option v-for="item in UserList" :key="item.UserID" :label="item.UserName"
-                                 :value="item.UserID"
-                      />
+                        :value="item.UserID" />
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -133,9 +127,8 @@
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="审核时间">
                     <el-date-picker v-model="ExamineTime" style="width:100% ;" class="rangeTimeClass" type="daterange"
-                                    range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间" :picker-options="pickerOptions"
-                                    clearable="" @input="datetimeChange"
-                    />
+                      range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间" :picker-options="pickerOptions"
+                      clearable="" @input="datetimeChange" />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="6">
@@ -193,8 +186,7 @@
                 <el-dropdown trigger="click" style="margin-left: 0;" @command="(command) => {
                   handleButtonCommand(command);
                 }
-                "
-                >
+                  ">
                   <el-button v-if="auditStatusCheckFlag" type="extend3">
                     更 多<i class="el-icon-arrow-down el-icon--right" />
                   </el-button>
@@ -207,8 +199,7 @@
                     <!-- <el-dropdown-item command="b" v-if="editButtonShow" icon="el-icon-edit">修 改 {{ "\xa0" }}
                     </el-dropdown-item> -->
                     <el-dropdown-item v-if="IfExistsExportUserFlag" command="c" icon="el-icon-download"
-                                      :loading="ExportLoading"
-                    >导 出 {{ "\xa0\xa0" }}</el-dropdown-item>
+                      :loading="ExportLoading">导 出 {{ "\xa0\xa0" }}</el-dropdown-item>
 
                     <el-dropdown-item command="d" icon="el-icon-setting">表头设置 {{ "\xa0\xa0" }}
                     </el-dropdown-item>
@@ -216,9 +207,8 @@
                   </el-dropdown-menu>
                 </el-dropdown>
                 <el-button type="text" style="margin-left: 10px;"
-                           :icon="isActive ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
-                           @click="collapseClick"
-                >{{ isActive ? "收起" : "展开" }}</el-button>
+                  :icon="isActive ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
+                  @click="collapseClick">{{ isActive ? "收起" : "展开" }}</el-button>
               </el-button-group>
             </el-col>
           </el-row>
@@ -227,8 +217,7 @@
     </el-card>
     <el-card class="CardTableClass">
       <el-table ref="multipleTable" v-loading="loading" class="tableCheckClass" :data="ContractData" fit
-                :cell-style="showBackground" @selection-change="TableSelect" @row-click="toggleSelection"
-      >
+        :cell-style="showBackground" @selection-change="TableSelect" @row-click="toggleSelection">
         <!-- :row-class-name="tableRowClassName"
           :cell-style="InvoiceTypeStyle" -->
         <!-- @row-click="clickRow" ref="tableRef" -->
@@ -237,28 +226,23 @@
         <el-table-column v-if="fixedLeftShow" key="checked" class="checkClass" type="selection" width="50" fixed="left" />
         <el-table-column v-else key="checkedFalse" type="selection" width="50" />
         <el-table-column v-if="ifSecondContractNumberPrefix && fixedLeftShow" key="SecondContractNumberPrefix"
-                         fixed="left" prop="SecondContractNumberPrefix" label="乙方合同编号" small width="160" sortable
-        >
+          fixed="left" prop="SecondContractNumberPrefix" label="乙方合同编号" small width="160" sortable>
           <template slot-scope="scope">
             <span>{{ scope.row.SecondContractNumberPrefix }}</span>
             <el-button v-if="scope.row.SecondContractNumberPrefix" size="mini" style="padding:4px 0 4px 5px" type="text"
-                       icon="el-icon-document-copy" @click="SecondClick(scope.row.SecondContractNumberPrefix)"
-            />
+              icon="el-icon-document-copy" @click="SecondClick(scope.row.SecondContractNumberPrefix)" />
           </template>
         </el-table-column>
         <el-table-column v-else-if="ifSecondContractNumberPrefix && !fixedLeftShow" key="SecondContractNumberPrefixFalse"
-                         prop="SecondContractNumberPrefix" label="乙方合同编号" small width="160" sortable
-        >
+          prop="SecondContractNumberPrefix" label="乙方合同编号" small width="160" sortable>
           <template slot-scope="scope">
             <span>{{ scope.row.SecondContractNumberPrefix }}</span>
             <el-button v-if="scope.row.SecondContractNumberPrefix" size="mini" style="padding:4px 0 4px 5px" type="text"
-                       icon="el-icon-document-copy" @click="SecondClick(scope.row.SecondContractNumberPrefix)"
-            />
+              icon="el-icon-document-copy" @click="SecondClick(scope.row.SecondContractNumberPrefix)" />
           </template>
         </el-table-column>
         <el-table-column v-if="ifAuditStatusName && fixedLeftShow" key="AuditStatusName" prop="AuditStatusName"
-                         label="审核状态" small min-width="120" fixed="left"
-        >
+          label="审核状态" small min-width="120" fixed="left">
           <template slot="header" slot-scope="{}">
             <span>审核状态</span>
             <el-tooltip class="item" effect="light" placement="bottom" style="margin-left: 5px;margin-bottom: 0.2rem">
@@ -299,34 +283,29 @@
           <template slot-scope="scope">
             <div :style="tableTagClass">
               <el-tag v-if="scope.row.AuditStatus == 1" :key="scope.$index + 'a' + scope.row.AuditStatus" type="danger"
-                      effect="plain"
-              >
+                effect="plain">
                 {{ scope.row.AuditStatusName }}
               </el-tag>
               <el-tag v-if="scope.row.AuditStatus == 2" :key="scope.$index + 'b' + scope.row.AuditStatus" effect="plain">
                 {{ scope.row.AuditStatusName }}
               </el-tag>
               <el-tag v-if="scope.row.AuditStatus == 3" :key="scope.$index + 'c' + scope.row.AuditStatus" type="warning"
-                      effect="plain"
-              >
+                effect="plain">
                 {{ scope.row.AuditStatusName }}
               </el-tag>
               <el-tag v-if="scope.row.AuditStatus == 4" :key="scope.$index + 'd' + scope.row.AuditStatus" type="success"
-                      effect="plain"
-              >
+                effect="plain">
                 {{ scope.row.AuditStatusName }}
               </el-tag>
               <el-tag v-if="scope.row.AuditStatus == 5" :key="scope.$index + 'e' + scope.row.AuditStatus" type="info"
-                      effect="plain"
-              >
+                effect="plain">
                 {{ scope.row.AuditStatusName }}
               </el-tag>
             </div>
           </template>
         </el-table-column>
         <el-table-column v-else-if="ifAuditStatusName && !fixedLeftShow" key="AuditStatusNameFalse" prop="AuditStatusName"
-                         label="审核状态" small min-width="120"
-        >
+          label="审核状态" small min-width="120">
           <template slot="header" slot-scope="{}">
             <span>审核状态</span>
             <el-tooltip class="item" effect="light" placement="bottom" style="margin-left: 5px;margin-bottom: 0.2rem">
@@ -367,26 +346,22 @@
           <template slot-scope="scope">
             <div :style="tableTagClass">
               <el-tag v-if="scope.row.AuditStatus == 1" :key="scope.$index + 'a' + scope.row.AuditStatus" type="danger"
-                      effect="plain"
-              >
+                effect="plain">
                 {{ scope.row.AuditStatusName }}
               </el-tag>
               <el-tag v-if="scope.row.AuditStatus == 2" :key="scope.$index + 'b' + scope.row.AuditStatus" effect="plain">
                 {{ scope.row.AuditStatusName }}
               </el-tag>
               <el-tag v-if="scope.row.AuditStatus == 3" :key="scope.$index + 'c' + scope.row.AuditStatus" type="warning"
-                      effect="plain"
-              >
+                effect="plain">
                 {{ scope.row.AuditStatusName }}
               </el-tag>
               <el-tag v-if="scope.row.AuditStatus == 4" :key="scope.$index + 'd' + scope.row.AuditStatus" type="success"
-                      effect="plain"
-              >
+                effect="plain">
                 {{ scope.row.AuditStatusName }}
               </el-tag>
               <el-tag v-if="scope.row.AuditStatus == 5" :key="scope.$index + 'e' + scope.row.AuditStatus" type="info"
-                      effect="plain"
-              >
+                effect="plain">
                 {{ scope.row.AuditStatusName }}
               </el-tag>
             </div>
@@ -423,18 +398,15 @@
           <template slot-scope="scope">
             <div :style="tableTagClass">
               <span v-if="scope.row.ArchivedType == 1" :key="scope.$index + 'a' + scope.row.ArchivedType"
-                    style="border-color: #F7C695;color:#FA8C16"
-              >
+                style="border-color: #F7C695;color:#FA8C16">
                 待上传
               </span>
               <span v-if="scope.row.ArchivedType == 2" :key="scope.$index + 'b' + scope.row.ArchivedType"
-                    style="border-color: #A29BC4;color:#6959CD"
-              >
+                style="border-color: #A29BC4;color:#6959CD">
                 待归档
               </span>
               <span v-if="scope.row.ArchivedType == 3" :key="scope.$index + 'c' + scope.row.ArchivedType"
-                    style="border-color: #8BC6C6;color:#13C2C2"
-              >
+                style="border-color: #8BC6C6;color:#13C2C2">
                 已归档
               </span>
             </div>
@@ -444,13 +416,14 @@
           min-width="180" show-overflow-tooltip>
         </el-table-column> -->
         <el-table-column v-if="ifCompanyName" key="CompanyName" prop="CompanyName" label="甲方名称" small min-width="280"
-                         show-overflow-tooltip
-        >
+          show-overflow-tooltip>
           <template slot-scope="scope">
             <div v-if="scope.row.CompanyRelationList.length != 0">
+              <el-tag v-if="scope.row.ContractTypesOf == 2" type="success">补充协议</el-tag>
+              <el-tag v-if="scope.row.ContractTypesOf == 3" type="primary">付款方</el-tag>
+              {{ "\xa0" }}
               <el-popover transition="companyNameTransition" placement="right" width="470" trigger="click"
-                          :title="scope.row.CompanyName + ' - 曾用名'"
-              >
+                :title="scope.row.CompanyName + ' - 曾用名'">
                 <el-table :data="scope.row.CompanyRelationList">
                   <el-table-column width="280" property="CompanyrelationName" label="曾用名" />
                   <el-table-column width="150" property="CreateTime" label="添加时间">
@@ -461,24 +434,21 @@
                   </el-table-column>
                 </el-table>
                 <el-button slot="reference" style="padding:0 ;" type="text" size="mini">
-                  {{ scope.row.CompanyName }} <el-divider v-if="scope.row.ContractTypesOf != 1" direction="vertical" />
-                  <el-tag v-if="scope.row.ContractTypesOf == 2" type="primary">补充协议</el-tag>
-                  <el-tag v-if="scope.row.ContractTypesOf == 3" type="primary">付款方</el-tag>
+                  {{ scope.row.CompanyName }}
                 </el-button>
                 <!-- <el-link slot="reference">{{scope.row.CompanyName}}</el-link> -->
               </el-popover>
             </div>
-            <div v-else>{{ scope.row.CompanyName }} <el-divider v-if="scope.row.ContractTypesOf != 1"
-                                                                direction="vertical"
-            />
-              <el-tag v-if="scope.row.ContractTypesOf == 2" type="primary">补充协议</el-tag>
+            <div v-else>
+              <el-tag v-if="scope.row.ContractTypesOf == 2" type="success">补充协议</el-tag>
               <el-tag v-if="scope.row.ContractTypesOf == 3" type="primary">付款方</el-tag>
+              {{ "\xa0" }}
+              {{ scope.row.CompanyName }}
             </div>
           </template>
         </el-table-column>
         <el-table-column v-if="ifSecondPartyName" key="SecondPartyName" prop="SecondPartyName" label="乙方名称" small
-                         min-width="100"
-        />
+          min-width="120" />
         <el-table-column v-if="ifName" key="Name" prop="Name" label="合同类型" small min-width="100" />
         <el-table-column v-if="ifConStateName" key="ConStateName" prop="ConStateName" label="合同状态" small min-width="100">
           <template slot="header" slot-scope="{}">
@@ -510,8 +480,7 @@
           </template>
         </el-table-column>
         <el-table-column v-if="ifParentContractCode" key="ParentContractCode" prop="ParentContractCode" label="有无关联合同"
-                         small min-width="120"
-        >
+          small min-width="120">
           <template slot-scope="scope">
             <div v-if="scope.row.ParentContractCode">
               有
@@ -522,8 +491,7 @@
           </template>
         </el-table-column>
         <el-table-column v-if="ifBeginTimeString" key="BeginTimeString" prop="BeginTimeString" label="开始时间" small
-                         min-width="115" sortable
-        >
+          min-width="115" sortable>
           <template slot-scope="scope">
             <div v-if="scope.row.BeginTimeString">
               <i class="el-icon-time" />
@@ -532,8 +500,7 @@
           </template>
         </el-table-column>
         <el-table-column v-if="ifEndTimeString" key="EndTimeString" prop="EndTimeString" label="结束时间" small
-                         min-width="115" sortable
-        >
+          min-width="115" sortable>
           <template slot-scope="scope">
             <div v-if="scope.row.EndTimeString">
               <i class="el-icon-time" />
@@ -547,32 +514,26 @@
             </template> -->
         </el-table-column>
         <el-table-column v-if="ifSaleName" key="SaleName" prop="SaleName" label="销售人员" small min-width="150"
-                         show-overflow-tooltip
-        />
+          show-overflow-tooltip />
         <!-- <el-table-column v-if="ifUnitPrice" key="UnitPrice" prop="UnitPrice" label="单价" small width="100"
           show-overflow-tooltip />
         <el-table-column v-if="ifQuantity" key="Quantity" prop="Quantity" label="数量" small width="100"
           show-overflow-tooltip /> -->
         <el-table-column v-if="ifPaymentMethodString" key="PaymentMethodString" prop="PaymentMethodString" label="缴费方式"
-                         small width="100" show-overflow-tooltip
-        />
+          small width="100" show-overflow-tooltip />
         <el-table-column v-if="ifContractAmount" key="ContractAmount" prop="ContractAmount" label="合同金额" min-width="100"
-                         sortable=""
-        >
+          sortable="">
           <template slot-scope="scope">
             <span v-format="'¥#,##0.00'">{{ scope.row.ContractAmount }}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column prop="SignTimeString" label="签订时间" small min-width="100"></el-table-column> -->
         <el-table-column v-if="ifFirstPartyName" key="FirstPartyName" prop="FirstPartyName" label="甲方名称" small
-                         min-width="250" show-overflow-tooltip
-        />
+          min-width="250" show-overflow-tooltip />
         <el-table-column v-if="ifCreateUserName" key="CreateUserName" prop="CreateUserName" label="添加人" small
-                         min-width="100"
-        />
+          min-width="100" />
         <el-table-column v-if="ifCreationTimeString" key="CreationTimeString" prop="CreationTimeString" label="添加时间" small
-                         min-width="180" sortable
-        >
+          min-width="180" sortable>
           <template slot-scope="scope">
             <div v-if="scope.row.CreationTimeString">
               <i class="el-icon-time" />
@@ -581,8 +542,7 @@
           </template>
         </el-table-column>
         <el-table-column v-if="ifSubmitCensorshipTimeStr" key="SubmitCensorshipTimeStr" prop="SubmitCensorshipTimeStr"
-                         label="送审时间" small min-width="180" sortable
-        >
+          label="送审时间" small min-width="180" sortable>
           <template slot-scope="scope">
             <div v-if="scope.row.SubmitCensorshipTimeStr">
               <i class="el-icon-time" />
@@ -591,8 +551,7 @@
           </template>
         </el-table-column>
         <el-table-column v-if="ifExamineTimeStr" key="ExamineTimeStr" prop="ExamineTimeStr" label="审核时间" small
-                         min-width="180" sortable
-        >
+          min-width="180" sortable>
           <template slot-scope="scope">
             <div v-if="scope.row.ExamineTimeStr">
               <i class="el-icon-time" />
@@ -612,8 +571,7 @@
               <el-dropdown trigger="click" @command="(command) => {
                 handleCommand(command, scope.row);
               }
-              "
-              >
+                ">
                 <el-button type="text" size="mini">
                   更多操作<i class="el-icon-arrow-down el-icon--right" />
                 </el-button>
@@ -641,8 +599,7 @@
               <el-dropdown trigger="click" @command="(command) => {
                 handleCommand(command, scope.row);
               }
-              "
-              >
+                ">
                 <el-button type="text" size="mini">
                   更多操作<i class="el-icon-arrow-down el-icon--right" />
                 </el-button>
@@ -662,23 +619,20 @@
       </el-table>
       <!-- 分页区域 -->
       <el-pagination background size="mini" :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
-                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
-      />
+        :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
 
     <!-- 添加合同、补充协议弹出页面 -->
     <el-dialog :visible.sync="detailAddDialogVisible" top="5vh" width="65%" :append-to-body="true"
-               @close="detailAddDialogVisibleClosed"
-    >
+      @close="detailAddDialogVisibleClosed">
       <!-- 上面两个属性用来重置滚动条 -->
       <div slot="title" class="dialog-title">
         <span>{{ addContractsTitle }}</span>
       </div>
       <el-form v-if="detailAddDialogVisible" ref="addContractsRef" :model="addContractsForm"
-               :rules="addContractsForm.ContractTypesOf == 1 ? addContractsRules : addContractsForm.ContractTypesOf == 2 ? addRulesSupplementRules : addRulesPayerRules"
-               label-width="120px" class="formClass"
-      >
+        :rules="addContractsForm.ContractTypesOf == 1 ? addContractsRules : addContractsForm.ContractTypesOf == 2 ? addRulesSupplementRules : addRulesPayerRules"
+        label-width="120px" class="formClass">
         <!-- 合同信息 -->
         <el-card>
           <div slot="header" class="clearfix">
@@ -689,17 +643,14 @@
               <el-col :span="12">
                 <el-form-item label="合同名称" prop="ContractName">
                   <el-select v-model="addContractsForm.ContractName" class="CompanySelectClass" filterable
-                             placeholder="合同名称" clearable=""
-                  >
+                    placeholder="合同名称" clearable="">
                     <el-option v-for="item in ContractNameconfigList" :key="item.ContractCode" :label="item.ContractName"
-                               :value="item.ContractCode"
-                    />
+                      :value="item.ContractCode" />
                   </el-select>
                   <div>
                     <el-tooltip class="item" effect="dark" content="复制历史合同信息" placement="top-start">
                       <el-button style="margin-left:10px ;font-size:15px" type="text" icon="el-icon-document-copy"
-                                 @click="CopyContractName"
-                      />
+                        @click="CopyContractName" />
                     </el-tooltip>
                   </div>
                 </el-form-item>
@@ -708,8 +659,7 @@
                 <el-form-item label="合同类型" prop="ContractType">
                   <el-select v-model="addContractsForm.ContractType" filterable placeholder="合同类型" clearable="">
                     <el-option v-for="item in GetContractTypeArray" :key="item.Code" :label="item.Name"
-                               :value="item.Code"
-                    />
+                      :value="item.Code" />
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -721,18 +671,15 @@
                     <span>甲方名称</span>
                   </template>
                   <el-select v-model="addContractsForm.CompanyId" class="CompanySelectClass" filterable
-                             placeholder="甲方名称（模糊搜索）" clearable="" remote reserve-keyword :remote-method="remoteMethod"
-                             @visible-change="clearselectCorporationDatas" @change="changeCompanyId"
-                  >
+                    placeholder="甲方名称（模糊搜索）" clearable="" remote reserve-keyword :remote-method="remoteMethod"
+                    @visible-change="clearselectCorporationDatas" @change="changeCompanyId">
                     <el-option v-for="item in selectCorporationDatas" :key="item.value" :label="item.label"
-                               :value="item.value"
-                    />
+                      :value="item.value" />
                   </el-select>
                   <div>
                     <el-tooltip class="item" effect="dark" content="添加公司" placement="top-start">
                       <el-button style="margin-left:10px ;font-size:15px" type="text" icon="el-icon-circle-plus-outline"
-                                 @click="AddDialog"
-                      />
+                        @click="AddDialog" />
                     </el-tooltip>
                   </div>
                 </el-form-item>
@@ -743,8 +690,7 @@
                     <span>乙方名称</span>
                   </template>
                   <el-select v-model="addContractsForm.SecondPartyName" filterable placeholder="乙方名称" clearable=""
-                             :disabled="addContractsForm.ContractTypesOf != 1"
-                  >
+                    :disabled="addContractsForm.ContractTypesOf != 1">
                     <el-option v-for="item in DicCategoryList" :key="item.Code" :label="item.Name" :value="item.Code" />
                   </el-select>
                 </el-form-item>
@@ -754,13 +700,11 @@
               <el-col :span="24">
                 <el-form-item label="主合同" prop="ParentContractCode">
                   <el-select v-model="addContractsForm.ParentContractCode" style="width:100% ;" filterable
-                             placeholder="合同类型 - 甲方名称 - 合同期" clearable="" remote reserve-keyword
-                             :remote-method="remoteMethodParent" @visible-change="clearselectCorporationDatasParent"
-                             @change="ParentChangeCompanyIdAdd"
-                  >
+                    placeholder="合同类型 - 甲方名称 - 合同期" clearable="" remote reserve-keyword
+                    :remote-method="remoteMethodParent" @visible-change="clearselectCorporationDatasParent"
+                    @change="ParentChangeCompanyIdAdd">
                     <el-option v-for="item in selectCorporationDatasParent" :key="item.value" :label="item.label"
-                               :value="item.value"
-                    />
+                      :value="item.value" />
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -772,8 +716,7 @@
               <el-col :span="12">
                 <el-form-item label="备注" prop="Remark">
                   <el-input v-model="addContractsForm.Remark" type="textarea" placeholder="500字以内" :rows="1"
-                            maxlength="500"
-                  />
+                    maxlength="500" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -781,10 +724,9 @@
               <el-col :span="24">
                 <el-form-item label="付款方">
                   <el-tag v-for="item in PayerArray" :key="item.Code" effect="plain"
-                          :closable="addContractsForm.CompanyId + '' != item.Code + ''" style="margin-right: 18px;"
-                          :type="item.Type" @close="handleClose(item.Code)"
-                  >{{ item.Name
-                  }}</el-tag>
+                    :closable="addContractsForm.CompanyId + '' != item.Code + ''" style="margin-right: 18px;"
+                    :type="item.Type" @close="handleClose(item.Code)">{{ item.Name
+                    }}</el-tag>
                   <el-divider v-if="PayerArray.length != 0" style="margin:15px 0" />
                   <el-button icon="el-icon-plus" plain size="mini" @click="showCollectionDialog(true)"> 关联付款方</el-button>
                 </el-form-item>
@@ -842,8 +784,7 @@
               <el-col :span="12">
                 <el-form-item style="margin-bottom:0 ;" label="销售人员" prop="SaleId">
                   <el-select v-model="addContractsForm.SaleId" filterable placeholder="销售人员" clearable=""
-                             :disabled="addContractsForm.ContractTypesOf != 1"
-                  >
+                    :disabled="addContractsForm.ContractTypesOf != 1">
                     <el-option v-for="item in UserList" :key="item.UserID" :label="item.UserName" :value="item.UserID" />
                   </el-select>
                 </el-form-item>
@@ -869,12 +810,11 @@
                 </el-col>
                 <el-col :span="6">
                   <el-form-item :key="domain.key" label-width="85px" :label="'单价' + (index + 1)"
-                                :prop="'domains.' + index + '.UnitPrice'" :rules="{
-                                  required: true,
-                                  message: '合同单价不能为空',
-                                  trigger: 'blur',
-                                }"
-                  >
+                    :prop="'domains.' + index + '.UnitPrice'" :rules="{
+                      required: true,
+                      message: '合同单价不能为空',
+                      trigger: 'blur',
+                    }">
                     <el-input v-model="domain.UnitPrice" clearable @input="handleChangeAdd" />
                   </el-form-item>
                 </el-col>
@@ -885,12 +825,11 @@
                 </el-col>
                 <el-col :span="6">
                   <el-form-item :key="domain.key" label-width="85px" :label="'数量' + (index + 1)"
-                                :prop="'domains.' + index + '.Quantity'" :rules="{
-                                  required: true,
-                                  message: '合同数量不能为空',
-                                  trigger: 'blur',
-                                }"
-                  >
+                    :prop="'domains.' + index + '.Quantity'" :rules="{
+                      required: true,
+                      message: '合同数量不能为空',
+                      trigger: 'blur',
+                    }">
                     <el-input v-model="domain.Quantity" clearable @input="handleChangeAdd" />
                   </el-form-item>
                 </el-col>
@@ -901,13 +840,11 @@
                 </el-col>
                 <el-col :span="1" style="line-height:100% ;text-align:center">
                   <el-button style="margin-left:10px ;font-size:14px" type="text" icon="el-icon-delete"
-                             @click.prevent="removeDomain(domain)"
-                  />
+                    @click.prevent="removeDomain(domain)" />
                 </el-col>
                 <el-col :span="1">
                   <el-form-item v-if="addContractsForm.domains.length > 1 && index == addContractsForm.domains.length - 1"
-                                label-width="0"
-                  >
+                    label-width="0">
                     <span style="font-size:14px; font-weight:500;display: block;text-align: left;">））</span>
                   </el-form-item>
                   <el-form-item v-else label-width="0">
@@ -925,7 +862,7 @@
             <el-form-item v-if="addContractsForm.ContractTypesOf != 3">
               <el-button size="mini" icon="el-icon-plus" class="addItemClass" @click="addDomain">新增条目</el-button>
               <el-button type="text" style="margin-left: 10px;color:#6959CD" @click="showMessage = !showMessage">{{
-                                                                                                                   showMessage ? "收起说明" : "展开说明" }}
+                showMessage ? "收起说明" : "展开说明" }}
                 <i v-if="showMessage" class="el-icon-arrow-up" />
                 <i v-if="!showMessage" class="el-icon-arrow-down" />
               </el-button>
@@ -939,11 +876,9 @@
               <el-col :span="6">
                 <el-form-item label="缴费方式" prop="PaymentMethod" label-width="85px">
                   <el-select v-model="addContractsForm.PaymentMethod" filterable placeholder="缴费方式" clearable=""
-                             @change="handleChangeAdd"
-                  >
+                    @change="handleChangeAdd">
                     <el-option v-for="item in PaymentMethodList" :key="item.Code" :label="item.Name + ' ' + item.Fee"
-                               :value="item.Code"
-                    >
+                      :value="item.Code">
                       <span style="float: left">{{ item.Name }}</span>
                       <span style="float: right; color: #8492a6; font-size: 13px">{{ item.Fee }}</span>
                     </el-option>
@@ -974,14 +909,13 @@
                       </el-form-item>
                     </div>
                     <div class="transition-box"> <el-form-item label-width="120px" style="margin-bottom:6px">
-                      <el-tag effect="plain"
-                              style="border-color: #A29BC4;color:#6959CD"
-                      >如果单价中有一项或者多项为保留四位小数，那么合同金额（参与计算）只保留前两位小数（不进行四舍五入）</el-tag>
-                    </el-form-item></div>
+                        <el-tag effect="plain"
+                          style="border-color: #A29BC4;color:#6959CD">如果单价中有一项或者多项为保留四位小数，那么合同金额（参与计算）只保留前两位小数（不进行四舍五入）</el-tag>
+                      </el-form-item></div>
                     <div class="transition-box"> <el-form-item label-width="120px" style="margin-bottom:6px">
-                      <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD">如果有多个项目类型请点击上方 “新增条目”
-                        按钮自行动态添加金额条目（金额条目至少有一个）</el-tag>
-                    </el-form-item> </div>
+                        <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD">如果有多个项目类型请点击上方 “新增条目”
+                          按钮自行动态添加金额条目（金额条目至少有一个）</el-tag>
+                      </el-form-item> </div>
                   </div>
                 </el-collapse-transition>
               </div>
@@ -1124,45 +1058,40 @@
               <el-col :span="24">
                 <el-form-item label="附件上传">
                   <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
-                             accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
-                             :on-exceed="handleExceedAdd" :on-remove="AttachmentCodeRemove" :auto-upload="false"
-                             :file-list="fileList" :on-change="handleChange"
-                  >
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
+                    :on-exceed="handleExceedAdd" :on-remove="AttachmentCodeRemove" :auto-upload="false"
+                    :file-list="fileList" :on-change="handleChange">
                     <el-button slot="trigger" icon="el-icon-position" size="mini" plain type="primary">选取文件</el-button>
-                    <el-button icon="el-icon-upload2" size="mini" plain style="margin-left: 10px;margin-bottom: 7px;"
-                               type="success" :loading="uploadServerLoading" @click="submitUpload"
-                    >上传到服务器</el-button>
-                    <h3>注：合同或协议{{ "\xa0\xa0" }}
-                      <span class="magic">
-                        <span class="magic-star">
-                          <svg viewBox="0 0 512 512">
-                            <path
-                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z"
-                            />
-                          </svg>
-                        </span>
-                        <span class="magic-star">
-                          <svg viewBox="0 0 512 512">
-                            <path
-                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z"
-                            />
-                          </svg>
-                        </span>
-                        <span class="magic-star">
-                          <svg viewBox="0 0 512 512">
-                            <path
-                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z"
-                            />
-                          </svg>
-                        </span>
-                        <span class="magic-text">双方盖章完成后</span>
-                      </span>
-                      {{ "\xa0\xa0" }}，请上传电子版扫描件
-                    </h3>
-                    <div slot="tip" class="uploadClass">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span>
-                    </div>
-                    <div slot="tip" class="uploadClass">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
                   </el-upload>
+                  <el-button v-if="UploadServerFlag" icon="el-icon-upload2" size="mini" plain style="margin-top: 0.8rem;" type="success"
+                    :loading="uploadServerLoading" @click="submitUpload">上传到服务器</el-button>
+                  <h3>注：合同或协议{{ "\xa0\xa0" }}
+                    <span class="magic">
+                      <span class="magic-star">
+                        <svg viewBox="0 0 512 512">
+                          <path
+                            d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
+                        </svg>
+                      </span>
+                      <span class="magic-star">
+                        <svg viewBox="0 0 512 512">
+                          <path
+                            d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
+                        </svg>
+                      </span>
+                      <span class="magic-star">
+                        <svg viewBox="0 0 512 512">
+                          <path
+                            d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
+                        </svg>
+                      </span>
+                      <span class="magic-text">双方盖章完成后</span>
+                    </span>
+                    {{ "\xa0\xa0" }}，请上传电子版扫描件
+                  </h3>
+                  <div class="el-upload__tip">只能上传office文件，且不超过<span
+                      style="color:#ff4949 ;">20M</span>，可一次选取多个文件，上传完成请点击上传到服务器。</div>
+
                 </el-form-item>
               </el-col>
             </el-row>
@@ -1173,24 +1102,21 @@
       <el-row class="buttonCenter">
         <el-col>
           <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingAdd || uploadServerLoading"
-                     @click="addContracts"
-          >保 存</el-button>
+            @click="addContracts">保 存</el-button>
           <el-button icon="el-icon-refresh" type="info" @click="detailAddDialogVisibleClosed">重 置</el-button>
         </el-col>
       </el-row>
     </el-dialog>
     <!-- 修改合同弹出页面 -->
     <el-dialog :visible.sync="updateDialogVisible" top="5vh" :append-to-body="true" width="65%"
-               @close="detailUpdateDialogVisibleClosed"
-    >
+      @close="detailUpdateDialogVisibleClosed">
       <div slot="title" class="dialog-title">
         <span>{{ updateContractsTitle }}</span>
       </div>
       <el-form v-if="updateDialogVisible" ref="updateContractsRef" v-loading="fullscreenLoading"
-               :model="updateContractsForm"
-               :rules="updateContractsForm.ContractTypesOf == 1 ? updateContractsRules : updateContractsForm.ContractTypesOf == 2 ? updateRulesSupplementRules : updateRulesPayerRules"
-               label-width="120px" class="formClass"
-      >
+        :model="updateContractsForm"
+        :rules="updateContractsForm.ContractTypesOf == 1 ? updateContractsRules : updateContractsForm.ContractTypesOf == 2 ? updateRulesSupplementRules : updateRulesPayerRules"
+        label-width="120px" class="formClass">
         <!-- 合同信息 -->
         <el-card>
           <div slot="header" class="clearfix">
@@ -1201,8 +1127,7 @@
               <el-col :span="12">
                 <el-form-item label="乙方合同编号" prop="SecondContractNumberPrefix">
                   <el-input v-model="updateContractsForm.SecondContractNumberPrefix" class="CompanySelectClass"
-                            disabled
-                  />
+                    disabled />
                 </el-form-item>
               </el-col>
               <el-col :span="12">
@@ -1215,22 +1140,18 @@
               <el-col :span="12">
                 <el-form-item label="合同名称" prop="ContractName">
                   <el-select v-model="updateContractsForm.ContractName" class="CompanySelectClass" filterable
-                             placeholder="合同名称" clearable="" :disabled="updateShowFlag"
-                  >
+                    placeholder="合同名称" clearable="" :disabled="updateShowFlag">
                     <el-option v-for="item in ContractNameconfigList" :key="item.ContractCode" :label="item.ContractName"
-                               :value="item.ContractCode"
-                    />
+                      :value="item.ContractCode" />
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="合同类型" prop="ContractType">
                   <el-select v-model="updateContractsForm.ContractType" filterable placeholder="合同类型" clearable=""
-                             :disabled="updateShowFlag"
-                  >
+                    :disabled="updateShowFlag">
                     <el-option v-for="item in GetContractTypeArray" :key="item.Code" :label="item.Name"
-                               :value="item.Code"
-                    />
+                      :value="item.Code" />
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -1243,19 +1164,16 @@
                     <span>甲方名称</span>
                   </template>
                   <el-select v-model="updateContractsForm.CompanyId" class="CompanySelectClass" filterable
-                             placeholder="公司名称（模糊搜索）" clearable="" remote reserve-keyword :remote-method="remoteMethod"
-                             :disabled="updateShowFlag" @visible-change="clearselectCorporationDatas"
-                             @change="changeCompanyIdUpdate"
-                  >
+                    placeholder="公司名称（模糊搜索）" clearable="" remote reserve-keyword :remote-method="remoteMethod"
+                    :disabled="updateShowFlag" @visible-change="clearselectCorporationDatas"
+                    @change="changeCompanyIdUpdate">
                     <el-option v-for="item in selectCorporationDatas" :key="item.value" :label="item.label"
-                               :value="item.value"
-                    />
+                      :value="item.value" />
                   </el-select>
                   <div>
                     <el-tooltip class="item" effect="dark" content="添加公司" placement="top-start">
                       <el-button title="添加公司" style="margin-left:10px ;font-size:15px" type="text"
-                                 icon="el-icon-circle-plus-outline" @click="AddDialog"
-                      />
+                        icon="el-icon-circle-plus-outline" @click="AddDialog" />
                     </el-tooltip>
                   </div>
                 </el-form-item>
@@ -1266,8 +1184,7 @@
                     <span>乙方名称</span>
                   </template>
                   <el-select v-model="updateContractsForm.SecondPartyName" filterable placeholder="乙方名称" clearable=""
-                             :disabled="ConCompany || updateContractsForm.ContractTypesOf == 2 || updateContractsForm.ContractTypesOf == 3"
-                  >
+                    :disabled="ConCompany || updateContractsForm.ContractTypesOf == 2 || updateContractsForm.ContractTypesOf == 3">
                     <el-option v-for="item in DicCategoryList" :key="item.Code" :label="item.Name" :value="item.Code" />
                   </el-select>
                 </el-form-item>
@@ -1277,21 +1194,18 @@
               <el-col :span="12">
                 <el-form-item label="主合同" prop="ParentContractCode">
                   <el-select v-model="updateContractsForm.ParentContractCode" class="CompanySelectClass" filterable
-                             placeholder="合同类型 - 甲方名称 - 合同期" clearable="" remote reserve-keyword
-                             :remote-method="remoteMethodParent" :disabled="updateShowFlag"
-                             @visible-change="clearselectCorporationDatasParent" @change="ParentChangeCompanyIdUpdate"
-                  >
+                    placeholder="合同类型 - 甲方名称 - 合同期" clearable="" remote reserve-keyword
+                    :remote-method="remoteMethodParent" :disabled="updateShowFlag"
+                    @visible-change="clearselectCorporationDatasParent" @change="ParentChangeCompanyIdUpdate">
                     <el-option v-for="item in selectCorporationDatasParent" :key="item.value" :label="item.label"
-                               :value="item.value"
-                    />
+                      :value="item.value" />
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="年签批次" prop="YearBatch">
                   第 <el-input-number v-model="updateContractsForm.YearBatch" controls-position="right" :min="1"
-                                     :disabled="updateShowFlag"
-                  /> 年签
+                    :disabled="updateShowFlag" /> 年签
                   <el-tooltip content="未填写保存时默认第一年签" placement="top">
                     <el-button style="margin-left:15px ;" type="text" @click="saveYearBatch">修改</el-button>
                   </el-tooltip>
@@ -1307,8 +1221,7 @@
               <el-col :span="12">
                 <el-form-item label="备注" prop="Remark">
                   <el-input v-model="updateContractsForm.Remark" placeholder="500字以内" type="textarea" :rows="1"
-                            maxlength="500"
-                  />
+                    maxlength="500" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -1316,7 +1229,8 @@
               <el-col :span="24">
                 <el-form-item label="曾用名">
                   <el-row>
-                    <el-col v-for="item in CompanyRelationList" :key="item.CompanyrelationName" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+                    <el-col v-for="item in CompanyRelationList" :key="item.CompanyrelationName" :xs="24" :sm="12" :md="12"
+                      :lg="12" :xl="6">
                       <el-tag type="primary">
                         {{ item.CompanyrelationName }}
                       </el-tag>
@@ -1329,14 +1243,12 @@
               <el-col :span="24">
                 <el-form-item label="付款方">
                   <el-tag v-for="item in PayerArray" :key="item.Code" effect="plain"
-                          :closable="updateContractsForm.CompanyId + '' != item.Code + ''" style="margin-right: 18px;"
-                          :type="item.Type" @close="handleClose(item.Code)"
-                  >{{ item.Name
-                  }}</el-tag>
+                    :closable="updateContractsForm.CompanyId + '' != item.Code + ''" style="margin-right: 18px;"
+                    :type="item.Type" @close="handleClose(item.Code)">{{ item.Name
+                    }}</el-tag>
                   <el-divider style="margin:15px 0 !important" />
                   <el-button icon="el-icon-plus" plain size="mini" :disabled="updateShowFlag"
-                             @click="showCollectionDialog(false)"
-                  >
+                    @click="showCollectionDialog(false)">
                     关联付款方</el-button>
                 </el-form-item>
               </el-col>
@@ -1353,15 +1265,13 @@
               <el-col :span="12">
                 <el-form-item ref="BeginTime" label="开始日期" prop="BeginTime">
                   <el-date-picker v-model="updateContractsForm.BeginTime" type="date" placeholder="选择日期"
-                                  :disabled="updateShowFlag"
-                  />
+                    :disabled="updateShowFlag" />
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="结束日期" prop="EndTime">
                   <el-date-picker v-model="updateContractsForm.EndTime" type="date" placeholder="结束日期"
-                                  :disabled="updateShowFlag"
-                  />
+                    :disabled="updateShowFlag" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -1369,15 +1279,13 @@
               <el-col :span="12">
                 <el-form-item label="实际开始日期" prop="ActualBeginTime">
                   <el-date-picker v-model="updateContractsForm.ActualBeginTime" type="date" placeholder="结束日期"
-                                  :disabled="updateShowFlag"
-                  />
+                    :disabled="updateShowFlag" />
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="实际结束日期" prop="ActualEndTime">
                   <el-date-picker v-model="updateContractsForm.ActualEndTime" type="date" placeholder="结束日期"
-                                  :disabled="updateShowFlag"
-                  />
+                    :disabled="updateShowFlag" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -1390,8 +1298,7 @@
               <el-col v-if="updateContractsForm.ContractTypesOf != 3" :span="12">
                 <el-form-item label="提成占比" prop="Percentage">
                   <el-input v-model="updateContractsForm.Percentage" :disabled="updateShowFlag"> <template
-                    slot="append"
-                  >%</template>
+                      slot="append">%</template>
                   </el-input>
 
                 </el-form-item>
@@ -1401,8 +1308,7 @@
               <el-col :span="12">
                 <el-form-item label="销售人员" prop="SaleId">
                   <el-select v-model="updateContractsForm.SaleId" filterable placeholder="销售人员" clearable=""
-                             :disabled="updateShowFlag || updateContractsForm.ContractTypesOf == 2 || updateContractsForm.ContractTypesOf == 3"
-                  >
+                    :disabled="updateShowFlag || updateContractsForm.ContractTypesOf == 2 || updateContractsForm.ContractTypesOf == 3">
                     <el-option v-for="item in UserList" :key="item.UserID" :label="item.UserName" :value="item.UserID" />
                   </el-select>
                 </el-form-item>
@@ -1410,8 +1316,7 @@
               <el-col v-if="updateContractsForm.ContractTypesOf != 3" :span="12">
                 <el-form-item label="签订时间" prop="SignTime">
                   <el-date-picker v-model="updateContractsForm.SignTime" type="date" placeholder="签订时间"
-                                  :disabled="updateShowFlag"
-                  />
+                    :disabled="updateShowFlag" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -1429,12 +1334,11 @@
                 </el-col>
                 <el-col :span="6">
                   <el-form-item :key="domain.key" label-width="85px" :label="'单价' + (index + 1)"
-                                :prop="'domains.' + index + '.UnitPrice'" :rules="{
-                                  required: true,
-                                  message: '合同单价不能为空',
-                                  trigger: 'blur',
-                                }"
-                  >
+                    :prop="'domains.' + index + '.UnitPrice'" :rules="{
+                      required: true,
+                      message: '合同单价不能为空',
+                      trigger: 'blur',
+                    }">
                     <el-input v-model="domain.UnitPrice" clearable :disabled="UnitPriceFlag" @input="handleChangeUpt" />
                   </el-form-item>
                 </el-col>
@@ -1445,12 +1349,11 @@
                 </el-col>
                 <el-col :span="6">
                   <el-form-item :key="domain.key" label-width="85px" :label="'数量' + (index + 1)"
-                                :prop="'domains.' + index + '.Quantity'" :rules="{
-                                  required: true,
-                                  message: '合同数量不能为空',
-                                  trigger: 'blur',
-                                }"
-                  >
+                    :prop="'domains.' + index + '.Quantity'" :rules="{
+                      required: true,
+                      message: '合同数量不能为空',
+                      trigger: 'blur',
+                    }">
                     <el-input v-model="domain.Quantity" clearable :disabled="UnitPriceFlag" @input="handleChangeUpt" />
                   </el-form-item>
                 </el-col>
@@ -1461,14 +1364,12 @@
                 </el-col>
                 <el-col :span="1" style="line-height:100% ;text-align:center">
                   <el-button style="margin-left:10px ;font-size:14px" type="text" icon="el-icon-delete"
-                             :disabled="UnitPriceFlag" @click.prevent="removeDomainUpt(domain)"
-                  />
+                    :disabled="UnitPriceFlag" @click.prevent="removeDomainUpt(domain)" />
                 </el-col>
                 <el-col :span="1">
                   <el-form-item
                     v-if="updateContractsForm.domains.length > 1 && index == updateContractsForm.domains.length - 1"
-                    label-width="0"
-                  >
+                    label-width="0">
                     <span style="font-size:14px; font-weight:500;display: block;text-align: left;">））</span>
                   </el-form-item>
                   <el-form-item v-else label-width="0">
@@ -1485,10 +1386,9 @@
 
             <el-form-item v-if="updateContractsForm.ContractTypesOf != 3">
               <el-button size="mini" icon="el-icon-plus" class="addItemClass" :disabled="UnitPriceFlag"
-                         @click="addDomainUpt"
-              >新增条目</el-button>
+                @click="addDomainUpt">新增条目</el-button>
               <el-button type="text" style="margin-left: 10px;color:#6959CD" @click="showMessage = !showMessage">{{
-                                                                                                                   showMessage ? "收起说明" : "展开说明" }}
+                showMessage ? "收起说明" : "展开说明" }}
                 <i v-if="showMessage" class="el-icon-arrow-up" />
                 <i v-if="!showMessage" class="el-icon-arrow-down" />
               </el-button>
@@ -1502,11 +1402,9 @@
               <el-col :span="6">
                 <el-form-item label-width="85px" label="缴费方式" prop="PaymentMethod">
                   <el-select v-model="updateContractsForm.PaymentMethod" filterable placeholder="缴费方式" clearable=""
-                             :disabled="updateShowFlag" @change="handleChangeUpt"
-                  >
+                    :disabled="updateShowFlag" @change="handleChangeUpt">
                     <el-option v-for="item in PaymentMethodList" :key="item.Code" :label="item.Name + ' ' + item.Fee"
-                               :value="item.Code"
-                    >
+                      :value="item.Code">
                       <span style="float: left">{{ item.Name }}</span>
                       <span style="float: right; color: #8492a6; font-size: 13px">{{ item.Fee }}</span>
                     </el-option>
@@ -1539,14 +1437,13 @@
                       </el-form-item>
                     </div>
                     <div class="transition-box"> <el-form-item label-width="120px" style="margin-bottom:6px">
-                      <el-tag effect="plain"
-                              style="border-color: #A29BC4;color:#6959CD"
-                      >如果单价中有一项或者多项为保留四位小数，那么合同金额（参与计算）只保留前两位小数（不进行四舍五入）</el-tag>
-                    </el-form-item></div>
+                        <el-tag effect="plain"
+                          style="border-color: #A29BC4;color:#6959CD">如果单价中有一项或者多项为保留四位小数，那么合同金额（参与计算）只保留前两位小数（不进行四舍五入）</el-tag>
+                      </el-form-item></div>
                     <div class="transition-box"> <el-form-item label-width="120px" style="margin-bottom:6px">
-                      <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD">如果有多个项目类型请点击上方 “新增条目”
-                        按钮自行动态添加金额条目（金额条目至少有一个）</el-tag>
-                    </el-form-item> </div>
+                        <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD">如果有多个项目类型请点击上方 “新增条目”
+                          按钮自行动态添加金额条目（金额条目至少有一个）</el-tag>
+                      </el-form-item> </div>
                   </div>
                 </el-collapse-transition>
               </div>
@@ -1555,8 +1452,7 @@
               <el-col :span="24">
                 <el-form-item label="金额备注" prop="ContractAmountDetail">
                   <el-input v-model="updateContractsForm.ContractAmountDetail" type="textarea" :rows="5" maxlength="500"
-                            :disabled="UnitPriceFlag"
-                  />
+                    :disabled="UnitPriceFlag" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -1697,9 +1593,8 @@
               <el-col :span="24">
                 <el-form-item label="已上传文件">
                   <el-button v-if="updateContractsForm.ArchivedType == 2" icon="el-icon-receiving" size="mini"
-                             style="margin-bottom:13px" plain :loading="placeFileLoading" type="warning"
-                             @click="placeFile"
-                  >归档</el-button>
+                    style="margin-bottom:13px" plain :loading="placeFileLoading" type="warning"
+                    @click="placeFile">归档</el-button>
                   <div v-for="item in updateContractsForm.FileLists" :key="item.name" class="bottom clearfix">
                     <!-- <el-link type="primary" class="time" :href="item.url" target="_blank">{{ item.name }}
                     </el-link> -->
@@ -1721,49 +1616,41 @@
               <el-col :span="24">
                 <el-form-item label="附件上传">
                   <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
-                             accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
-                             :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
-                             :file-list="fileListUpload" :on-change="handleChangeUpdate"
-                  >
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
+                    :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
+                    :file-list="fileListUpload" :on-change="handleChangeUpdate">
                     <el-button v-if="updateContractsForm.ArchivedType != 3" slot="trigger" icon="el-icon-position"
-                               size="mini" plain type="primary"
-                    >选取文件</el-button>
-                    <el-button v-if="updateContractsForm.ArchivedType != 3" icon="el-icon-upload2" size="mini" plain
-                               style="margin-left: 10px;margin-bottom: 7px;" type="success" :loading="uploadServerLoading"
-                               @click="submitUploadUpdate"
-                    >上传到服务器</el-button>
-                    <h3>注：合同或协议{{ "\xa0\xa0" }}
+                      size="mini" plain type="primary">选取文件</el-button>
+                  </el-upload>
+                  <el-button v-if="updateContractsForm.ArchivedType != 3 && UploadServerFlagUpdate" icon="el-icon-upload2" size="mini" plain
+                      style="margin-top: 0.8rem;" type="success" :loading="uploadServerLoading"
+                      @click="submitUploadUpdate">上传到服务器</el-button>
+                  <h3>注：合同或协议{{ "\xa0\xa0" }}
                       <span class="magic">
                         <span class="magic-star">
                           <svg viewBox="0 0 512 512">
                             <path
-                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z"
-                            />
+                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
                           </svg>
                         </span>
                         <span class="magic-star">
                           <svg viewBox="0 0 512 512">
                             <path
-                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z"
-                            />
+                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
                           </svg>
                         </span>
                         <span class="magic-star">
                           <svg viewBox="0 0 512 512">
                             <path
-                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z"
-                            />
+                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
                           </svg>
                         </span>
                         <span class="magic-text">双方盖章完成后</span>
                       </span>
                       {{ "\xa0\xa0" }}，请上传电子版扫描件
                     </h3>
-                    <div slot="tip" class="uploadClass">只能上传文档和图片格式文件，且不超过<span style="color:#ff4949 ;">20M</span>
-                    </div>
-                    <div slot="tip" class="uploadClass">可一次选取多个文件，上传完成请点击上传到服务器，否则文档不能保存。</div>
-                    <div slot="tip" class="uploadClass">下面为新上传的文件</div>
-                  </el-upload>
+                    <div class="el-upload__tip">只能上传office文件，且不超过<span
+                        style="color:#ff4949 ;">20M</span>，可一次选取多个文件，上传完成请点击上传到服务器。</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -1774,8 +1661,7 @@
       <el-row class="buttonCenter">
         <el-col>
           <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingUpdate || uploadServerLoading"
-                     @click="saveUpdate"
-          >保 存</el-button>
+            @click="saveUpdate">保 存</el-button>
         </el-col>
       </el-row>
     </el-dialog>
@@ -1832,8 +1718,7 @@
         <el-row class="buttonCenter">
           <el-col>
             <el-button icon="el-icon-circle-check" type="primary" :loading="auditStatusCheckLoading"
-                       @click="saveAuditStatusCheck"
-            >确 定
+              @click="saveAuditStatusCheck">确 定
             </el-button>
           </el-col>
         </el-row>
@@ -1841,8 +1726,7 @@
     </el-dialog>
     <!-- 关联公司、关联客服弹出窗口 -->
     <el-dialog :title="connectTitle" :visible.sync="connectDialogVisible" top="5vh" width="1100px"
-               :before-close="closeLoading"
-    >
+      :before-close="closeLoading">
       <el-card v-loading="connectLoading" class="box-card">
         <div slot="header" class="clearfix">
           <span>选择公司进行关联</span>
@@ -1850,15 +1734,13 @@
             <!-- <el-button type="success" icon="el-icon-circle-plus-outline" @click="AddDialog">添加新公司
             </el-button> -->
             <el-button type="primary" icon="el-icon-circle-check" :loading="LoadingRoleUpdate"
-                       @click="saveConnectUpdate"
-            >提交保存</el-button>
+              @click="saveConnectUpdate">提交保存</el-button>
           </el-button-group>
         </div>
         <!-- <el-transfer v-model="value" :data="data"></el-transfer> -->
         <el-virtual-transfer ref="transferCom" v-model="BindCompanyA.ComAArray"
-                             style="width:943px;margin: auto; height: calc(100vh - 300px);" :data="CompanyNameAList" :titles="connecttitles"
-                             :button-texts="buttonTexts" filterable :filter-placeholder="filterPlaceholder" :props="transferProps"
-        />
+          style="width:943px;margin: auto; height: calc(100vh - 300px);" :data="CompanyNameAList" :titles="connecttitles"
+          :button-texts="buttonTexts" filterable :filter-placeholder="filterPlaceholder" :props="transferProps" />
       </el-card>
     </el-dialog>
     <!-- （添加修改）关联公司、关联客服弹出窗口 -->
@@ -1874,16 +1756,14 @@
         </div>
         <!-- <el-transfer v-model="value" :data="data"></el-transfer> -->
         <el-virtual-transfer ref="transferCom" v-model="BindCompanyA.ComAArray"
-                             style="width:943px;margin: auto; height: calc(100vh - 300px);" :data="CompanyNameAList" :titles="connecttitles"
-                             :button-texts="buttonTexts" filterable :filter-placeholder="filterPlaceholder" :filter-method="filterMethodCom"
-                             :props="transferProps"
-        />
+          style="width:943px;margin: auto; height: calc(100vh - 300px);" :data="CompanyNameAList" :titles="connecttitles"
+          :button-texts="buttonTexts" filterable :filter-placeholder="filterPlaceholder" :filter-method="filterMethodCom"
+          :props="transferProps" />
       </el-card>
     </el-dialog>
     <!-- 关联销售弹出窗口 -->
     <el-dialog title="关联销售" :visible.sync="connectSaleDialogVisible" top="5vh" width="60%"
-               :before-close="closeSaleLoading"
-    >
+      :before-close="closeSaleLoading">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <el-form ref="addSaleRef" :model="addSaleForm" :rules="addSaleRules" label-width="120px" class="SaleClass">
@@ -1905,8 +1785,7 @@
               <el-col :span="8">
                 <el-form-item prop="button">
                   <el-button icon="el-icon-circle-check" type="primary" :loading="LoadingSaleUpdate"
-                             @click="saveSale"
-                  >提交保存
+                    @click="saveSale">提交保存
                   </el-button>
                 </el-form-item>
               </el-col>
@@ -1926,8 +1805,7 @@
     </el-dialog>
     <!-- 添加公司弹出框 -->
     <el-dialog title="添加公司" :visible.sync="addDialogVisible" width="50%" top="5vh" append-to-body
-               @close="addDialogClosed"
-    >
+      @close="addDialogClosed">
       <el-form ref="addRef" :model="AddCompanyForm" label-width="90px" :rules="AddCompanyRules">
         <el-row>
           <el-col :span="12">
@@ -1961,8 +1839,7 @@
         </el-row>
         <el-form-item label="公司地图">
           <baidu-map class="bm-view" scroll-wheel-zoom :center="location" :zoom="zoom"
-                     ak="eRCv7o5j4Rmj4U2GsODMb71V2r4t4FIt" @ready="mapReady"
-          >
+            ak="eRCv7o5j4Rmj4U2GsODMb71V2r4t4FIt" @ready="mapReady">
             <bm-control :offset="{ width: '50px', height: '10px' }">
               <!-- 自动填充 -->
               <bm-auto-complete :sug-style="{ zIndex: 999999 }">
@@ -1988,9 +1865,8 @@
         <draggable v-model="showTitleArray" group="people" @start="drag = true" @end="drag = false">
           <el-col v-for="item in showTitleArray" :key="item" style="height:50px ;line-height:50px;width: 140px;">
             <el-button :disabled="item == '乙方合同编号' || item == '审核状态'" type="danger" plain style="margin-left: 10px;"
-                       @click="hideClick(item)"
-            ><i v-if="item != '乙方合同编号' && item != '审核状态'" class="el-icon-close " /> {{ item
-            }}</el-button>
+              @click="hideClick(item)"><i v-if="item != '乙方合同编号' && item != '审核状态'" class="el-icon-close " /> {{ item
+              }}</el-button>
           </el-col>
         </draggable>
       </el-row>
@@ -2012,18 +1888,15 @@
         <el-col :span="12" style="text-align: right;">
           <el-button icon="el-icon-circle-close" @click="titleDialogClosed">取消</el-button>
           <el-button icon="el-icon-circle-check" type="primary" :loading="ColumnSubmitLoading"
-                     @click="ColumnSubmit"
-          >确定</el-button>
+            @click="ColumnSubmit">确定</el-button>
         </el-col>
       </el-row>
     </el-dialog>
     <!-- 复制合同信息弹出窗口 -->
     <el-dialog :title="CopyContractTitle" :visible.sync="CopyContractNameVisible" top="5vh" width="60%"
-               @close="CopyContractNameClose"
-    >
+      @close="CopyContractNameClose">
       <el-table v-loading="CopyContractNameLoading" :data="CopyContractData" border fit class="formClassTable"
-                height="calc(100vh - 250px)"
-      >
+        height="calc(100vh - 250px)">
         <el-table-column prop="ContractNameStr" label="合同名称" small min-width="180" show-overflow-tooltip />
         <el-table-column prop="Name" label="合同类型" small min-width="100" />
         <el-table-column prop="SaleName" label="销售人员" small width="150" show-overflow-tooltip />
@@ -2032,16 +1905,14 @@
         <el-table-column label="操作">
           <template slot-scope="scope" class="tableRowClass">
             <el-button icon="el-icon-document-copy" type="text" size="mini"
-                       @click="CopyContractNameCloseClick(scope.row)"
-            >复制合同信息</el-button>
+              @click="CopyContractNameCloseClick(scope.row)">复制合同信息</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-dialog>
     <div v-if="isShowProgress" class="popContainer">
       <el-progress type="circle" :percentage="parseInt(fakes.progress * 100)" :stroke-width="9" :color="customColors"
-                   style="top: 30%; left: calc(50vw - 58px);color:white"
-      />
+        style="top: 30%; left: calc(50vw - 58px);color:white" />
     </div>
   </div>
 </template>
@@ -2106,6 +1977,8 @@ export default {
   },
   data() {
     return {
+      UploadServerFlag:false,
+      UploadServerFlagUpdate:false,
       CardImg: yuanfu,
       showMessage: false, // 展开合同金额说明
       addContractsTitle: '',
@@ -3233,7 +3106,31 @@ export default {
     },
     // 添加-上传文件
     handleChange(file, fileList) {
-      this.fileList = fileList
+      this.fileList = fileList;
+this.addIfShowUploadButton();
+    },
+    addIfShowUploadButton(){
+      this.UploadServerFlag=false;
+          // 正向对比
+          if (this.fileList.length != 0 || this.addContractsForm.FileList.length != 0) {
+            for (const index in this.fileList) {
+              var flagz = this.addContractsForm.FileList.filter((item) => {
+                return item.FileName == this.fileList[index].name;
+              });
+              if (flagz.length == 0) 
+              return this.UploadServerFlag=true;
+            }
+          }
+          // 反向对比
+          if (this.fileList.length != 0 || this.addContractsForm.FileList.length != 0) {
+            for (const index in this.addContractsForm.FileList) {
+              var flagf = this.fileList.filter((item) => {
+                return item.name == this.addContractsForm.FileList[index].FileName;
+              });
+              if (flagf.length == 0) 
+              return this.UploadServerFlag=true;
+            }
+          }
     },
     handleExceedAdd(files, fileList) {
       this.$message.warning('当前文件数量超过限制');
@@ -3251,6 +3148,7 @@ export default {
       this.addContractsForm.FileList = [];
       Uploads(formData).then(response => {
         if (response.success) {
+          debugger
           for (const index in response.result) {
             var addForm = {
               AttachmentName: response.result[index].AttachmentName,
@@ -3259,6 +3157,7 @@ export default {
             // 给添加表单的列表赋值
             this.addContractsForm.FileList.push(addForm);
           }
+          this.UploadServerFlag=false;
           this.$message.success("上传成功");
         } else {
           this.$message.error(response.resultMessage);
@@ -3271,14 +3170,46 @@ export default {
         })
     },
     AttachmentCodeRemove(file, fileList) {
-      this.fileList = fileList
+      this.fileList = fileList;
+      let addNew=[];
+      fileList.map((item)=>{
+        addNew.push(item.name);
+      });
+      this.addContractsForm.FileList= this.addContractsForm.FileList.filter((f)=>{
+       return addNew.includes(f.FileName)
+       })
+      this.addIfShowUploadButton();
     },
     // AttachmentCodePreview(file) {
     //   window.open(file.url);
     // },
     // 修改-上传文件
     handleChangeUpdate(file, fileList) {
-      this.fileListUpload = fileList
+      this.fileListUpload = fileList;
+this.updateIfShowUploadButton();
+    },
+    updateIfShowUploadButton(){
+      this.UploadServerFlagUpdate=false;
+          // 正向对比
+          if (this.fileListUpload.length != 0 || this.updateContractsForm.FileList.length != 0) {
+            for (const index in this.fileListUpload) {
+              var flagz = this.updateContractsForm.FileList.filter((item) => {
+                return item.FileName == this.fileListUpload[index].name;
+              });
+              if (flagz.length == 0) 
+              return this.UploadServerFlagUpdate=true;
+            }
+          }
+          // 反向对比
+          if (this.fileListUpload.length != 0 || this.updateContractsForm.FileList.length != 0) {
+            for (const index in this.updateContractsForm.FileList) {
+              var flagf = this.fileListUpload.filter((item) => {
+                return item.name == this.updateContractsForm.FileList[index].FileName;
+              });
+              if (flagf.length == 0) 
+              return this.UploadServerFlagUpdate=true;
+            }
+          }
     },
     handleExceedAddUpdate(files, fileList) {
       this.$message.warning('当前文件数量超过限制');
@@ -3304,6 +3235,7 @@ export default {
             // 给添加表单的列表赋值
             this.updateContractsForm.FileList.push(addForm);
           }
+          this.UploadServerFlagUpdate=false;
           this.$message.success("上传成功");
         } else {
           this.$message.error(response.resultMessage);
@@ -3316,7 +3248,15 @@ export default {
         })
     },
     AttachmentCodeRemoveUpdate(file, fileList) {
-      this.fileListUpload = fileList
+      this.fileListUpload = fileList;
+      let addNew=[];
+      fileList.map((item)=>{
+        addNew.push(item.name);
+      });
+      this.updateContractsForm.FileList= this.updateContractsForm.FileList.filter((f)=>{
+       return addNew.includes(f.FileName)
+       })
+      this.updateIfShowUploadButton();
     },
 
     // 保存修改状态
@@ -3610,6 +3550,7 @@ export default {
     },
     // 弹出添加窗口
     ShowContractAddDialog(types) {
+      this.UploadServerFlag=false;
       // types ： 1 合同 2 补充协议
       this.addContractsForm.ContractTypesOf = types;
       this.addContractsTitle = types == 1 ? '添加合同' : types == 2 ? '添加补充协议' : "添加付款方";
@@ -3840,7 +3781,8 @@ export default {
             : "";
           this.updateContractsForm.PayerArray = this.PayerArray;
 
-          if (this.updateContractsForm.ContractAmount != this.OldContractAmount && !this.updateContractsForm.ContractAmountDetail) {
+          if (this.updateContractsForm.ContractAmount != this.OldContractAmount && !this.updateContractsForm.ContractAmountDetail &&
+            this.updateContractsForm.ContractTypesOf != 3) {
             this.LoadingUpdate = false;
             this.$message.warning("如果修改了合同金额，那么此备注要必填");
             return;
@@ -3985,6 +3927,7 @@ export default {
     },
     // 编辑获取反填信息
     showEditDialog(item) {
+      this.UploadServerFlagUpdate=false;
       this.updateContractsForm.ContractTypesOf = item.ContractTypesOf;
       this.updateContractsTitle = item.ContractTypesOf == 1 ? "编辑合同" : item.ContractTypesOf == 2 ? "编辑补充协议" : "编辑付款方";
       // 标识，判断是否时添加或者修改
@@ -4942,6 +4885,10 @@ export default {
   }
 }
 
+h3 {
+  margin: 5px 0;
+}
+
 h3>.magic {
   display: inline-block;
   position: relative;
@@ -4962,19 +4909,27 @@ h3>.magic>.magic-star {
 h3>.magic>.magic-star>svg {
   animation: rotate 1000ms linear infinite;
   display: block;
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 h3>.magic>.magic-text {
-  animation: background-pan 3s linear infinite;
+  animation: background-pan 1.5s linear infinite;
   background: linear-gradient(to right,
-      #ff4949,
-      #ffba00,
       #6959CD,
-      #ff4949);
+      #1890ff,
+      #13ce66,
+      #ff4949,
+      #6959CD);
   background-size: 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   white-space: nowrap;
 }
+/* 下面两个样式是设置上传的文件不能删除（即使上传错误了） */
+/* ::v-deep .el-icon-close{
+  display: none;
+}
+::v-deep .el-upload-list__item:hover .el-icon-close{
+  display: none !important;
+} */
 </style>

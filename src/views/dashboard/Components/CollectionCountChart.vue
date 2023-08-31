@@ -78,7 +78,7 @@ export default {
         getEchartData() {
             const option = {
                 title: {
-                    text: this.Title,
+                    text: this.title,
                 },
                 tooltip: {
                     trigger: 'axis',
