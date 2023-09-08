@@ -546,7 +546,7 @@ export function UpdateTicket(model) {
   });
 }
 // 获取公司
-export function GetCompany(CompanyId, CompanyName, PageIndex, PageSize) {
+export function GetCompanySystem(CompanyId, CompanyName, PageIndex, PageSize) {
   return request({
     url: '/SystemManagement/GetCompany?CompanyId=' + CompanyId + '&CompanyName=' + CompanyName + '&PageIndex=' + PageIndex + '&PageSize=' + PageSize,
     method: 'post',

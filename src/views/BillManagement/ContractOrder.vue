@@ -56,8 +56,7 @@
                   <el-form-item class="whereFormClass" label="乙方公司">
                     <el-select v-model="SecondPartyName" class="timeClass" filterable placeholder="乙方公司" clearable="">
                       <el-option v-for="item in DicCategoryListAll" :key="item.Code" :label="item.Name"
-                                 :value="item.Code"
-                      />
+                        :value="item.Code" />
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -65,17 +64,15 @@
                   <el-form-item label="申请人" prop="SaleId" class="scrollClass">
                     <el-select v-model="Applicant" class="timeClass" filterable placeholder="申请人" clearable="">
                       <el-option v-for="item in UserList" :key="item.UserID" :label="item.UserName"
-                                 :value="item.UserID"
-                      />
+                        :value="item.UserID" />
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="申请日期">
                     <el-date-picker v-model="ApplicationTime" style="width:100% ;" class="rangeTimeClass" type="daterange"
-                                    range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions"
-                                    clearable="" @input="datetimeChange"
-                    />
+                      range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions"
+                      clearable="" @input="datetimeChange" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -101,9 +98,8 @@
                   开 票
                 </el-button>
                 <el-button type="text" style="margin-left: 10px;"
-                           :icon="isActive ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
-                           @click="collapseClick"
-                >{{ isActive ? "收起" : "展开" }}</el-button>
+                  :icon="isActive ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
+                  @click="collapseClick">{{ isActive ? "收起" : "展开" }}</el-button>
               </el-button-group>
             </el-col>
           </el-row>
@@ -112,26 +108,21 @@
     </el-card>
     <el-card class="CardTableClass">
       <el-table ref="multipleTable" v-loading="loading" class="tableCheckClass" :data="ContractData" fit
-                :cell-style="isRed" @selection-change="TableSelect" @row-click="toggleSelection"
-      >
+        :cell-style="isRed" @selection-change="TableSelect" @row-click="toggleSelection">
         <el-table-column v-if="fixedLeftShow" key="column" type="selection" width="50" fixed="left" />
         <el-table-column v-else key="columnFalse" type="selection" width="50" />
         <el-table-column v-if="fixedLeftShow" key="SecondContractNumberPrefix" prop="SecondContractNumberPrefix"
-                         label="乙方合同编号" min-width="160" show-overflow-tooltip fixed="left"
-        />
+          label="乙方合同编号" min-width="160" show-overflow-tooltip fixed="left" />
         <el-table-column v-else key="ContractCodeFalse" prop="SecondContractNumberPrefix" label="乙方合同编号" min-width="160"
-                         show-overflow-tooltip
-        />
+          show-overflow-tooltip />
         <!-- <el-table-column v-if="fixedLeftShow" key="ContractNameStr" prop="ContractNameStr" label="合同名称" min-width="120"
           show-overflow-tooltip fixed="left" /> -->
         <!-- <el-table-column v-else key="ContractNameStrFalse" prop="ContractNameStr" label="合同名称" min-width="120"
           show-overflow-tooltip /> -->
         <el-table-column v-if="fixedLeftShow" key="CompanyName" prop="CompanyName" label="公司名称" min-width="200"
-                         show-overflow-tooltip fixed="left"
-        />
+          show-overflow-tooltip fixed="left" />
         <el-table-column v-else key="CompanyNameFalse" prop="CompanyName" label="公司名称" min-width="200"
-                         show-overflow-tooltip
-        />
+          show-overflow-tooltip />
         <el-table-column prop="Name" label="合同类型" min-width="100" show-overflow-tooltip />
         <el-table-column prop="SecondPartyName" label="乙方公司" min-width="100" show-overflow-tooltip />
         <!-- <el-table-column v-if="fixedLeftShow" prop="ApplicationTimeStr" label="账单申请日期" min-width="130"
@@ -329,27 +320,23 @@
       </el-table>
       <!-- 分页区域 -->
       <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
-                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
-      />
+        :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
 
     <!-- 添加合同弹出页面 -->
     <el-dialog :visible.sync="addDialogVisible" top="5vh" width="60%" :lock-scroll="false" :append-to-body="true"
-               @close="addDialogVisibleClosed"
-    >
+      @close="addDialogVisibleClosed">
       <!-- 上面两个属性用来重置滚动条 -->
       <div slot="title" class="dialog-title">
         <span>添加账单</span>
       </div>
       <el-form ref="addContractOrderRef" :model="addContractOrderForm" :rules="addContractOrderRules" label-width="120px"
-               class="formClass"
-      >
+        class="formClass">
         <el-form-item label="合同信息" prop="ContractCode">
           <el-select v-model="addContractOrderForm.ContractCode" style="width:100% ;" filterable
-                     placeholder="合同类型 - 公司名称 - 合同期" clearable="" remote reserve-keyword :remote-method="remoteMethod"
-                     @visible-change="clearselectCorporationDatas"
-          >
+            placeholder="合同类型 - 公司名称 - 合同期" clearable="" remote reserve-keyword :remote-method="remoteMethod"
+            @visible-change="clearselectCorporationDatas">
             <el-option v-for="item in selectCorporationDatas" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -375,34 +362,30 @@
         <el-row v-for="(domain, index) in addContractOrderForm.domains" :key="index">
           <el-col :span="12">
             <el-form-item :key="domain.key" :label="'收款项目' + (index + 1)" :prop="'domains.' + index + '.CustomAmountName'"
-                          :rules="{
-                            required: true, message: '收款项目不能为空', trigger: 'blur'
-                          }"
-            >
+              :rules="{
+                required: true, message: '收款项目不能为空', trigger: 'blur'
+              }">
               <el-input v-model="domain.CustomAmountName" clearable />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :key="domain.key" :label="'金额' + (index + 1)" :prop="'domains.' + index + '.CustomAmount'"
-                          :rules="{
-                            required: true,
-                            pattern:
-                              /^([0-9]\d*(\.\d{1,2})?|([0](\.([0][0-9]|[0-9]\d{0,1}))))$/,
-                            message: '金额输入不合法（不能小于0小数位不超过2位）',
-                            trigger: 'blur',
-                          }"
-            >
+              :rules="{
+                required: true,
+                pattern:
+                  /^([0-9]\d*(\.\d{1,2})?|([0](\.([0][0-9]|[0-9]\d{0,1}))))$/,
+                message: '金额输入不合法（不能小于0小数位不超过2位）',
+                trigger: 'blur',
+              }">
               <el-input v-model="domain.CustomAmount" clearable @input="handleChangeAdd(domain.CustomAmount, index)" />
             </el-form-item>
           </el-col>
           <el-col :span="4" style="line-height:100% ;">
             <el-form-item label-width="0">
               <el-tag v-if="domain.OrderState == 1" key="未回款" style="margin-left:10px ;" :disabled="true" effect="plain"
-                      type="danger"
-              >未回款</el-tag>
+                type="danger">未回款</el-tag>
               <el-button style="margin-left:10px ;" type="text" icon="el-icon-delete"
-                         @click.prevent="removeDomain(domain)"
-              />
+                @click.prevent="removeDomain(domain)" />
             </el-form-item>
 
           </el-col>
@@ -440,8 +423,7 @@
             <el-form-item label="申请人" prop="Applicant">
               <el-select v-model="addContractOrderForm.Applicant" filterable placeholder="申请人">
                 <el-option v-for="item in UserList" :key="item.UserID" :class="item.Class" :label="item.UserName"
-                           :value="item.UserID"
-                />
+                  :value="item.UserID" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -456,19 +438,16 @@
             <el-form-item label="账单使用状态" prop="IsUsed">
               <el-select v-model="addContractOrderForm.IsUsed" filterable placeholder="账单使用状态">
                 <el-option v-for="item in OrderStateArray" :key="item.Code" :class="item.Class" :label="item.Name"
-                           :value="item.Code"
-                />
+                  :value="item.Code" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="回款状态" prop="CollectionState">
               <el-select v-model="addContractOrderForm.CollectionState" disabled="" filterable placeholder="回款状态"
-                         clearable=""
-              >
+                clearable="">
                 <el-option v-for="item in PaymentCollectionStateArray" :key="item.Code" :label="item.Name"
-                           :value="item.Code"
-                />
+                  :value="item.Code" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -491,19 +470,16 @@
       </el-form>
     </el-dialog>
     <el-dialog :visible.sync="updateDialogVisible" top="5vh" :lock-scroll="false" :append-to-body="true" width="60%"
-               @close="detailUpdateDialogVisibleClosed"
-    >
+      @close="detailUpdateDialogVisibleClosed">
       <div slot="title" class="dialog-title">
         <span>编辑帐单</span>
       </div>
       <el-form ref="updateContractsRef" :model="updateContractOrderForm" :rules="addContractOrderRules"
-               label-width="120px" class="formClass"
-      >
+        label-width="120px" class="formClass">
         <el-form-item label="合同信息" prop="ContractCode">
           <el-select v-model="updateContractOrderForm.ContractCode" disabled="" style="width:100% ;" filterable
-                     placeholder="合同类型 - 公司名称 - 合同期" clearable="" remote reserve-keyword :remote-method="remoteMethod"
-                     @visible-change="clearselectCorporationDatas"
-          >
+            placeholder="合同类型 - 公司名称 - 合同期" clearable="" remote reserve-keyword :remote-method="remoteMethod"
+            @visible-change="clearselectCorporationDatas">
             <el-option v-for="item in selectCorporationDatas" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -531,58 +507,48 @@
         <el-row v-for="(domain, index) in updateContractOrderForm.domains" :key="index">
           <el-col :span="8">
             <el-form-item :key="domain.key" :label="'收款项目' + (index + 1)" :prop="'domains.' + index + '.CustomAmountName'"
-                          :rules="{
-                            required: true, message: '收款项目不能为空', trigger: 'blur'
-                          }"
-            >
+              :rules="{
+                required: true, message: '收款项目不能为空', trigger: 'blur'
+              }">
               <el-input v-model="domain.CustomAmountName"
-                        :disabled="!updateShow || (domain.OrderAmount != 0 && !domain.Flag)" clearable
-              />
+                :disabled="!updateShow || (domain.OrderAmount != 0 && !domain.Flag)" clearable />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item :key="domain.key" :label="'金额' + (index + 1)" :prop="'domains.' + index + '.CustomAmount'"
-                          :rules="{
-                            required: true,
-                            pattern:
-                              /^([0-9]\d*(\.\d{1,2})?|([0](\.([0][0-9]|[0-9]\d{0,1}))))$/,
-                            message: '金额输入不合法（不能小于0小数位不超过2位）',
-                            trigger: 'blur',
-                          }"
-            >
+              :rules="{
+                required: true,
+                pattern:
+                  /^([0-9]\d*(\.\d{1,2})?|([0](\.([0][0-9]|[0-9]\d{0,1}))))$/,
+                message: '金额输入不合法（不能小于0小数位不超过2位）',
+                trigger: 'blur',
+              }">
               <el-input v-model="domain.CustomAmount" :disabled="!updateShow || (domain.OrderAmount != 0 && !domain.Flag)"
-                        clearable @input="handleChangeUpdate(domain.CustomAmount, index)"
-              />
+                clearable @input="handleChangeUpdate(domain.CustomAmount, index)" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item :key="domain.key" :label="'回款金额' + (index + 1)" :prop="'domains.' + index + '.OrderAmount'">
               <el-input v-model="domain.OrderAmount" :disabled="true" clearable
-                        @input="handleChangeUpdate(domain.OrderAmount, index)"
-              />
+                @input="handleChangeUpdate(domain.OrderAmount, index)" />
             </el-form-item>
           </el-col>
           <el-col :span="4" style="line-height:100% ;margin:auto">
             <el-form-item label-width="0">
               <el-tag v-if="domain.OrderState == 1" key="未回款" style="margin-left:10px ;" :disabled="true" effect="plain"
-                      type="danger"
-              >未回款</el-tag>
+                type="danger">未回款</el-tag>
               <el-tag v-if="domain.OrderState == 2" key="已回款" style="margin-left:10px ;" :disabled="true" effect="plain"
-                      type="success"
-              >已回款</el-tag>
+                type="success">已回款</el-tag>
               <el-tag v-if="domain.OrderState == 3" key="部分回款" style="margin-left:10px ;" :disabled="true"
-                      effect="plain"
-              >部分回款</el-tag>
+                effect="plain">部分回款</el-tag>
               <el-button :disabled="!updateShow || (domain.OrderAmount != 0 && !domain.Flag)" style="margin-left:10px ;"
-                         type="text" icon="el-icon-delete" @click.prevent="removeDomainUpdate(domain)"
-              />
+                type="text" icon="el-icon-delete" @click.prevent="removeDomainUpdate(domain)" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item>
           <el-button size="mini" :disabled="!updateShow" icon="el-icon-plus" class="addItemClass"
-                     @click="addDomainUpdate"
-          >新增自定义金额</el-button>
+            @click="addDomainUpdate">新增自定义金额</el-button>
         </el-form-item>
         <!-- <el-form-item label="合计" prop="AmountReceived">
                     <el-input placeholder="先添加数据然后再添加自定义金额" v-model="updateContractOrderForm.AmountReceived" readonly>
@@ -613,16 +579,14 @@
             <el-form-item label="申请人" prop="Applicant">
               <el-select v-model="updateContractOrderForm.Applicant" :disabled="!updateShow" filterable placeholder="申请人">
                 <el-option v-for="item in UserList" :key="item.UserID" :class="item.Class" :label="item.UserName"
-                           :value="item.UserID"
-                />
+                  :value="item.UserID" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="账单申请日期" prop="ApplicationTime">
               <el-date-picker v-model="updateContractOrderForm.ApplicationTime" :disabled="!updateShow" type="date"
-                              placeholder="账单申请日期"
-              />
+                placeholder="账单申请日期" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -632,19 +596,16 @@
             <el-form-item label="账单使用状态" prop="IsUsed">
               <el-select v-model="updateContractOrderForm.IsUsed" :disabled="!updateShow" filterable placeholder="账单使用状态">
                 <el-option v-for="item in OrderStateArray" :key="item.Code" :class="item.Class" :label="item.Name"
-                           :value="item.Code"
-                />
+                  :value="item.Code" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="回款状态" prop="CollectionState">
               <el-select v-model="updateContractOrderForm.CollectionState" disabled filterable placeholder="回款状态"
-                         clearable=""
-              >
+                clearable="">
                 <el-option v-for="item in PaymentCollectionStateArray" :key="item.Code" :label="item.Name"
-                           :value="item.Code"
-                />
+                  :value="item.Code" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -720,8 +681,7 @@
         <el-form-item label="发票状态" style="margin-top:20px;">
           <el-select v-model="InvoiceState" filterable placeholder="发票状态" clearable>
             <el-option v-for="item in InvoiceStatusList" :key="item.Code" :class="item.Class" :label="item.Name"
-                       :value="item.Code"
-            >
+              :value="item.Code">
               <el-tag v-if="item.Code == 5" :key="item.Code" effect="plain" type="info">
                 {{ item.Name }}
               </el-tag>
@@ -741,8 +701,7 @@
         <el-row class="buttonCenter">
           <el-col>
             <el-button icon="el-icon-circle-check" type="primary" :loading="auditStatusCheckLoading"
-                       @click="saveAuditStatusCheck"
-            >保 存
+              @click="saveAuditStatusCheck">保 存
             </el-button>
           </el-col>
         </el-row>
@@ -750,8 +709,7 @@
     </el-dialog>
     <!-- 弹出开票窗口 -->
     <el-dialog title="开票申请" :visible.sync="updateInvoicingDialogVisible" top="5vh" width="70%"
-               @close="InvoicingVisibleClosed"
-    >
+      @close="InvoicingVisibleClosed">
       <el-descriptions v-if="ClickRow" title="公司发票信息" class="margin-top" :column="3" border>
         <el-descriptions-item>
           <template slot="label">
@@ -824,8 +782,7 @@
         <el-table-column label="本次发票金额" prop="ServReceiveNew" min-width="120">
           <template slot-scope="scope">
             <el-input v-model="scope.row.ServReceiveNew" size="mini" placeholder="金额" clearable
-                      @input="handleChange(scope.row)"
-            />
+              @input="handleChange(scope.row)" />
           </template>
         </el-table-column>
         <el-table-column label="账单状态" prop="BillingState" width="90">
@@ -836,7 +793,7 @@
         </el-table-column>
       </el-table>
       <el-divider />
-      <el-descriptions title="公司开票信息" class="margin-top" :column="3" border>
+      <el-descriptions title="公司开票信息" class="margin-top" :column="2" border>
         <el-descriptions-item>
           <template slot="label">
             <i class="el-icon-office-building" />
@@ -850,8 +807,7 @@
             统一信用代码/税号
           </template>
           <el-input v-model="DicCategoryList.TaxpayerIdentificationNumber" placeholder="输入失去焦点自动更新"
-                    @blur="UpdateCompany"
-          />
+            @blur="UpdateCompany" />
         </el-descriptions-item>
         <el-descriptions-item>
           <template slot="label">
@@ -884,26 +840,25 @@
       </el-descriptions>
       <el-divider />
       <el-form ref="updateInvoiceRef" :model="updateInvoiceFrom" :rules="updateContractsRules" label-width="100px"
-               class="formClass"
-      >
+        class="formClass">
         <el-row>
-          <el-col :span="24">
-            <el-form-item label-width="100px">
+          <el-col :span="24" >
+            <el-form-item label-width="0" style="margin-bottom:0 ;">
               <el-tag effect="plain"
-                      style="border-color: #A29BC4;color:#6959CD;margin-right:15px"
-              >（选择增值税专用发票、增值税电子普通发票）上方公司开票信息所有字段不可为空</el-tag>
+                style="border-color: #A29BC4;color:#6959CD;margin-right:15px">（选择增值税专用发票、增值税电子普通发票）上方公司开票信息所有字段不可为空</el-tag>
               <el-tag effect="plain"
-                      style="border-color: #A29BC4;color:#6959CD;margin-right:15px"
-              >（选择增值税普通发票）上方公司名称、统一信用代码/税号不可为空</el-tag>
+                style="border-color: #A29BC4;color:#6959CD;margin-right:15px">（选择增值税普通发票）上方公司名称、统一信用代码/税号不可为空</el-tag>
               <el-tag effect="plain" style="border-color: #A29BC4;color:#6959CD;">开票完成后公司信息和开票信息尽量不要更改</el-tag>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-divider />
+        <el-row>
           <el-col :span="12">
             <el-form-item label="发票种类" prop="InvoiceType">
               <el-select v-model="updateInvoiceFrom.InvoiceType" filterable placeholder="发票种类">
                 <el-option v-for="item in InvoiceTypeList" :key="item.Code" :class="item.Class" :label="item.Name"
-                           :value="item.Code"
-                />
+                  :value="item.Code" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -918,8 +873,7 @@
             <el-form-item label="发票科目" prop="InvoiceAccount">
               <el-select v-model="updateInvoiceFrom.InvoiceAccount" filterable placeholder="发票科目">
                 <el-option v-for="item in InvoiceAccountList" :key="item.InvoiceAccountCode" :class="item.Class"
-                           :label="item.InvoiceAccountName" :value="item.InvoiceAccountCode"
-                />
+                  :label="item.InvoiceAccountName" :value="item.InvoiceAccountCode" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -927,8 +881,7 @@
             <el-form-item label="发票类型" prop="InvoiceTypes">
               <el-select v-model="updateInvoiceFrom.InvoiceTypes" filterable placeholder="发票类型">
                 <el-option v-for="item in InvoiceTypesList" :key="item.Code" :class="item.Class" :label="item.Name"
-                           :value="item.Code"
-                />
+                  :value="item.Code" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -965,24 +918,22 @@
         </el-form-item>
         <el-form-item label="附件上传">
           <el-upload ref="upload" class="upload-demo" action="" :headers="header" multiple
-                     accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
-                     :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
-                     :file-list="fileListUpload" :on-change="handleChangeAddUpload"
-          >
+            accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.gif,.bmp,.ppt,.pptx,.rtf,.txt" :limit="20"
+            :on-exceed="handleExceedAddUpdate" :on-remove="AttachmentCodeRemoveUpdate" :auto-upload="false"
+            :file-list="fileListUpload" :on-change="handleChangeAddUpload">
             <el-button slot="trigger" icon="el-icon-position" plain type="primary">选取文件</el-button>
           </el-upload>
           <el-button v-if="UploadServerFlag" icon="el-icon-upload2" plain style="margin-top: 0.8rem;" type="success"
-                       :loading="uploadServerLoading" @click="submitUploadUpdate"
-            >上传到服务器</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传office文件，且不超过<span style="color:#ff4949 ;">20M</span>，可一次选取多个文件，上传完成请点击上传到服务器。</div>
+            :loading="uploadServerLoading" @click="submitUploadUpdate">上传到服务器</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传office文件，且不超过<span
+              style="color:#ff4949 ;">20M</span>，可一次选取多个文件，上传完成请点击上传到服务器。</div>
         </el-form-item>
       </el-form>
       <el-divider />
       <el-row style="text-align:center;">
         <el-col :span="24">
           <el-button icon="el-icon-circle-check" :loading="LoadingInvoicing || uploadServerLoading" type="primary"
-                     @click="saveInvoicing"
-          >保
+            @click="saveInvoicing">保
             存</el-button>
         </el-col>
       </el-row>
@@ -1006,7 +957,7 @@ import {
   InvoicingData,
 } from "@/api/CollectionMangement";
 import {
-  GetCompany,
+  GetCompanySystem,
   GetInvoiceAccount,
   Uploads,
   UpdateCompany,
@@ -1027,7 +978,7 @@ export default {
   },
   data() {
     return {
-      UploadServerFlag:false,
+      UploadServerFlag: false,
       SecondPartyName: "",
       DicCategoryListAll: [],
       DicCategoryList: [],
@@ -1856,7 +1807,7 @@ export default {
         return v
       });
       // 根据公司编号获取公司发票信息
-      GetCompany(
+      GetCompanySystem(
         dataArr[0].CompanyId, // 公司编号
         '',
         1,
@@ -2044,7 +1995,7 @@ export default {
     },
     // 弹出添加窗口
     ShowContractAddDialog() {
-      this.UploadServerFlag=false;
+      this.UploadServerFlag = false;
       this.CompanyList = [];
       this.addContractOrderForm.CollectionState = 1;
       this.addDialogVisible = true;
