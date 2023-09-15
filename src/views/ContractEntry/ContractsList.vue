@@ -92,7 +92,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-                  <el-form-item label="添加人员">
+                  <el-form-item label="添加人员" class="whereFormClass">
                     <el-select v-model="CreateUserId" class="timeClass" filterable placeholder="添加人员" clearable="">
                       <el-option v-for="item in UserList" :key="item.UserID" :label="item.UserName"
                         :value="item.UserID" />
@@ -102,7 +102,7 @@
               </el-row>
               <el-row>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-                  <el-form-item label="审核状态">
+                  <el-form-item label="审核状态" class="whereFormClass">
                     <el-select v-model="AuditStatus" class="timeClass" filterable placeholder="审核状态" clearable>
                       <el-option v-for="item in AuditStatusList" :key="item.Code" :label="item.Name" :value="item.Code">
                         <el-tag v-if="item.Code == 1" :key="item.Code" type="danger">
@@ -217,7 +217,7 @@
     </el-card>
     <el-card class="CardTableClass">
       <el-table ref="multipleTable" v-loading="loading" class="tableCheckClass" :data="ContractData" fit
-        :cell-style="showBackground" @selection-change="TableSelect" @row-click="toggleSelection">
+        :cell-style="showBackground" @selection-change="TableSelect" @row-click="toggleSelection" :height="DynamicHeight">
         <!-- :row-class-name="tableRowClassName"
           :cell-style="InvoiceTypeStyle" -->
         <!-- @row-click="clickRow" ref="tableRef" -->
@@ -1063,8 +1063,8 @@
                     :file-list="fileList" :on-change="handleChange">
                     <el-button slot="trigger" icon="el-icon-position" size="mini" plain type="primary">选取文件</el-button>
                   </el-upload>
-                  <el-button v-if="UploadServerFlag" icon="el-icon-upload2" size="mini" plain style="margin-top: 0.8rem;" type="success"
-                    :loading="uploadServerLoading" @click="submitUpload">上传到服务器</el-button>
+                  <el-button v-if="UploadServerFlag" icon="el-icon-upload2" size="mini" plain style="margin-top: 0.8rem;"
+                    type="success" :loading="uploadServerLoading" @click="submitUpload">上传到服务器</el-button>
                   <h3>注：合同或协议{{ "\xa0\xa0" }}
                     <span class="magic">
                       <span class="magic-star">
@@ -1121,6 +1121,11 @@
         <el-card>
           <div slot="header" class="clearfix">
             <span>合同信息</span>
+            <el-tooltip content="点击关联合同方和付款方" placement="top">
+              <el-button style="float: right; padding: 0"
+                v-if="updateContractsForm.AuditStatus == 2 || updateContractsForm.AuditStatus == 4"
+                 type="text" @click="DoAddContract" :loading="DoAddContractLoading">同步客服系统</el-button>
+            </el-tooltip>
           </div>
           <el-row>
             <el-row>
@@ -1207,7 +1212,7 @@
                   第 <el-input-number v-model="updateContractsForm.YearBatch" controls-position="right" :min="1"
                     :disabled="updateShowFlag" /> 年签
                   <el-tooltip content="未填写保存时默认第一年签" placement="top">
-                    <el-button style="margin-left:15px ;" type="text" @click="saveYearBatch">修改</el-button>
+                    <el-button style="margin-left:15px ;" type="text" @click="saveYearBatch" :loading="SaveYearBatchLoading">修改</el-button>
                   </el-tooltip>
                 </el-form-item>
               </el-col>
@@ -1622,35 +1627,35 @@
                     <el-button v-if="updateContractsForm.ArchivedType != 3" slot="trigger" icon="el-icon-position"
                       size="mini" plain type="primary">选取文件</el-button>
                   </el-upload>
-                  <el-button v-if="updateContractsForm.ArchivedType != 3 && UploadServerFlagUpdate" icon="el-icon-upload2" size="mini" plain
-                      style="margin-top: 0.8rem;" type="success" :loading="uploadServerLoading"
-                      @click="submitUploadUpdate">上传到服务器</el-button>
+                  <el-button v-if="updateContractsForm.ArchivedType != 3 && UploadServerFlagUpdate" icon="el-icon-upload2"
+                    size="mini" plain style="margin-top: 0.8rem;" type="success" :loading="uploadServerLoading"
+                    @click="submitUploadUpdate">上传到服务器</el-button>
                   <h3>注：合同或协议{{ "\xa0\xa0" }}
-                      <span class="magic">
-                        <span class="magic-star">
-                          <svg viewBox="0 0 512 512">
-                            <path
-                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
-                          </svg>
-                        </span>
-                        <span class="magic-star">
-                          <svg viewBox="0 0 512 512">
-                            <path
-                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
-                          </svg>
-                        </span>
-                        <span class="magic-star">
-                          <svg viewBox="0 0 512 512">
-                            <path
-                              d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
-                          </svg>
-                        </span>
-                        <span class="magic-text">双方盖章完成后</span>
+                    <span class="magic">
+                      <span class="magic-star">
+                        <svg viewBox="0 0 512 512">
+                          <path
+                            d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
+                        </svg>
                       </span>
-                      {{ "\xa0\xa0" }}，请上传电子版扫描件
-                    </h3>
-                    <div class="el-upload__tip">只能上传office文件，且不超过<span
-                        style="color:#ff4949 ;">20M</span>，可一次选取多个文件，上传完成请点击上传到服务器。</div>
+                      <span class="magic-star">
+                        <svg viewBox="0 0 512 512">
+                          <path
+                            d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
+                        </svg>
+                      </span>
+                      <span class="magic-star">
+                        <svg viewBox="0 0 512 512">
+                          <path
+                            d="M512 255.1c0 11.34-7.406 20.86-18.44 23.64l-171.3 42.78l-42.78 171.1C276.7 504.6 267.2 512 255.9 512s-20.84-7.406-23.62-18.44l-42.66-171.2L18.47 279.6C7.406 276.8 0 267.3 0 255.1c0-11.34 7.406-20.83 18.44-23.61l171.2-42.78l42.78-171.1C235.2 7.406 244.7 0 256 0s20.84 7.406 23.62 18.44l42.78 171.2l171.2 42.78C504.6 235.2 512 244.6 512 255.1z" />
+                        </svg>
+                      </span>
+                      <span class="magic-text">双方盖章完成后</span>
+                    </span>
+                    {{ "\xa0\xa0" }}，请上传电子版扫描件
+                  </h3>
+                  <div class="el-upload__tip">只能上传office文件，且不超过<span
+                      style="color:#ff4949 ;">20M</span>，可一次选取多个文件，上传完成请点击上传到服务器。</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -1942,6 +1947,8 @@ import {
   GetContractNameList,
   PlaceFileMethod,
   UpdateYearBatch,
+  CustomerServiceExists,
+  DoAddContract,
 } from "@/api/CollectionMangement";
 
 import {
@@ -1977,8 +1984,12 @@ export default {
   },
   data() {
     return {
-      UploadServerFlag:false,
-      UploadServerFlagUpdate:false,
+      tagsView: this.$store.state.settings.tagsView,
+      SaveYearBatchLoading:false,
+      DoAddContractLoading:false,
+      DynamicHeight: "calc(100vh - 280px)",
+      UploadServerFlag: false,
+      UploadServerFlagUpdate: false,
       CardImg: yuanfu,
       showMessage: false, // 展开合同金额说明
       addContractsTitle: '',
@@ -2267,6 +2278,7 @@ export default {
       ContractData: [],
       corp_id: "",
       updateContractsForm: {
+        AuditStatus: '',
         ContractTypesOf: '',
         domains: [],
         PayerArray: [],
@@ -2473,7 +2485,12 @@ export default {
   watch: {
     '$store.getters.clientWidth'(newVal, oldVal) {
       this.fixedShowMethod(newVal);
-    }
+    },
+    '$store.state.settings.tagsView'(newVal, oldVal) {
+      debugger
+      this.tagsView=newVal;
+      this.dynimceHeightMethod();
+    },
   },
   created() {
     this.fixedShowMethod(document.body.clientWidth);
@@ -2519,6 +2536,10 @@ export default {
     }
     if (sessionStorage.getItem("RoleName") == "超级管理员") { this.ConCompany = false; }
 
+    if(this.tagsView)
+    this.DynamicHeight= "calc(100vh - 280px)";
+    else
+    this.DynamicHeight= "calc(100vh - 35px - 280px)";
     // 默认取当月有效时间
     // this.ContractRangeTime = [
     //   this.$moment(new Date()).format("YYYY-MM-01"),
@@ -2537,6 +2558,7 @@ export default {
         this.$message.warning("请填写年签批次后再点击修改");
         return;
       }
+      this.SaveYearBatchLoading=true;
       UpdateYearBatch(this.updateContractsForm.Id, this.updateContractsForm.YearBatch).then((res) => {
         if (res.success) {
           this._getContractData();
@@ -2544,6 +2566,7 @@ export default {
         } else {
           this.$message.error("操作失败");
         }
+        this.SaveYearBatchLoading=false;
       });
     },
     ParentChangeCompanyIdAdd(value) {
@@ -2916,7 +2939,14 @@ export default {
     },
 
     collapseClick() {
-      this.isActive = !this.isActive
+      this.isActive = !this.isActive;
+   this.dynimceHeightMethod();
+    },
+    dynimceHeightMethod(){
+   //因为分辨率不一样，所以这里展开只能用一部分动态的高度，否则可能导致切换分辨率底部对不齐问题
+   this.DynamicHeight = this.isActive ? 
+      (this.tagsView?"calc(100vh - 377px - 4.5vh)":"calc(100vh - 377px + 35px - 4.5vh)") 
+      :(this.tagsView?"calc(100vh - 280px)":"calc(100vh + 35px - 280px)") ;
     },
     // 点击置为不显示
     hideClick(item) {
@@ -3107,30 +3137,30 @@ export default {
     // 添加-上传文件
     handleChange(file, fileList) {
       this.fileList = fileList;
-this.addIfShowUploadButton();
+      this.addIfShowUploadButton();
     },
-    addIfShowUploadButton(){
-      this.UploadServerFlag=false;
-          // 正向对比
-          if (this.fileList.length != 0 || this.addContractsForm.FileList.length != 0) {
-            for (const index in this.fileList) {
-              var flagz = this.addContractsForm.FileList.filter((item) => {
-                return item.FileName == this.fileList[index].name;
-              });
-              if (flagz.length == 0) 
-              return this.UploadServerFlag=true;
-            }
-          }
-          // 反向对比
-          if (this.fileList.length != 0 || this.addContractsForm.FileList.length != 0) {
-            for (const index in this.addContractsForm.FileList) {
-              var flagf = this.fileList.filter((item) => {
-                return item.name == this.addContractsForm.FileList[index].FileName;
-              });
-              if (flagf.length == 0) 
-              return this.UploadServerFlag=true;
-            }
-          }
+    addIfShowUploadButton() {
+      this.UploadServerFlag = false;
+      // 正向对比
+      if (this.fileList.length != 0 || this.addContractsForm.FileList.length != 0) {
+        for (const index in this.fileList) {
+          var flagz = this.addContractsForm.FileList.filter((item) => {
+            return item.FileName == this.fileList[index].name;
+          });
+          if (flagz.length == 0)
+            return this.UploadServerFlag = true;
+        }
+      }
+      // 反向对比
+      if (this.fileList.length != 0 || this.addContractsForm.FileList.length != 0) {
+        for (const index in this.addContractsForm.FileList) {
+          var flagf = this.fileList.filter((item) => {
+            return item.name == this.addContractsForm.FileList[index].FileName;
+          });
+          if (flagf.length == 0)
+            return this.UploadServerFlag = true;
+        }
+      }
     },
     handleExceedAdd(files, fileList) {
       this.$message.warning('当前文件数量超过限制');
@@ -3157,7 +3187,7 @@ this.addIfShowUploadButton();
             // 给添加表单的列表赋值
             this.addContractsForm.FileList.push(addForm);
           }
-          this.UploadServerFlag=false;
+          this.UploadServerFlag = false;
           this.$message.success("上传成功");
         } else {
           this.$message.error(response.resultMessage);
@@ -3171,13 +3201,13 @@ this.addIfShowUploadButton();
     },
     AttachmentCodeRemove(file, fileList) {
       this.fileList = fileList;
-      let addNew=[];
-      fileList.map((item)=>{
+      let addNew = [];
+      fileList.map((item) => {
         addNew.push(item.name);
       });
-      this.addContractsForm.FileList= this.addContractsForm.FileList.filter((f)=>{
-       return addNew.includes(f.FileName)
-       })
+      this.addContractsForm.FileList = this.addContractsForm.FileList.filter((f) => {
+        return addNew.includes(f.FileName)
+      })
       this.addIfShowUploadButton();
     },
     // AttachmentCodePreview(file) {
@@ -3186,30 +3216,30 @@ this.addIfShowUploadButton();
     // 修改-上传文件
     handleChangeUpdate(file, fileList) {
       this.fileListUpload = fileList;
-this.updateIfShowUploadButton();
+      this.updateIfShowUploadButton();
     },
-    updateIfShowUploadButton(){
-      this.UploadServerFlagUpdate=false;
-          // 正向对比
-          if (this.fileListUpload.length != 0 || this.updateContractsForm.FileList.length != 0) {
-            for (const index in this.fileListUpload) {
-              var flagz = this.updateContractsForm.FileList.filter((item) => {
-                return item.FileName == this.fileListUpload[index].name;
-              });
-              if (flagz.length == 0) 
-              return this.UploadServerFlagUpdate=true;
-            }
-          }
-          // 反向对比
-          if (this.fileListUpload.length != 0 || this.updateContractsForm.FileList.length != 0) {
-            for (const index in this.updateContractsForm.FileList) {
-              var flagf = this.fileListUpload.filter((item) => {
-                return item.name == this.updateContractsForm.FileList[index].FileName;
-              });
-              if (flagf.length == 0) 
-              return this.UploadServerFlagUpdate=true;
-            }
-          }
+    updateIfShowUploadButton() {
+      this.UploadServerFlagUpdate = false;
+      // 正向对比
+      if (this.fileListUpload.length != 0 || this.updateContractsForm.FileList.length != 0) {
+        for (const index in this.fileListUpload) {
+          var flagz = this.updateContractsForm.FileList.filter((item) => {
+            return item.FileName == this.fileListUpload[index].name;
+          });
+          if (flagz.length == 0)
+            return this.UploadServerFlagUpdate = true;
+        }
+      }
+      // 反向对比
+      if (this.fileListUpload.length != 0 || this.updateContractsForm.FileList.length != 0) {
+        for (const index in this.updateContractsForm.FileList) {
+          var flagf = this.fileListUpload.filter((item) => {
+            return item.name == this.updateContractsForm.FileList[index].FileName;
+          });
+          if (flagf.length == 0)
+            return this.UploadServerFlagUpdate = true;
+        }
+      }
     },
     handleExceedAddUpdate(files, fileList) {
       this.$message.warning('当前文件数量超过限制');
@@ -3235,7 +3265,7 @@ this.updateIfShowUploadButton();
             // 给添加表单的列表赋值
             this.updateContractsForm.FileList.push(addForm);
           }
-          this.UploadServerFlagUpdate=false;
+          this.UploadServerFlagUpdate = false;
           this.$message.success("上传成功");
         } else {
           this.$message.error(response.resultMessage);
@@ -3249,13 +3279,13 @@ this.updateIfShowUploadButton();
     },
     AttachmentCodeRemoveUpdate(file, fileList) {
       this.fileListUpload = fileList;
-      let addNew=[];
-      fileList.map((item)=>{
+      let addNew = [];
+      fileList.map((item) => {
         addNew.push(item.name);
       });
-      this.updateContractsForm.FileList= this.updateContractsForm.FileList.filter((f)=>{
-       return addNew.includes(f.FileName)
-       })
+      this.updateContractsForm.FileList = this.updateContractsForm.FileList.filter((f) => {
+        return addNew.includes(f.FileName)
+      })
       this.updateIfShowUploadButton();
     },
 
@@ -3550,7 +3580,7 @@ this.updateIfShowUploadButton();
     },
     // 弹出添加窗口
     ShowContractAddDialog(types) {
-      this.UploadServerFlag=false;
+      this.UploadServerFlag = false;
       // types ： 1 合同 2 补充协议
       this.addContractsForm.ContractTypesOf = types;
       this.addContractsTitle = types == 1 ? '添加合同' : types == 2 ? '添加补充协议' : "添加付款方";
@@ -3925,9 +3955,52 @@ this.updateIfShowUploadButton();
         this.ExportLoading = false;
       });
     },
+    //公司同步至客服系统
+    DoAddContract() {
+      console.log(this.updateContractsForm.ContractType);
+      if(this.updateContractsForm.ContractTypesOf==2)
+      {
+        this.$message.warning("补充协议不需要同步，请检查");
+  return;
+      }
+      debugger
+var awwows=["3","4","8","9","13"];
+if(awwows.indexOf(this.updateContractsForm.ContractType)==-1 )
+{
+  this.$message.warning("同步合同的合同类型只能是医疗、意外、雇主险、高端医疗、单工伤，请检查");
+  return;
+}
+    this.DoAddContractLoading=true;
+      DoAddContract(this.updateContractsForm.Id, this.updateContractsForm.CompanyId, this.updateContractsForm.SecondPartyName).then((res) => {
+        if (res.success) {
+          this.$message.success(res.resultMessage);
+          this._getContractData();
+        }
+        else
+        {
+          if(res.resultCode="1000")
+          this.$message.warning(res.resultMessage);
+          else
+          this.$message.error(res.resultMessage);
+        }
+        this.DoAddContractLoading=false;
+      });
+    },
+    // // 判断在客服系统中是否已经添加
+    // CustomerServiceExists(item) {
+    //   CustomerServiceExists(item.CompanyId, item.SecondPartyName).then((res) => {
+    //     if (res.success) {
+    //       this.CustomerServiceDisables = false;
+    //     } else {
+    //       this.CustomerServiceDisables = true;
+    //       if (res.resultCode == "1000")
+    //         this.$message.error(resultMessage);
+    //     }
+    //   });
+    // },
     // 编辑获取反填信息
     showEditDialog(item) {
-      this.UploadServerFlagUpdate=false;
+      this.UploadServerFlagUpdate = false;
       this.updateContractsForm.ContractTypesOf = item.ContractTypesOf;
       this.updateContractsTitle = item.ContractTypesOf == 1 ? "编辑合同" : item.ContractTypesOf == 2 ? "编辑补充协议" : "编辑付款方";
       // 标识，判断是否时添加或者修改
@@ -3945,9 +4018,11 @@ this.updateIfShowUploadButton();
         };
         this.PayerArray.push(items);
       })
-
+      //判断在客服系统中是否已经添加,先废弃
+      // this.CustomerServiceExists(item);
       this.fullscreenLoading = true;
       this.CompanyRelationList = item.CompanyRelationList;
+      this.updateContractsForm.AuditStatus = item.AuditStatus;
       this.updateContractsForm.CompanyId = item.CompanyId;
       this.remoteMethodShow(item.CompanyId);
       this.remoteMethodShowParent(item.ParentContractCode);
@@ -4595,7 +4670,7 @@ this.updateIfShowUploadButton();
 }
 
 .whereFormClass {
-  margin-bottom: 15px;
+  margin-bottom: 1.5vh;
   width: 100%;
 }
 
@@ -4925,6 +5000,7 @@ h3>.magic>.magic-text {
   -webkit-text-fill-color: transparent;
   white-space: nowrap;
 }
+
 /* 下面两个样式是设置上传的文件不能删除（即使上传错误了） */
 /* ::v-deep .el-icon-close{
   display: none;

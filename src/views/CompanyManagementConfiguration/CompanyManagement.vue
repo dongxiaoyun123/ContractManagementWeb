@@ -91,7 +91,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="ComAddress" label="公司地址" />
+        <el-table-column prop="ComAddress" label="公司地址" show-overflow-tooltip  />
         <el-table-column label="操作" width="170px">
           <template slot-scope="scope">
             <!-- <el-button v-if="scope.row.Flag" icon="el-icon-circle-plus-outline" type="text" size="mini"
@@ -220,7 +220,7 @@
 
 <script>
 import {
-  GetCompany,
+  GetCompanySystem,
   AddCompany,
   AddCompanyRelation,
   DeleteCompanyRelation,
@@ -331,7 +331,7 @@ export default {
   watch: {},
   created() {
     if (sessionStorage.getItem("RoleName") == "超级管理员") { this.disabledFlag = false; }
-    this.GetCompany();
+    this.GetCompanySystem();
   },
   methods: {
     // 列表时间格式化
@@ -501,7 +501,7 @@ export default {
           this.LoadingUpdate = false;
           if (res.success) {
             this.$message.success("操作成功");
-            this.GetCompany();
+            this.GetCompanySystem();
             this.updateDialogVisible = false;
           } else {
             this.$message.error(res.resultMessage);
@@ -555,12 +555,12 @@ export default {
     // 监听 pagesize改变的事件
     handleSizeChange(newSize) {
       this.queryInfo.pagesize = newSize;
-      this.GetCompany();
+      this.GetCompanySystem();
     },
     // 监听 页码值 改变事件
     handleCurrentChange(newSize) {
       this.queryInfo.pagenum = newSize;
-      this.GetCompany();
+      this.GetCompanySystem();
     },
     // 添加模块
     AddDialog(flag, row) {
@@ -618,7 +618,7 @@ export default {
             if (res.success) {
               this.addDialogVisible = false;
               this.$message.success("操作成功");
-              this.GetCompany();
+              this.GetCompanySystem();
             } else {
               this.$message.error(res.resultMessage);
             }
@@ -629,7 +629,7 @@ export default {
             if (res.success) {
               this.addDialogVisible = false;
               this.$message.success("操作成功");
-              this.GetCompany();
+              this.GetCompanySystem();
             } else {
               this.$message.error(res.resultMessage);
             }
@@ -641,12 +641,12 @@ export default {
     GetCompanySearch() {
       this.queryInfo.pagenum = 1;
       this.queryInfo.pagesize = 20;
-      this.GetCompany();
+      this.GetCompanySystem();
     },
     // 获取数据
-    GetCompany() {
+    GetCompanySystem() {
       this.loading = true;
-      GetCompany(
+      GetCompanySystem(
         null, // 公司编号
         this.Name,
         this.queryInfo.pagenum,

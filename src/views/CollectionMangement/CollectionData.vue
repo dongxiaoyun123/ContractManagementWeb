@@ -73,9 +73,12 @@
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
-                <el-button type="text" style="margin-left: 10px;"
+                <!-- <el-button type="text" style="margin-left: 10px;"
                   :icon="isActive ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
-                  @click="collapseClick">{{ isActive ? "收起" : "展开" }}</el-button>
+                  @click="collapseClick">{{ isActive ? "收起" : "展开" }}</el-button> -->
+                <el-button type="text" style="margin-left: 10px;"
+                  :icon="isActiveAll ? 'el-icon-arrow-up el-icon--right' : 'el-icon-arrow-down el-icon--right'"
+                  @click="collapseClickAll">{{ isActiveAll ? "收起统计" : "展开统计" }}</el-button>
               </el-button-group>
             </el-col>
             <el-col :span="tipWidth" style="text-align: right;">
@@ -97,7 +100,7 @@
             </el-col>
           </el-row>
           <collapse>
-            <div v-show="isActive">
+            <div v-show="isActiveAll">
               <el-descriptions style="margin-left: 1.3rem;margin-top: 18px;" class="margin-top"
                 :column="descriptionColumn" border>
                 <el-descriptions-item v-for="(item, index) in TotalSecondPartyNameList" :key="index"
@@ -617,7 +620,8 @@ export default {
   components: { Customer, CustomerOther, collapse },
   data() {
     return {
-      isActive: true,
+       isActive: true,
+      isActiveAll: false,
       LoadingUpdateOther: false,
       RoleName: sessionStorage.getItem("RoleName"),
       DynamicColumn: '',
@@ -833,8 +837,11 @@ export default {
       process.env.VUE_APP_BASE_API + "/CollectionMangement/UploadFiles?Flag=" + this.Flag;
   },
   methods: {
-    collapseClick() {
-      this.isActive = !this.isActive
+    // collapseClick() {
+    //   this.isActive = !this.isActive
+    // },
+    collapseClickAll() {
+      this.isActiveAll = !this.isActiveAll
     },
     // 列表时间格式化
     dateFormat(row) {

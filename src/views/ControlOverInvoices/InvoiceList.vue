@@ -11,6 +11,28 @@
             <div v-show="isActive">
               <el-row>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item class="whereFormClass" label="公司名称">
+                    <el-input v-model="CompanyId" class="timeClass" clearable="" placeholder="公司名称" />
+                  </el-form-item>
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item class="whereFormClass" label="乙方公司">
+                    <el-select v-model="SecondPartyName" class="timeClass" filterable placeholder="乙方公司" clearable="">
+                      <el-option v-for="item in DicCategoryListAll" :key="item.Code" :label="item.Name"
+                        :value="item.Code" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item class="whereFormClass" label="发票抬头">
+                    <el-input v-model="InvoiceHeader" class="timeClass" clearable="" placeholder="发票抬头" />
+                  </el-form-item>
+                  <!-- <el-form-item class="whereFormClass" label="应收月份">
+                    <el-date-picker v-model="SMonth" style="width:100% ;" class="timeClass" type="month" placeholder="选择月"
+                      format="MM" />
+                  </el-form-item> -->
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="发票种类">
                     <el-select v-model="InvoiceType" class="timeClass" filterable placeholder="发票种类" clearable>
                       <el-option v-for="item in InvoiceTypeList" :key="item.Code" :label="item.Name" :value="item.Code">
@@ -42,29 +64,15 @@
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-                  <el-form-item class="whereFormClass" label="应收年份">
+                  <el-form-item class="whereFormClass" label="应收年月">
+                    <el-date-picker v-model="SYearSMonth" type="month" style="width:100% ;" class="timeClass"
+                      placeholder="选择年月">
+                    </el-date-picker>
+                  </el-form-item>
+                  <!-- <el-form-item class="whereFormClass" label="应收年份">
                     <el-date-picker v-model="SYear" style="width:100% ;" class="timeClass" type="year"
                       placeholder="选择年" />
-                  </el-form-item>
-                </el-col>
-                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-                  <el-form-item class="whereFormClass" label="应收月份">
-                    <el-date-picker v-model="SMonth" style="width:100% ;" class="timeClass" type="month" placeholder="选择月"
-                      format="MM" />
-                  </el-form-item>
-                </el-col>
-                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-                  <el-form-item class="whereFormClass" label="公司名称">
-                    <el-input v-model="CompanyId" class="timeClass" clearable="" placeholder="公司名称" />
-                  </el-form-item>
-                </el-col>
-                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-                  <el-form-item class="whereFormClass" label="乙方公司">
-                    <el-select v-model="SecondPartyName" class="timeClass" filterable placeholder="乙方公司" clearable="">
-                      <el-option v-for="item in DicCategoryListAll" :key="item.Code" :label="item.Name"
-                        :value="item.Code" />
-                    </el-select>
-                  </el-form-item>
+                  </el-form-item> -->
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="申开人">
@@ -359,7 +367,7 @@
         <el-divider />
         <!-- <el-tag effect="plain"
           style="border-color: #A29BC4;color:#6959CD;margin-bottom:20px">合同系统帐单列表的回款下面会显示账单详情（客服系统生成的不显示）</el-tag> -->
-        <el-descriptions v-if="DicCategoryList != null" title="公司开票信息" class="margin-top" :column="2" border >
+        <el-descriptions v-if="DicCategoryList != null" title="公司开票信息" class="margin-top" :column="2" border>
           <el-descriptions-item>
             <template slot="label">
               <i class="el-icon-office-building" />
@@ -564,8 +572,10 @@ export default {
       CompanyId: null,
       InvoiceType: null,
       IvState: null,
-      SYear: null,
-      SMonth: null,
+      SYearSMonth: null,
+      // SYear: null,
+      // SMonth: null,
+      InvoiceHeader: null,
       ApplyPerson: '',
       IssuingPerson: '',
       ApplyPersonList: [],
@@ -719,8 +729,10 @@ export default {
       this.CompanyId = null;
       this.InvoiceType = null;
       this.IvState = null;
-      this.SYear = null;
-      this.SMonth = null;
+      this.SYearSMonth = null;
+      // this.SYear = null;
+      // this.SMonth = null;
+      this.InvoiceHeader = null;
       this.ApplyPerson = '';
       this.IssuingPerson = '';
       this.queryInfo.pagesize = 20;
@@ -867,15 +879,15 @@ export default {
     // 获取合同列表数据
     GetInvoiceData() {
       this.loading = true;
-      if (this.SYear) { this.SYear = parseTime(new Date(this.SYear), "{y}") }
-      if (this.SMonth) { this.SMonth = parseTime(new Date(this.SMonth), "{m}") }
-
+      // if (this.SYear) { this.SYear = parseTime(new Date(this.SYear), "{y}") }
+      // if (this.SMonth) { this.SMonth = parseTime(new Date(this.SMonth), "{m}") }
+      if (this.SYearSMonth) { this.SYearSMonth = parseTime(new Date(this.SYearSMonth), "{y}-{m}") }
       GetInvoiceDataMethod(
         this.CompanyId,
         this.InvoiceType,
         this.IvState,
-        this.SYear,
-        this.SMonth,
+        this.SYearSMonth,
+        this.InvoiceHeader,
         this.ApplyPerson,
         this.IssuingPerson,
         false,

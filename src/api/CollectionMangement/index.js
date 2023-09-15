@@ -205,16 +205,16 @@ export function GetAttachmentFirst(Type, Id) {
 }
 
 // 获取发票列表
-export function GetInvoiceDataMethod(CompanyId, InvoiceType, IvState, SYear, SMonth, ApplyPerson, IssuingPerson, Flag, SecondPartyName, pagenum, pagesize) {
+export function GetInvoiceDataMethod(CompanyId, InvoiceType, IvState, SYearSMonth, InvoiceHeader, ApplyPerson, IssuingPerson, Flag, SecondPartyName, pagenum, pagesize) {
   CompanyId = CompanyId || "";
   InvoiceType = InvoiceType || "";
   IvState = IvState || "";
-  SYear = SYear || "";
-  SMonth = SMonth || "";
+  SYearSMonth = SYearSMonth || "";
+  InvoiceHeader = InvoiceHeader || "";
   ApplyPerson = ApplyPerson || "";
   IssuingPerson = IssuingPerson || "";
   return request({
-    url: '/CollectionMangement/GetInvoiceData?CompanyId=' + CompanyId + '&InvoiceType=' + InvoiceType + '&IvState=' + IvState + '&SYear=' + SYear + '&SMonth=' + SMonth +
+    url: '/CollectionMangement/GetInvoiceData?CompanyId=' + CompanyId + '&InvoiceType=' + InvoiceType + '&IvState=' + IvState + '&SYearSMonth=' + SYearSMonth + '&InvoiceHeader=' + InvoiceHeader +
       '&ApplyPerson=' + ApplyPerson + '&IssuingPerson=' + IssuingPerson + '&Flag=' + Flag + '&SecondPartyName=' + SecondPartyName + '&pageIndex=' + pagenum + '&pageSize=' + pagesize + '&Id=',
     method: 'post',
   });
@@ -489,4 +489,15 @@ export function UpdateYearBatch(Id, YearBatch) {
     method: 'post',
   });
 }
-
+export function CustomerServiceExists(CompanyId, SecondPartyName) {
+  return request({
+    url: '/CollectionMangement/CustomerServiceExists?CompanyId=' + CompanyId + '&SecondPartyName=' + SecondPartyName,
+    method: 'post',
+  });
+}
+export function DoAddContract(Id,CompanyId, SecondPartyName) {
+  return request({
+    url: '/CollectionMangement/DoAddContract?Id=' + Id + '&CompanyId=' + CompanyId+ '&SecondPartyName=' + SecondPartyName,
+    method: 'post',
+  });
+}
