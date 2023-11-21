@@ -21,7 +21,8 @@
                             <!-- <el-tag effect="plain" key="全部"  type="info" v-if="item.Code == 0">全部</el-tag> -->
                             <el-tag v-if="item.Code == 1" key="未领取" effect="plain" type="danger">未领取</el-tag>
                             <el-tag v-if="item.Code == 2" key="已领取" effect="plain" type="success">已领取</el-tag>
-                            <el-tag v-if="item.Code == 3" key="部分领取" effect="plain">部分领取</el-tag>
+                            <el-tag v-if="item.Code == 3" key="部分领取" effect="plain" type="warning">部分领取</el-tag>
+                            <el-tag v-if="item.Code == 4" key="系统领取" effect="plain" >系统领取</el-tag>
                           </template>
                         </el-option>
                       </el-select>
@@ -209,7 +210,9 @@
                   <span slot="reference" style="margin: 0 10px 0 6px;" class="SecondPartyNameClass">
                     <div> <el-tag key="未领取" effect="plain" type="danger">未领取</el-tag></div>
                     <div><el-tag key="已领取" effect="plain" type="success">已领取</el-tag></div>
-                    <div style="margin-bottom: 0;"><el-tag key="部分领取" effect="plain">部分领取</el-tag></div>
+                    <div><el-tag key="部分领取" effect="plain" type="warning">部分领取</el-tag></div>
+                    <div style="margin-bottom: 0;"><el-tag key="系统领取" effect="plain" >系统领取</el-tag></div>
+                    
                   </span>
                 </div>
               </div>
@@ -218,7 +221,8 @@
           <template slot-scope="scope">
             <el-tag v-if="scope.row.States == 1" key="未领取" effect="plain" type="danger">未领取</el-tag>
             <el-tag v-if="scope.row.States == 2" key="已领取" effect="plain" type="success">已领取</el-tag>
-            <el-tag v-if="scope.row.States == 3" key="部分领取" effect="plain">部分领取</el-tag>
+            <el-tag v-if="scope.row.States == 3" key="部分领取" effect="plain" type="warning">部分领取</el-tag>
+            <el-tag v-if="scope.row.States == 4" key="系统领取" effect="plain">系统领取</el-tag>
             <!-- <el-tag  type="danger" v-if="scope.row.States == 1">未回款</el-tag>
               <el-tag  type="success" v-if="scope.row.States == 2">已回款</el-tag>
               <el-tag v-if="scope.row.States == 3">有余额</el-tag> -->
@@ -705,6 +709,7 @@ export default {
         { Code: 1, Name: "未领取" },
         { Code: 2, Name: "已领取" },
         { Code: 3, Name: "部分领取" },
+        { Code: 4, Name: "系统领取" },
       ],
       // 判断选中的数据回款状态是否都是未回款，只要有一个是已回款，那么这个状态为true
       collectionStateFlag: false,

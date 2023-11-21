@@ -248,6 +248,12 @@ export function GetCompanyABy_Contract(ContractId, type) {
   });
 }
 
+export function GetCompanyDataByCodes(ContractId) {
+  return request({
+    url: '/CollectionMangement/GetCompanyDataByCodes?ContractId=' + ContractId ,
+    method: 'post',
+  });
+}
 export function BindCompanyABy_Contract(model) {
   return request({
     url: '/CollectionMangement/BindCompanyABy_Contract',

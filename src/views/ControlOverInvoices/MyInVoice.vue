@@ -89,7 +89,7 @@
                 </el-button>
                 <el-button type="info" icon="el-icon-refresh-left" @click="reseatData">重 置
                 </el-button>
-                <el-button type="success" icon="el-icon-circle-check" @click="auditStatusAction">
+                <el-button :disabled="adminConfirmDis" type="success" icon="el-icon-circle-check" @click="auditStatusAction">
                   确 认
                 </el-button>
                 <el-button type="warning" icon="el-icon-circle-close" @click="RevokeInvoice">撤 销
@@ -262,7 +262,7 @@ export default {
       InvoiceTypeList: [],
       CompanyId: null,
       InvoiceType: null,
-      IvState: '4',
+      IvState: '',
       SYear: null,
       SMonth: null,
       ApplyPerson: '',
@@ -273,6 +273,8 @@ export default {
       MaxMoney: '',
       multipleSelection: [],
       IdStr: '',
+      //超级管理员可以进行确认操作（这个按钮先保留），别的角色不能操作
+      adminConfirmDis:sessionStorage.getItem("RoleName") != "超级管理员",
     };
   },
   watch: {
@@ -425,7 +427,7 @@ export default {
       this.SecondPartyName = '';
       this.CompanyId = null;
       this.InvoiceType = null;
-      this.IvState = '4';
+      this.IvState = '';
       this.SYear = null;
       this.SMonth = null;
       this.ApplyPerson = '';
