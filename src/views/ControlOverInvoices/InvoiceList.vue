@@ -862,7 +862,7 @@
             {{ DicCategoryList.Account }}
           </el-descriptions-item>
         </el-descriptions>
-        <el-divider v-if="updateInvoiceFrom.OrderData.length > 0" />
+        <!-- <el-divider v-if="updateInvoiceFrom.OrderData.length > 0" /> -->
         <!-- <el-table v-if="updateInvoiceFrom.OrderData.length > 0" :data="updateInvoiceFrom.OrderData" border>
           <el-table-column type="index" width="50" />
           <el-table-column label="账单名称" prop="ContractOrderName" min-width="250" show-overflow-tooltip />
@@ -1290,7 +1290,7 @@ export default {
       this.updateInvoiceFrom.SecondPartyName = item.SecondPartyName;
       // 根据公司编号获取公司发票信息
       GetCompanySystem(
-        item.CompanyId, // 公司编号
+        item.PayerCompanyId, // 公司编号
         "",
         1,
         100000

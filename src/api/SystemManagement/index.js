@@ -552,6 +552,13 @@ export function GetCompanySystem(CompanyId, CompanyName, PageIndex, PageSize) {
     method: 'post',
   });
 }
+// 获取公司(客户管理)
+export function GetCompanySystemList(CompanyId, CompanyName, PageIndex, PageSize) {
+  return request({
+    url: '/SystemManagement/GetCompanyList?CompanyId=' + CompanyId + '&CompanyName=' + CompanyName + '&PageIndex=' + PageIndex + '&PageSize=' + PageSize,
+    method: 'post',
+  });
+}
 // 添加公司
 export function AddCompany(model) {
   return request({

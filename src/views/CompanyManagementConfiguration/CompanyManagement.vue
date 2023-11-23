@@ -220,7 +220,7 @@
 
 <script>
 import {
-  GetCompanySystem,
+  GetCompanySystemList,
   AddCompany,
   AddCompanyRelation,
   DeleteCompanyRelation,
@@ -646,7 +646,7 @@ export default {
     // 获取数据
     GetCompanySystem() {
       this.loading = true;
-      GetCompanySystem(
+      GetCompanySystemList(
         null, // 公司编号
         this.Name,
         this.queryInfo.pagenum,

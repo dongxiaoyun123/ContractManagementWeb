@@ -1524,7 +1524,7 @@
                   color: #6959cd;
                   margin-right: 15px;
                 "
-                >（选择增值税专用发票、增值税电子普通发票）上方公司开票信息所有字段不可为空</el-tag
+                >选择增值税专用发票上方公司开票信息所有字段不可为空</el-tag
               >
               <el-tag
                 effect="plain"
@@ -1533,7 +1533,7 @@
                   color: #6959cd;
                   margin-right: 15px;
                 "
-                >（选择增值税普通发票）上方公司名称、统一信用代码/税号不可为空</el-tag
+                >（选择增值税普通发票、增值税电子普通发票）上方公司名称、统一信用代码/税号不可为空</el-tag
               >
               <el-tag
                 effect="plain"
@@ -2285,8 +2285,7 @@ export default {
               return;
           }
           if (
-            this.updateInvoiceFrom.InvoiceType == 1 ||
-            this.updateInvoiceFrom.InvoiceType == 3
+            this.updateInvoiceFrom.InvoiceType == 1
           ) {
               if (
                 !this.DicCategoryList.RegisteredAddress ||
@@ -2297,7 +2296,7 @@ export default {
                 this.LoadingInvoicing = false;
                 this.$message({
                   message:
-                    "（选择增值税专用发票、增值税电子普通发票）上方公司开票信息不完整，请先添加(开票信息状态不能为禁用！！！)",
+                    "选择增值税专用发票上方公司开票信息不完整，请先添加(开票信息状态不能为禁用！！！)",
                   type: "warning",
                   duration: 5000,
                 });
@@ -2368,6 +2367,7 @@ export default {
             FileList: this.updateInvoiceFrom.FileList,
             ChangedData: changedData, // 输入金额的数据
             SecondPartyName: this.ClickRow.SecondPartyName,
+            PayerCompanyId: this.DicCategoryList.ComID,
           };
           InvoicingData(parameters).then((res) => {
             if (res.success) {
