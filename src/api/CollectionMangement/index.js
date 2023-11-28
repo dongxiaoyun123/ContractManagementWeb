@@ -283,11 +283,11 @@ export function deleteSaleData(ContractRelationCode) {
 }
 
 // 获取订单数据列表
-export function GetContractOrder(ContractCode, ContractName, CompanyName, InvoiceAccount, InvoiceType, Applicant, ApplicationTimeBegin, ApplicationTimeEnd, SecondPartyName, pagenum, pagesize) {
+export function GetContractOrder(ContractCode, ContractName, CompanyName, InvoiceAccount, InvoiceType, Applicant, ApplicationTimeBegin, ApplicationTimeEnd, SecondPartyName,ContractType, pagenum, pagesize) {
   return request({
     url: '/CollectionMangement/GetContractOrder?ContractCode=' + ContractCode + '&ContractName=' + ContractName + '&CompanyName=' + CompanyName + '&InvoiceAccount=' + InvoiceAccount +
       '&InvoiceType=' + InvoiceType + '&Applicant=' + Applicant + '&ApplicationTimeBegin=' + ApplicationTimeBegin + '&ApplicationTimeEnd=' + ApplicationTimeEnd + '&SecondPartyName=' + SecondPartyName +
-      '&PageIndex=' + pagenum + '&PageSize=' + pagesize + '&OrderCode=',
+      '&ContractType=' + ContractType + '&PageIndex=' + pagenum + '&PageSize=' + pagesize + '&OrderCode=',
     method: 'post',
   });
 }

@@ -120,6 +120,24 @@
                     />
                   </el-form-item>
                 </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item class="whereFormClass" label="合同类型">
+                    <el-select
+                      v-model="ContractType"
+                      class="timeClass"
+                      filterable
+                      placeholder="合同类型"
+                      clearable=""
+                    >
+                      <el-option
+                        v-for="item in GetContractTypeArray"
+                        :key="item.Code"
+                        :label="item.Name"
+                        :value="item.Code"
+                      />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
               </el-row>
             </div>
           </collapse>
@@ -622,12 +640,18 @@
               :label="item.label"
               :value="item.value"
             >
-            <span style="float: left">{{ item.label }}</span>
-                    <span v-if="item.StatesName == '过期'" style="float: right; color: #909399; font-size: 13px">{{
-                      item.StatesName
-                    }}</span>
-                    <span v-else style="float: right; color: #13CE66; font-size: 13px">{{ item.StatesName }}</span>
-          </el-option>
+              <span style="float: left">{{ item.label }}</span>
+              <span
+                v-if="item.StatesName == '过期'"
+                style="float: right; color: #909399; font-size: 13px"
+                >{{ item.StatesName }}</span
+              >
+              <span
+                v-else
+                style="float: right; color: #13ce66; font-size: 13px"
+                >{{ item.StatesName }}</span
+              >
+            </el-option>
           </el-select>
         </el-form-item>
         <!-- <el-form-item label="公司名称" prop="CompanyId">
@@ -880,12 +904,18 @@
               :label="item.label"
               :value="item.value"
             >
-            <span style="float: left">{{ item.label }}</span>
-                    <span v-if="item.StatesName == '过期'" style="float: right; color: #909399; font-size: 13px">{{
-                      item.StatesName
-                    }}</span>
-                    <span v-else style="float: right; color: #13CE66; font-size: 13px">{{ item.StatesName }}</span>
-          </el-option>
+              <span style="float: left">{{ item.label }}</span>
+              <span
+                v-if="item.StatesName == '过期'"
+                style="float: right; color: #909399; font-size: 13px"
+                >{{ item.StatesName }}</span
+              >
+              <span
+                v-else
+                style="float: right; color: #13ce66; font-size: 13px"
+                >{{ item.StatesName }}</span
+              >
+            </el-option>
           </el-select>
         </el-form-item>
         <!-- <el-form-item label="公司名称" prop="CompanyId">
@@ -1730,6 +1760,7 @@ import {
   OrderSaveAuditStatus,
   InvoicingData,
   GetCompanyDataByCodes,
+  GetContractType,
 } from "@/api/CollectionMangement";
 import {
   GetCompanySystem,
@@ -1753,6 +1784,8 @@ export default {
   },
   data() {
     return {
+      ContractType: "",
+      GetContractTypeArray: [],
       ComAArray: [],
       UploadServerFlag: false,
       SecondPartyName: "",
@@ -2112,8 +2145,20 @@ export default {
     this.GetInvoiceStatus();
     // 获取乙方公司数据
     this.GetDicCategoryC();
+    //获取合同类型数据
+    this.GetContractTypeList();
   },
   methods: {
+    // 获取全部合同类型
+    GetContractTypeList() {
+      GetContractType().then((res) => {
+        if (res.success) {
+          this.GetContractTypeArray = res.result;
+        } else {
+          this.GetContractTypeArray = [];
+        }
+      });
+    },
     // 获取乙方公司数据
     GetDicCategoryC() {
       GetDicCategoryC("", 1, 100000).then((res) => {
@@ -2273,35 +2318,32 @@ export default {
             return;
           }
           //禁用状态直接返回
-          if (!this.DicCategoryList.IsUsed)
-          {
+          if (!this.DicCategoryList.IsUsed) {
             this.LoadingInvoicing = false;
+            this.$message({
+              message:
+                "开票信息状态不能为禁用，请到公司管理配置-客户管理-开票信息中查看开票公司的（开票信息）状态！！！",
+              type: "warning",
+              duration: 5000,
+            });
+            return;
+          }
+          if (this.updateInvoiceFrom.InvoiceType == 1) {
+            if (
+              !this.DicCategoryList.RegisteredAddress ||
+              !this.DicCategoryList.Phone ||
+              !this.DicCategoryList.DepositBank ||
+              !this.DicCategoryList.Account
+            ) {
+              this.LoadingInvoicing = false;
               this.$message({
                 message:
-                  "开票信息状态不能为禁用，请到公司管理配置-客户管理-开票信息中查看开票公司的（开票信息）状态！！！",
+                  "选择增值税专用发票上方公司开票信息不完整，请先添加(开票信息状态不能为禁用！！！)",
                 type: "warning",
                 duration: 5000,
               });
               return;
-          }
-          if (
-            this.updateInvoiceFrom.InvoiceType == 1
-          ) {
-              if (
-                !this.DicCategoryList.RegisteredAddress ||
-                !this.DicCategoryList.Phone ||
-                !this.DicCategoryList.DepositBank ||
-                !this.DicCategoryList.Account
-              ) {
-                this.LoadingInvoicing = false;
-                this.$message({
-                  message:
-                    "选择增值税专用发票上方公司开票信息不完整，请先添加(开票信息状态不能为禁用！！！)",
-                  type: "warning",
-                  duration: 5000,
-                });
-                return;
-              }
+            }
           }
           // 如果有附件，那么需要进行判断
           if (
@@ -2464,7 +2506,9 @@ export default {
           : 0;
       });
       this.addContractOrderForm.AmountReceived =
-        this.addContractOrderForm.domains.length == 0 ? "" : totalInputMoney;
+        this.addContractOrderForm.domains.length == 0
+          ? ""
+          : totalInputMoney.toFixed(2);
     },
     handleChangeUpdate(CustomAmount, index) {
       // 验证输入是否金额，如果不是直接返回
@@ -2485,7 +2529,9 @@ export default {
           : 0;
       });
       this.updateContractOrderForm.AmountReceived =
-        this.updateContractOrderForm.domains.length == 0 ? "" : totalInputMoney;
+        this.updateContractOrderForm.domains.length == 0
+          ? ""
+          : totalInputMoney.toFixed(2);
     },
     // 点击当前行数据进行选中或取消复选框
     toggleSelection(row, column, event) {
@@ -2789,7 +2835,7 @@ export default {
       this.InvoiceType = "";
       this.Applicant = "";
       this.ApplicationTime = [];
-
+      this.ContractType = "";
       this.queryInfo.pagesize = 20;
       this.queryInfo.pagenum = 1;
       this.GetContractOrderList();
@@ -2970,6 +3016,7 @@ export default {
         this.ApplicationTimeBegin,
         this.ApplicationTimeEnd,
         this.SecondPartyName,
+        this.ContractType,
         this.queryInfo.pagenum,
         this.queryInfo.pagesize
       ).then((res) => {
@@ -3118,7 +3165,7 @@ export default {
                 return {
                   value: item.Id,
                   label: item.ContractName,
-                  StatesName:item.StatesName,
+                  StatesName: item.StatesName,
                 };
               });
               this.selectCorporationDatas = this.CorporationDatas.filter(
@@ -3151,7 +3198,7 @@ export default {
                 return {
                   value: item.Id,
                   label: item.ContractName,
-                  StatesName:item.StatesName,
+                  StatesName: item.StatesName,
                 };
               });
               this.selectCorporationDatas = this.CorporationDatas.filter(
