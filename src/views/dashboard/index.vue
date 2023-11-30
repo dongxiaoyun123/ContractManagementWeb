@@ -1,6 +1,5 @@
 <template>
   <div class="dashboardCalss">
-
     <el-card>
       <el-form label-width="0">
         <!-- 合同信息 -->
@@ -10,27 +9,50 @@
         <el-row>
           <el-row>
             <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-              <el-form-item style="margin-bottom:0">
+              <el-form-item style="margin-bottom: 0">
                 <el-radio-group v-model="ContractsOption">
                   <el-radio-button label="客户合同录入" />
                   <el-radio-button label="供应商合同录入" />
                 </el-radio-group>
                 <el-divider v-if="RoleName != '财务'" direction="vertical" />
-                <el-cascader v-if="RoleName != '财务'" v-model="UserArray" :options="permissionTree" :props="props"
-                             collapse-tags clearable get-checked-nodes :show-all-levels="false" placeholder="选择员工"
+                <el-cascader
+                  v-if="RoleName != '财务'"
+                  v-model="UserArray"
+                  :options="permissionTree"
+                  :props="props"
+                  collapse-tags
+                  clearable
+                  get-checked-nodes
+                  :show-all-levels="false"
+                  placeholder="选择员工"
                 >
                   <template slot-scope="{ node, data }">
                     <span style="float: left">{{ data.label }}</span>
-                    <span v-if="data.PositionStatus == 0" style="float: right; color: #13ce66">在职</span>
-                    <span v-if="data.PositionStatus == 1" style="float: right; color: #909399">离职</span>
+                    <span
+                      v-if="data.PositionStatus == 0"
+                      style="float: right; color: #13ce66"
+                      >在职</span
+                    >
+                    <span
+                      v-if="data.PositionStatus == 1"
+                      style="float: right; color: #909399"
+                      >离职</span
+                    >
                   </template>
                 </el-cascader>
                 <el-divider v-if="RoleName != '财务'" direction="vertical" />
-                <el-checkbox v-if="RoleName != '财务'" v-model="PositionStatus"
-                             @change="PositionStatusChange"
-                >在职</el-checkbox>
+                <el-checkbox
+                  v-if="RoleName != '财务'"
+                  v-model="PositionStatus"
+                  @change="PositionStatusChange"
+                  >在职</el-checkbox
+                >
                 <el-divider direction="vertical" />
-                <el-button type="primary" icon="el-icon-search" @click="GetAdmin_UserSearch">查 询
+                <el-button
+                  type="primary"
+                  icon="el-icon-search"
+                  @click="GetAdmin_UserSearch"
+                  >查 询
                 </el-button>
               </el-form-item>
             </el-col>
@@ -42,22 +64,53 @@
     <panel-group :where-parameter="WhereParameter" />
     <!-- 销售统计分析图表 -->
     <el-row :gutter="16">
-      <el-col v-if="ContractsOptionCatch == '客户合同录入'" :xs="24" :sm="24" :lg="24" :xl="8">
+      <el-col
+        v-if="ContractsOptionCatch == '客户合同录入'"
+        :xs="24"
+        :sm="24"
+        :lg="24"
+        :xl="8"
+      >
         <div class="chart-wrapper">
-          <CollectionCountChart :key="datekey" :where-parameter="WhereParameter" title="近一年合同录入统计" />
+          <CollectionCountChart
+            :key="datekey"
+            :where-parameter="WhereParameter"
+            title="近一年合同录入统计"
+          />
         </div>
       </el-col>
-      <el-col v-if="ContractsOptionCatch == '供应商合同录入'" :xs="24" :sm="24" :lg="24">
+      <el-col
+        v-if="ContractsOptionCatch == '供应商合同录入'"
+        :xs="24"
+        :sm="24"
+        :lg="24"
+      >
         <div class="chart-wrapper">
-          <CollectionCountChart :key="datekey" :where-parameter="WhereParameter" title="近一年供应商合同录入统计" />
+          <CollectionCountChart
+            :key="datekey"
+            :where-parameter="WhereParameter"
+            title="近一年供应商合同录入统计"
+          />
         </div>
       </el-col>
-      <el-col v-show="ContractsOptionCatch == '客户合同录入'" :xs="24" :sm="24" :lg="24" :xl="8">
+      <el-col
+        v-show="ContractsOptionCatch == '客户合同录入'"
+        :xs="24"
+        :sm="24"
+        :lg="24"
+        :xl="8"
+      >
         <div class="chart-wrapper">
           <CollectionMoneyChart :where-parameter="WhereParameter" />
         </div>
       </el-col>
-      <el-col v-show="ContractsOptionCatch == '客户合同录入'" :xs="24" :sm="24" :lg="24" :xl="8">
+      <el-col
+        v-show="ContractsOptionCatch == '客户合同录入'"
+        :xs="24"
+        :sm="24"
+        :lg="24"
+        :xl="8"
+      >
         <div class="chart-wrapper">
           <CollectionStateChart :where-parameter="WhereParameter" />
         </div>
@@ -89,12 +142,18 @@
     <el-row v-if="RoleName == '财务' || RoleName == '超级管理员'" :gutter="16">
       <el-col :xs="24" :sm="24" :lg="24" :xl="12">
         <div class="chart-wrapper">
-          <CollectionDatastatisticsChart :key="datekey" :where-parameter="WhereParameter" />
+          <CollectionDatastatisticsChart
+            :key="datekey"
+            :where-parameter="WhereParameter"
+          />
         </div>
       </el-col>
       <el-col :xs="24" :sm="24" :lg="24" :xl="12">
         <div class="chart-wrapper">
-          <InvoiceListDatastatisticsChart :key="datekey" :where-parameter="WhereParameter" />
+          <InvoiceListDatastatisticsChart
+            :key="datekey"
+            :where-parameter="WhereParameter"
+          />
         </div>
       </el-col>
     </el-row>
@@ -108,13 +167,19 @@
       </el-col>
       <el-col :xs="24" :sm="24" :lg="24" :xl="12">
         <div class="chart-wrapper">
-          <CommonOperationLog :key="datekey" :where-parameter="WhereParameter" />
+          <CommonOperationLog
+            :key="datekey"
+            :where-parameter="WhereParameter"
+          />
         </div>
       </el-col>
     </el-row>
     <el-backtop target=".dashboardCalss" :bottom="45">
       <el-tooltip placement="top" content="回到顶部">
-        <svg-icon style="color: #1890FF;font-size:medium;" icon-class="BackToTop" />
+        <svg-icon
+          style="color: #1890ff; font-size: medium"
+          icon-class="BackToTop"
+        />
       </el-tooltip>
     </el-backtop>
   </div>
@@ -122,21 +187,23 @@
 <script>
 import {
   GetUserAllChildList,
+  CheckUserLoginStatus,
+  UpdateUserLoginStatus,
 } from "@/api/SystemManagement";
-import PanelGroup from './Components/PanelGroup'
-import CollectionCountChart from './Components/CollectionCountChart'
-import CollectionMoneyChart from './Components/CollectionMoneyChart'
-import CollectionStateChart from './Components/CollectionStateChart'
+import PanelGroup from "./Components/PanelGroup";
+import CollectionCountChart from "./Components/CollectionCountChart";
+import CollectionMoneyChart from "./Components/CollectionMoneyChart";
+import CollectionStateChart from "./Components/CollectionStateChart";
 // import CollectionDataChart from './Components/CollectionDataChart'
 // import CollectionDataTable from './Components/CollectionDataTable'
 // import InvoiceListChart from './Components/InvoiceListChart'
-import CommonSuggestions from './Components/CommonSuggestions'
-import CommonOperationLog from './Components/CommonOperationLog'
-import CollectionDatastatisticsChart from './Components/CollectionDatastatisticsChart'
-import InvoiceListDatastatisticsChart from './Components/InvoiceListDatastatisticsChart'
+import CommonSuggestions from "./Components/CommonSuggestions";
+import CommonOperationLog from "./Components/CommonOperationLog";
+import CollectionDatastatisticsChart from "./Components/CollectionDatastatisticsChart";
+import InvoiceListDatastatisticsChart from "./Components/InvoiceListDatastatisticsChart";
 
 export default {
-  name: 'Dashboard',
+  name: "Dashboard",
   components: {
     PanelGroup,
     CollectionCountChart,
@@ -148,31 +215,32 @@ export default {
     CommonSuggestions,
     CommonOperationLog,
     CollectionDatastatisticsChart,
-    InvoiceListDatastatisticsChart
+    InvoiceListDatastatisticsChart,
   },
   data() {
     return {
       RoleName: sessionStorage.getItem("RoleName"),
-      ContractsOption: '客户合同录入',
-      ContractsOptionCatch: '客户合同录入',
+      ContractsOption: "客户合同录入",
+      ContractsOptionCatch: "客户合同录入",
       props: { multiple: true, emitPath: false },
       permissionTree: [],
       PositionStatus: true,
       UserArray: [],
       datekey: Date.now(),
       WhereParameter: {
-        ContractsOption: '',
+        ContractsOption: "",
         UserArray: [],
         PositionStatus: null,
       },
-    }
+    };
   },
   created() {
     this.GetPermissionTreeData();
-    this.GetData();// 这个是为了渲染合同录入统计（组件要刷新，所以这个要再写一遍，不会导致重复加载数据的）
+    this.GetData(); // 这个是为了渲染合同录入统计（组件要刷新，所以这个要再写一遍，不会导致重复加载数据的）
   },
   mounted() {
-    this.GetData();// 这个是为了渲染除了合同录入统计其它的
+    this.CheckUserLogin();
+    this.GetData(); // 这个是为了渲染除了合同录入统计其它的
   },
   methods: {
     // //浅对比（这里不需要深对比）
@@ -192,12 +260,27 @@ export default {
     //   }
     //   return true;
     // },
+    //如果用户初次登陆，那么提示一下新增信息
+    CheckUserLogin() {
+      CheckUserLoginStatus().then((res) => {
+        if (res.success) {
+          if (res.result == 0) {
+            this.$notify.info({
+              title: "新增功能",
+              message: "因为登录显示器分辨率的大小不同，现新增用户自定义空间尺寸的功能，操作方法：关闭此提示后点击项目右上角控件尺寸图标并选择合适的控件大小即可保存",
+              duration: 0,
+            });
+            UpdateUserLoginStatus();
+          }
+        }
+      });
+    },
     GetData() {
       const WhereParameter = {
         ContractsOption: this.ContractsOption,
         UserArray: this.UserArray, // 选择人员集合
         PositionStatus: this.PositionStatus,
-      }
+      };
       // if (!this.shallowEqual(this.WhereParameter, WhereParameter))
       this.WhereParameter = WhereParameter;
     },
@@ -228,13 +311,13 @@ export default {
       // 清空一下选中的值并重新加载数据
       this.UserArray = [];
       this.GetPermissionTreeData();
-    }
-  }
-}
+    },
+  },
+};
 </script>
-<style lang="scss"  >
+<style lang="scss">
 .dashboardCalss {
-  background-color: #F0F2F5;
+  background-color: #f0f2f5;
   overflow-y: scroll;
   overflow-x: hidden;
   padding: 102px 16px 0 16px;
@@ -252,7 +335,7 @@ export default {
   }
 }
 
-@media (max-width:1024px) {
+@media (max-width: 1024px) {
   .chart-wrapper {
     padding: 8px;
     //background:url("https://www.toptal.com/designers/subtlepatterns/uploads/double-bubble-outline.png");
@@ -267,4 +350,3 @@ export default {
   margin: 0 1rem;
 }
 </style>
-

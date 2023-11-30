@@ -76,6 +76,7 @@ import Cookie from "js-cookie";
 import moment from "moment";
 import { SendPhoneMessage } from '@/api/login'
 import md5 from "js-md5";
+import Cookies from "js-cookie";
 export default {
   name: "Login",
   data() {
@@ -277,6 +278,9 @@ export default {
         .then((data) => {
           this.loading = false;
           if (data.success) {
+            this.$store.dispatch('app/setSize', data.result.ButtonSize || "mini");
+            this.$ELEMENT.size =  data.result.ButtonSize || "mini";
+            // this.refreshView();
             this.$router.push("dashboard");
             // if (sessionStorage.getItem("RoleCode") === "01F70224-6886-38A2-DA3F-7073E49E4359") {
             //   this.$router.push("CollectionMangement/CollectionData");
@@ -292,6 +296,18 @@ export default {
           this.loading = false;
         })
     },
+    refreshView() {
+      // In order to make the cached page re-rendered
+      this.$store.dispatch('tagsView/delAllCachedViews', this.$route)
+
+      const { fullPath } = this.$route
+
+      this.$nextTick(() => {
+        this.$router.replace({
+          path: '/redirect' + fullPath
+        })
+      })
+    }
   },
 };
 </script>
