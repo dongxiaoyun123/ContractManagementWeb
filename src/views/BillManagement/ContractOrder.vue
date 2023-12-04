@@ -10,7 +10,7 @@
           <collapse>
             <div v-show="isActive">
               <el-row>
-                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                <!-- <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="合同编号">
                     <el-input
                       v-model="ContractCode"
@@ -18,7 +18,7 @@
                       placeholder="合同编号"
                     />
                   </el-form-item>
-                </el-col>
+                </el-col> -->
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="合同名称">
                     <el-input
@@ -65,6 +65,24 @@
                   </el-form-item>
                 </el-col> -->
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item class="whereFormClass" label="合同类型">
+                    <el-select
+                      v-model="ContractType"
+                      class="timeClass"
+                      filterable
+                      placeholder="合同类型"
+                      clearable=""
+                    >
+                      <el-option
+                        v-for="item in GetContractTypeArray"
+                        :key="item.Code"
+                        :label="item.Name"
+                        :value="item.Code"
+                      />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item class="whereFormClass" label="乙方公司">
                     <el-select
                       v-model="SecondPartyName"
@@ -78,28 +96,6 @@
                         :key="item.Code"
                         :label="item.Name"
                         :value="item.Code"
-                      />
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-                  <el-form-item
-                    label="申请人"
-                    prop="SaleId"
-                    class="scrollClass"
-                  >
-                    <el-select
-                      v-model="Applicant"
-                      class="timeClass"
-                      filterable
-                      placeholder="申请人"
-                      clearable=""
-                    >
-                      <el-option
-                        v-for="item in UserList"
-                        :key="item.UserID"
-                        :label="item.UserName"
-                        :value="item.UserID"
                       />
                     </el-select>
                   </el-form-item>
@@ -121,19 +117,88 @@
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-                  <el-form-item class="whereFormClass" label="合同类型">
+                  <el-form-item class="whereFormClass" label="领取状态">
                     <el-select
-                      v-model="ContractType"
+                      v-model="CollectionState"
                       class="timeClass"
                       filterable
-                      placeholder="合同类型"
+                      placeholder="领取状态"
                       clearable=""
                     >
                       <el-option
-                        v-for="item in GetContractTypeArray"
+                        v-for="item in CollectionStateArray"
                         :key="item.Code"
                         :label="item.Name"
                         :value="item.Code"
+                      >
+                      <template>
+                        <el-tag v-if="item.Code == 1" key="未领取" effect="plain" type="danger">未领取</el-tag>
+                            <el-tag v-if="item.Code == 2" key="已领取" effect="plain" type="success">已领取</el-tag>
+                            <el-tag v-if="item.Code == 3" key="部分领取" effect="plain" type="warning">部分领取</el-tag>
+                            <el-tag v-if="item.Code == 4" key="系统领取" effect="plain">系统领取</el-tag>
+                        </template>
+                    </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item class="whereFormClass" label="开票状态">
+                    <el-select
+                      v-model="BillingState"
+                      class="timeClass"
+                      filterable
+                      placeholder="开票状态"
+                      clearable=""
+                    >
+                      <el-option
+                        v-for="item in BillingStateArray"
+                        :key="item.Code"
+                        :label="item.Name"
+                        :value="item.Code"
+                      >  <template>
+                          <div style="display: flex; align-items: center">
+                            <span slot="reference" style="margin-right: 8px">
+                              <i
+                                v-if="item.Code == 1"
+                                class="dotClass"
+                                style="background-color: #ff4949"
+                              />
+                              <i
+                                v-if="item.Code == 2"
+                                class="dotClass"
+                                style="background-color: #13ce66"
+                              />
+                              <i
+                                v-if="item.Code == 3"
+                                class="dotClass"
+                                style="background-color: #1890ff"
+                              />
+                            </span>
+                            {{ item.Name }}
+                          </div>
+                        </template>
+                    </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item
+                    label="申请人"
+                    prop="SaleId"
+                    class="scrollClass"
+                  >
+                    <el-select
+                      v-model="Applicant"
+                      class="timeClass"
+                      filterable
+                      placeholder="申请人"
+                      clearable=""
+                    >
+                      <el-option
+                        v-for="item in UserList"
+                        :key="item.UserID"
+                        :label="item.UserName"
+                        :value="item.UserID"
                       />
                     </el-select>
                   </el-form-item>
@@ -375,11 +440,11 @@
         </el-table-column> -->
         <el-table-column
           prop="CollectionState"
-          label="回款状态"
+          label="领取状态"
           min-width="100"
         >
           <template slot="header" slot-scope="{}">
-            <span>回款状态</span>
+            <span>领取状态</span>
             <el-tooltip
               class="item"
               effect="light"
@@ -391,55 +456,22 @@
                 style="font-size: 14px; vertical-align: middle"
               />
               <div slot="content">
-                <div style="display: flex; align-items: center">
-                  <span
-                    slot="reference"
-                    style="margin-right: 10px"
-                    class="SecondPartyNameClass"
-                  >
-                    <div>
-                      <i class="dotClass" style="background-color: #ff4949" />{{
-                        "\xa0\xa0"
-                      }}未回款<br />
-                    </div>
-                    <div>
-                      <i class="dotClass" style="background-color: #13ce66" />{{
-                        "\xa0\xa0"
-                      }}已回款
-                    </div>
-                    <div style="margin-bottom: 0">
-                      <i class="dotClass" style="background-color: #1890ff" />{{
-                        "\xa0\xa0"
-                      }}部分回款
-                    </div>
+                <div style="display: flex;  align-items: center;">
+                  <span slot="reference" style="margin: 0 10px 0 6px;" class="SecondPartyNameClass">
+                    <div> <el-tag key="未领取" effect="plain" type="danger">未领取</el-tag></div>
+                    <div><el-tag key="已领取" effect="plain" type="success">已领取</el-tag></div>
+                    <div><el-tag key="部分领取" effect="plain" type="warning">部分领取</el-tag></div>
+                    <div style="margin-bottom: 0;"><el-tag key="系统领取" effect="plain" >系统领取</el-tag></div>
                   </span>
                 </div>
               </div>
             </el-tooltip>
           </template>
           <template slot-scope="scope" class="tableRowClass">
-            <div style="display: flex; align-items: center">
-              <span slot="reference" style="margin-right: 8px">
-                <i
-                  v-if="scope.row.CollectionState == 1"
-                  class="dotClass"
-                  style="background-color: #ff4949"
-                />
-                <i
-                  v-if="scope.row.CollectionState == 2"
-                  class="dotClass"
-                  style="background-color: #13ce66"
-                />
-                <i
-                  v-if="scope.row.CollectionState == 3"
-                  class="dotClass"
-                  style="background-color: #1890ff"
-                />
-              </span>
-              <span v-if="scope.row.CollectionState == 1">未回款</span>
-              <span v-if="scope.row.CollectionState == 2">已回款</span>
-              <span v-if="scope.row.CollectionState == 3">部分回款</span>
-            </div>
+            <el-tag v-if="scope.row.CollectionState == 1" key="未领取" effect="plain" type="danger">未领取</el-tag>
+            <el-tag v-if="scope.row.CollectionState == 2" key="已领取" effect="plain" type="success">已领取</el-tag>
+            <el-tag v-if="scope.row.CollectionState == 3" key="部分领取" effect="plain" type="warning">部分领取</el-tag>
+            <el-tag v-if="scope.row.CollectionState == 4" key="系统领取" effect="plain">系统领取</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="BillingState" label="开票状态" min-width="120">
@@ -633,6 +665,7 @@
             reserve-keyword
             :remote-method="remoteMethod"
             @visible-change="clearselectCorporationDatas"
+            @change="addContractCodeChange"
           >
             <el-option
               v-for="item in selectCorporationDatas"
@@ -654,15 +687,14 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <!-- <el-form-item label="公司名称" prop="CompanyId">
-                    <el-select style="width:300px ;" v-model="addContractOrderForm.CompanyId" filterable
-                        placeholder="公司名称">
-                        <el-option v-for="item in CompanyList" :class="item.Class" :key="item.ComID"
-                            :label="item.ShortName" :value="item.ComID">
+        <el-form-item label="付款方名称" prop="CompanyId">
+                    <el-select style="width:100% ;" v-model="addContractOrderForm.CompanyId" filterable
+                        placeholder="付款方名称">
+                        <el-option v-for="item in ComAArray" :class="item.Class" :key="item.ComID"
+                            :label="item.ComName" :value="item.ComID">
                         </el-option>
                     </el-select>
-                </el-form-item> -->
-
+                </el-form-item>
         <el-form-item label="账单名称" prop="ContractOrderName">
           <el-input
             v-model="addContractOrderForm.ContractOrderName"
@@ -725,12 +757,12 @@
             <el-form-item label-width="0">
               <el-tag
                 v-if="domain.OrderState == 1"
-                key="未回款"
+                key="未领取"
                 style="margin-left: 10px"
                 :disabled="true"
                 effect="plain"
                 type="danger"
-                >未回款</el-tag
+                >未领取</el-tag
               >
               <el-button
                 style="margin-left: 10px"
@@ -822,12 +854,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="回款状态" prop="CollectionState">
+            <el-form-item label="领取状态" prop="CollectionState">
               <el-select
                 v-model="addContractOrderForm.CollectionState"
                 disabled=""
                 filterable
-                placeholder="回款状态"
+                placeholder="领取状态"
                 clearable=""
               >
                 <el-option
@@ -918,14 +950,14 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <!-- <el-form-item label="公司名称" prop="CompanyId">
-                    <el-select style="width:300px ;" v-model="updateContractOrderForm.CompanyId" filterable
-                        placeholder="公司名称">
-                        <el-option v-for="item in CompanyList" :class="item.Class" :key="item.ComID"
-                            :label="item.ShortName" :value="item.ComID">
+        <el-form-item label="付款方名称" prop="CompanyId">
+                    <el-select style="width:100% ;" v-model="updateContractOrderForm.CompanyId" filterable
+                        placeholder="付款方名称" :disabled="!updateShow">
+                        <el-option v-for="item in ComAArray" :class="item.Class" :key="item.ComID"
+                            :label="item.ComName" :value="item.ComID">
                         </el-option>
                     </el-select>
-                </el-form-item> -->
+                </el-form-item>
         <el-form-item label="账单名称" prop="ContractOrderName">
           <el-input
             v-model="updateContractOrderForm.ContractOrderName"
@@ -1020,29 +1052,29 @@
             <el-form-item label-width="0">
               <el-tag
                 v-if="domain.OrderState == 1"
-                key="未回款"
+                key="未领取"
                 style="margin-left: 10px"
                 :disabled="true"
                 effect="plain"
                 type="danger"
-                >未回款</el-tag
+                >未领取</el-tag
               >
               <el-tag
                 v-if="domain.OrderState == 2"
-                key="已回款"
+                key="已领取"
                 style="margin-left: 10px"
                 :disabled="true"
                 effect="plain"
                 type="success"
-                >已回款</el-tag
+                >已领取</el-tag
               >
               <el-tag
                 v-if="domain.OrderState == 3"
-                key="部分回款"
+                key="部分领取"
                 style="margin-left: 10px"
                 :disabled="true"
                 effect="plain"
-                >部分回款</el-tag
+                >部分领取</el-tag
               >
               <el-button
                 :disabled="
@@ -1141,12 +1173,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="回款状态" prop="CollectionState">
+            <el-form-item label="领取状态" prop="CollectionState">
               <el-select
                 v-model="updateContractOrderForm.CollectionState"
                 disabled
                 filterable
-                placeholder="回款状态"
+                placeholder="领取状态"
                 clearable=""
               >
                 <el-option
@@ -1440,10 +1472,10 @@
               v-if="scope.row.BillingState == 1"
               effect="plain"
               type="danger"
-              >未回款</el-tag
+              >未领取</el-tag
             >
             <el-tag v-if="scope.row.BillingState == 3" effect="plain"
-              >部分回款</el-tag
+              >部分领取</el-tag
             >
           </template>
         </el-table-column>
@@ -1784,6 +1816,8 @@ export default {
   },
   data() {
     return {
+      CollectionState: "",
+      BillingState: "",
       ContractType: "",
       GetContractTypeArray: [],
       ComAArray: [],
@@ -1967,7 +2001,7 @@ export default {
       updateContractOrderForm: {
         OrderCode: "",
         ContractCode: "",
-        // CompanyId: '',
+         CompanyId: '',
         OrderAbstract: "",
         InvoiceAccount: "",
         InvoiceType: "",
@@ -1993,7 +2027,7 @@ export default {
       UserList: [],
       addContractOrderForm: {
         ContractCode: "",
-        // CompanyId: '',
+        CompanyId: '',
         OrderAbstract: "",
         InvoiceAccount: "",
         InvoiceType: "",
@@ -2006,11 +2040,11 @@ export default {
         AmountReceived: "",
         ContractOrderName: "",
       },
-      // 回款状态
+      // 领取状态
       PaymentCollectionStateArray: [
-        { Code: 1, Name: "未回款" },
-        { Code: 2, Name: "已回款" },
-        { Code: 3, Name: "部分回款" },
+        { Code: 1, Name: "未领取" },
+        { Code: 2, Name: "已领取" },
+        { Code: 3, Name: "部分领取" },
       ],
       // 账单使用状态
       OrderStateArray: [
@@ -2027,9 +2061,9 @@ export default {
         ContractCode: [
           { required: true, message: "请选择合同", trigger: "change" },
         ],
-        // CompanyId: [
-        //     { required: true, message: "请选择公司名称", trigger: "change" },
-        // ],
+        CompanyId: [
+            { required: true, message: "请选择付款方名称", trigger: "change" },
+        ],
         ContractOrderName: [
           { required: true, message: "请输入账单名称", trigger: "blur" },
         ],
@@ -2114,6 +2148,21 @@ export default {
       },
       auditStatusdescription: "",
       auditStatusCheckDialog: false,
+      //领取状态
+      CollectionStateArray: [
+        { Code: 1, Name: "未领取" },
+        { Code: 2, Name: "已领取" },
+        { Code: 3, Name: "部分领取" },
+        { Code: 4, Name: "系统领取" },
+      ],
+      //开票状态
+      BillingStateArray: [
+        { Code: 1, Name: "未申开" },
+        { Code: 2, Name: "已申开" },
+        { Code: 3, Name: "部分申开" },
+      ],
+      CollectionState: "",
+      BillingState: "",
     };
   },
   watch: {
@@ -2149,6 +2198,18 @@ export default {
     this.GetContractTypeList();
   },
   methods: {
+    addContractCodeChange(val){
+      GetCompanyDataByCodes(val).then((res) => {
+        if (res.success) {
+          this.ComAArray = res.result;
+          if(this.ComAArray.length!=0)
+            this.addContractOrderForm.CompanyId=res.result1.CompanyId+"";
+
+        } else {
+          this.ComAArray = [];
+        }
+      });
+    },
     // 获取全部合同类型
     GetContractTypeList() {
       GetContractType().then((res) => {
@@ -2695,7 +2756,7 @@ export default {
       GetCompanyDataByCodes(dataArr[0].Id).then((res) => {
         if (res.success) {
           this.ComAArray = res.result;
-          this.GetCompanySystem(this.ComAArray[0].ComID);
+          this.GetCompanySystem(dataArr[0].CompanyId);
           this.updateInvoicingDialogVisible = true;
         } else {
           this.ComAArray = [];
@@ -2836,6 +2897,8 @@ export default {
       this.Applicant = "";
       this.ApplicationTime = [];
       this.ContractType = "";
+      this.CollectionState = "";
+       this.BillingState = "";
       this.queryInfo.pagesize = 20;
       this.queryInfo.pagenum = 1;
       this.GetContractOrderList();
@@ -3006,20 +3069,24 @@ export default {
         this.BeginSignTime = "";
         this.EndSignTime = "";
       }
-      GetContractOrder(
-        this.ContractCode,
-        this.ContractName,
-        this.CompanyName,
-        this.InvoiceAccount,
-        this.InvoiceType,
-        this.Applicant,
-        this.ApplicationTimeBegin,
-        this.ApplicationTimeEnd,
-        this.SecondPartyName,
-        this.ContractType,
-        this.queryInfo.pagenum,
-        this.queryInfo.pagesize
-      ).then((res) => {
+      var parameter = {
+        ContractCode: this.ContractCode,
+        ContractName: this.ContractName,
+        CompanyName: this.CompanyName,
+        InvoiceAccount: this.InvoiceAccount,
+        InvoiceType: this.InvoiceType,
+        Applicant: this.Applicant,
+        ApplicationTimeBegin: this.ApplicationTimeBegin,
+        ApplicationTimeEnd: this.ApplicationTimeEnd,
+        SecondPartyName: this.SecondPartyName,
+        ContractType: this.ContractType,
+        CollectionState: this.CollectionState,
+        BillingState: this.BillingState,
+        PageIndex: this.queryInfo.pagenum,
+        PageSize: this.queryInfo.pagesize,
+        OrderCode: "",
+      };
+      GetContractOrder(parameter).then((res) => {
         if (res.success) {
           this.ContractData = res.result.list;
           this.total = res.result.totalNumber;
@@ -3035,7 +3102,15 @@ export default {
       this.remoteMethodShow(item.Id);
       this.updateContractOrderForm.OrderCode = item.OrderCode;
       this.updateContractOrderForm.ContractCode = item.Id;
-      this.updateContractOrderForm.CompanyId = item.CompanyId;
+      GetCompanyDataByCodes(item.Id).then((res) => {
+        if (res.success) {
+          this.ComAArray = res.result;
+          if(this.ComAArray.length!=0)
+          this.updateContractOrderForm.CompanyId = item.CompanyId+"";
+        } else {
+          this.ComAArray = [];
+        }
+      });
       this.GetCompanyByContractList(item.Id);
       this.updateContractOrderForm.OrderAbstract = item.OrderAbstract;
       this.updateContractOrderForm.InvoiceAccount = item.InvoiceAccount;
