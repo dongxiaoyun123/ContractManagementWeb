@@ -161,17 +161,13 @@
     <!-- 综合哪个角色都能看到 -->
     <el-row :gutter="16">
       <el-col :xs="24" :sm="24" :lg="24" :xl="12">
-        <div class="chart-wrapper">
           <CommonSuggestions />
-        </div>
       </el-col>
       <el-col :xs="24" :sm="24" :lg="24" :xl="12">
-        <div class="chart-wrapper">
           <CommonOperationLog
             :key="datekey"
             :where-parameter="WhereParameter"
           />
-        </div>
       </el-col>
     </el-row>
     <el-backtop target=".dashboardCalss" :bottom="45">

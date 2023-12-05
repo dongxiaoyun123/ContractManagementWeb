@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 16px">
+  <div style="padding: 8px">
     <el-card>
       <el-form label-width="90px">
         <!-- 订单列表 -->
@@ -298,7 +298,7 @@
           show-overflow-tooltip fixed="left" /> -->
         <!-- <el-table-column v-else key="ContractNameStrFalse" prop="ContractNameStr" label="合同名称" min-width="120"
           show-overflow-tooltip /> -->
-        <el-table-column
+        <!-- <el-table-column
           v-if="fixedLeftShow"
           key="CompanyName"
           prop="CompanyName"
@@ -306,9 +306,8 @@
           min-width="200"
           show-overflow-tooltip
           fixed="left"
-        />
+        /> -->
         <el-table-column
-          v-else
           key="CompanyNameFalse"
           prop="CompanyName"
           label="公司名称"

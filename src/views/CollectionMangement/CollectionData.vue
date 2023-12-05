@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 16px;">
+  <div style="padding: 8px;">
     <el-card>
       <el-form label-width="90px">
         <!-- 合同信息 -->
@@ -87,12 +87,13 @@
                 <div slot="content" style="line-height: 20px;font-size: 13px;width: 300px;">
                   <span style="font-weight: bold;font-size: 14px;">公司数据不显示问题：</span>
                   <el-divider content-position="left">解决方案如下</el-divider>
-                  <div style="margin-bottom:15px ; color: #ffba00;">1. 检查保险管理后台系统查看是否存在该公司</div>
+                  <div style="margin-bottom:15px ; color: #ffba00;">
+                    1. 登录客服系统检查自己账号下是否存在该公司（合同方和付款方）（如果没有完全一致的公司名称则需要在客服系统中添加一个新的付款方然后刷新当前页面即可显示）</div>
                   <div style="margin-bottom:15px ;color: #13ce66;">
-                    2. 在回款系统中回款管理——关联用户中查看是否已经关联了所需要的用户(只针对客服角色)</div>
-                  <div style="color: #ff4949; ;">
+                    2. 在本系统中（系统管理——关联用户）中查看是否已经关联了所需要的用户(只针对客服角色)，如果没有关联先关联成功后即可看到此账号下关联的合同方</div>
+                  <!-- <div style="color: #ff4949; ;">
                     3. 如果前两项没有问题则需要联系管理员检查一下导入的公司名称是否和保险管理后台系统的公司名称是否完全一致（很重要）！
-                  </div>
+                  </div> -->
                 </div>
                 <el-badge value="hot" class="item">
                   <el-button icon="el-icon-warning-outline">提示</el-button>
@@ -212,7 +213,6 @@
                     <div><el-tag key="已领取" effect="plain" type="success">已领取</el-tag></div>
                     <div><el-tag key="部分领取" effect="plain" type="warning">部分领取</el-tag></div>
                     <div style="margin-bottom: 0;"><el-tag key="系统领取" effect="plain" >系统领取</el-tag></div>
-                    
                   </span>
                 </div>
               </div>

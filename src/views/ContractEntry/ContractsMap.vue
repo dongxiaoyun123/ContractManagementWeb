@@ -1,6 +1,6 @@
 
 <template>
-  <div style="padding: 16px;">
+  <div style="padding: 8px;">
     <el-card v-loading="mapShow">
       <el-row>
         <el-col v-if="typeParameter" class="titleClass" :span="24" style="text-align: right">

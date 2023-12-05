@@ -35,7 +35,7 @@ export default {
       this.$store.dispatch('app/setSize', size)
       this.refreshView()
       this.$message({
-        message: '按钮设置成功',
+        message: '控件尺寸设置成功',
         type: 'success'
       })
     },

@@ -219,20 +219,20 @@ aside {
 
 //el-card只要引用了CardTableClass这个类，下面的样式就会生效
 .CardTableClass {
-  margin-top: 16px;
+  margin-top: 8px;
   // margin-bottom: -5px;
 }
 
 .CardTableClass .el-card__body {
   padding-top: 0;
-  padding-bottom: 15px;
+  padding-bottom: 8px;
 
   .el-table {
     margin-top: 5px;
   }
 
   .el-pagination {
-    margin-top: 15px;
+    margin-top: 8px;
   }
 
   .el-button--mini {

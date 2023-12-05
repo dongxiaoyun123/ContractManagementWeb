@@ -1,6 +1,6 @@
 <template>
   <!-- ContractTypesOf 1.添加合同 2.添加补充协议 -->
-  <div style="padding: 16px">
+  <div style="padding: 8px">
     <el-card>
       <el-form label-width="90px">
         <!-- 合同信息 -->
@@ -408,6 +408,7 @@
         @selection-change="TableSelect"
         @row-click="toggleSelection"
         :height="DynamicHeight"
+        
       >
         <!-- :row-class-name="tableRowClassName"
           :cell-style="InvoiceTypeStyle" -->
@@ -3618,7 +3619,7 @@ export default {
       tagsView: this.$store.state.settings.tagsView,
       SaveYearBatchLoading: false,
       DoAddContractLoading: false,
-      DynamicHeight: "calc(100vh - 280px)",
+      DynamicHeight: "calc(100vh - 240px)",
       UploadServerFlag: false,
       UploadServerFlagUpdate: false,
       CardImg: yuanfu,
@@ -4166,8 +4167,8 @@ export default {
       this.ConCompany = false;
     }
 
-    if (this.tagsView) this.DynamicHeight = "calc(100vh - 280px)";
-    else this.DynamicHeight = "calc(100vh - 35px - 280px)";
+    if (this.tagsView) this.DynamicHeight = "calc(100vh - 240px)";
+    else this.DynamicHeight = "calc(100vh - 35px - 240px)";
     // 默认取当月有效时间
     // this.ContractRangeTime = [
     //   this.$moment(new Date()).format("YYYY-MM-01"),
@@ -4649,11 +4650,11 @@ export default {
       //因为分辨率不一样，所以这里展开只能用一部分动态的高度，否则可能导致切换分辨率底部对不齐问题
       this.DynamicHeight = this.isActive
         ? this.tagsView
-          ? "calc(100vh - 377px - 4.5vh)"
-          : "calc(100vh - 377px + 35px - 4.5vh)"
+          ? "calc(100vh - 337px - 4.5vh)"
+          : "calc(100vh - 337px + 35px - 4.5vh)"
         : this.tagsView
-        ? "calc(100vh - 280px)"
-        : "calc(100vh + 35px - 280px)";
+        ? "calc(100vh - 240px)"
+        : "calc(100vh + 35px - 240px)";
     },
     // 点击置为不显示
     hideClick(item) {

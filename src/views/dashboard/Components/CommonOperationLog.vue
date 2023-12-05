@@ -1,6 +1,6 @@
 <template>
   <div style="height: 600px;">
-    <el-card class="box-card cardTopClass" style="float: right ;width:99%;height:580px;">
+    <el-card class="box-card cardTopClass" style="float: right ;height:580px;width:100%">
       <div slot="header" class="clearfix">
         <div slot="header" class="clearfix">
           <h4 style="float: left;margin: 0;">操作记录</h4>
