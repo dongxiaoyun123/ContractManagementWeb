@@ -1,10 +1,10 @@
 import request from "@/utils/request";
 
 // 获取模块管理列表
-export function GetAdmin_Permission(PageIndex, PageSize) {
+export function GetAdmin_PermissionSys(PageIndex, PageSize) {
   return request({
     url:
-      "/SystemManagement/GetAdmin_Permission?PageIndex=" +
+      "/SystemManagement/GetAdmin_PermissionSys?PageIndex=" +
       PageIndex +
       "&PageSize=" +
       PageSize,
@@ -347,7 +347,7 @@ export function DeleteDepartment(DepartmentCode) {
 export function GetDicCategory(Name, PageIndex, PageSize) {
   return request({
     url:
-      "/SystemManagement/GetDicCategory?Name=" +
+      "/SystemManagement/GetDicCategorySys?Name=" +
       Name +
       "&PageIndex=" +
       PageIndex +
@@ -401,7 +401,7 @@ export function GetSystemLog(
 ) {
   return request({
     url:
-      "/SystemManagement/GetSystemLog?PermissionCode=" +
+      "/SystemManagement/GetSystemLogSys?PermissionCode=" +
       PermissionCode +
       "&MenuDescription=" +
       MenuDescription +
@@ -641,7 +641,7 @@ export function UpdateTicket(model) {
 export function GetCompanySystem(CompanyId, CompanyName, PageIndex, PageSize) {
   return request({
     url:
-      "/SystemManagement/GetCompany?CompanyId=" +
+      "/SystemManagement/GetCompanyById?CompanyId=" +
       CompanyId +
       "&CompanyName=" +
       CompanyName +
@@ -824,13 +824,7 @@ export function IfExistsExportUser() {
     method: "post",
   });
 }
-// 获取用户右侧菜单
-export function getUserPermissions() {
-  return request({
-    url: "/Admin/getUserPermissions/",
-    method: "post",
-  });
-}
+
 // 添加客户曾用名
 export function AddCompanyRelation(ComID, CompanyrelationName) {
   return request({
@@ -874,6 +868,13 @@ export function CheckUserLoginStatus() {
 export function UpdateUserLoginStatus() {
   return request({
     url: "/SystemManagement/UpdateUserLoginStatus",
+    method: "post",
+  });
+}
+
+export function GetSupplierCmpanyById(SupplierCmpanyBCode) {
+  return request({
+    url: "/SystemManagement/GetSupplierCmpanyById?SupplierCmpanyBCode=" + SupplierCmpanyBCode,
     method: "post",
   });
 }
