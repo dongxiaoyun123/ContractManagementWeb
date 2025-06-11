@@ -6345,10 +6345,9 @@ export default {
     ShowColumn(MenuName) {
       const columnKey = this.MenuToPropertyMap[MenuName];
       if (columnKey && Object.prototype.hasOwnProperty.call(this, columnKey)) {
-        this[columnKey] = false;
+        this[columnKey] = true;
       }
     },
-
     // 查询是否有导出权限true 有 false没有
     IfExistsExportUserMethod() {
       IfExistsExportUser(1).then((res) => {
