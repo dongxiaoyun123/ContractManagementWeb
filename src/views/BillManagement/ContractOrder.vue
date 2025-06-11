@@ -131,13 +131,33 @@
                         :label="item.Name"
                         :value="item.Code"
                       >
-                      <template>
-                        <el-tag v-if="item.Code == 1" key="未领取" effect="plain" type="danger">未领取</el-tag>
-                            <el-tag v-if="item.Code == 2" key="已领取" effect="plain" type="success">已领取</el-tag>
-                            <el-tag v-if="item.Code == 3" key="部分领取" effect="plain" type="warning">部分领取</el-tag>
-                            <el-tag v-if="item.Code == 4" key="系统领取" effect="plain">系统领取</el-tag>
+                        <template>
+                          <el-tag
+                            v-if="item.Code == 1"
+                            key="未领取"
+                            effect="plain"
+                            type="danger"
+                          >未领取（含部分领取）</el-tag>
+                          <el-tag
+                            v-if="item.Code == 2"
+                            key="已领取"
+                            effect="plain"
+                            type="success"
+                          >已领取</el-tag>
+                          <!-- <el-tag
+                            v-if="item.Code == 3"
+                            key="部分领取"
+                            effect="plain"
+                            type="warning"
+                            >部分领取</el-tag
+                          > -->
+                          <el-tag
+                            v-if="item.Code == 4"
+                            key="系统领取"
+                            effect="plain"
+                          >系统领取</el-tag>
                         </template>
-                    </el-option>
+                      </el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -155,7 +175,8 @@
                         :key="item.Code"
                         :label="item.Name"
                         :value="item.Code"
-                      >  <template>
+                      >
+                        <template>
                           <div style="display: flex; align-items: center">
                             <span slot="reference" style="margin-right: 8px">
                               <i
@@ -177,7 +198,7 @@
                             {{ item.Name }}
                           </div>
                         </template>
-                    </el-option>
+                      </el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -220,13 +241,13 @@
                   type="info"
                   icon="el-icon-refresh-left"
                   @click="reseatData"
-                  >重 置
+                >重 置
                 </el-button>
                 <el-button
                   type="success"
                   icon="el-icon-circle-plus-outline"
                   @click="ShowContractAddDialog"
-                  >增 加
+                >增 加
                 </el-button>
                 <!-- <el-button type="warning" icon="el-icon-thumb" @click="auditStatusAction">
                   送 审
@@ -250,8 +271,7 @@
                       : 'el-icon-arrow-down el-icon--right'
                   "
                   @click="collapseClick"
-                  >{{ isActive ? "收起" : "展开" }}</el-button
-                >
+                >{{ isActive ? "收起" : "展开" }}</el-button>
               </el-button-group>
             </el-col>
           </el-row>
@@ -311,9 +331,17 @@
           key="CompanyNameFalse"
           prop="CompanyName"
           label="公司名称"
-          min-width="200"
+          min-width="250"
           show-overflow-tooltip
-        />
+        >
+          <template slot-scope="scope">
+            <div>
+              <el-tag v-if="scope.row.SupplierContractCode" type="primary">供应商</el-tag>
+              {{ "\xa0" }}
+              {{ scope.row.CompanyName }}
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="Name"
           label="合同类型"
@@ -455,22 +483,53 @@
                 style="font-size: 14px; vertical-align: middle"
               />
               <div slot="content">
-                <div style="display: flex;  align-items: center;">
-                  <span slot="reference" style="margin: 0 10px 0 6px;" class="SecondPartyNameClass">
-                    <div> <el-tag key="未领取" effect="plain" type="danger">未领取</el-tag></div>
-                    <div><el-tag key="已领取" effect="plain" type="success">已领取</el-tag></div>
-                    <div><el-tag key="部分领取" effect="plain" type="warning">部分领取</el-tag></div>
-                    <div style="margin-bottom: 0;"><el-tag key="系统领取" effect="plain" >系统领取</el-tag></div>
+                <div style="display: flex; align-items: center">
+                  <span
+                    slot="reference"
+                    style="margin: 0 10px 0 6px"
+                    class="SecondPartyNameClass"
+                  >
+                    <div>
+                      <el-tag key="未领取" effect="plain" type="danger">未领取</el-tag>
+                    </div>
+                    <div>
+                      <el-tag key="已领取" effect="plain" type="success">已领取</el-tag>
+                    </div>
+                    <div>
+                      <el-tag key="部分领取" effect="plain" type="warning">部分领取</el-tag>
+                    </div>
+                    <div style="margin-bottom: 0">
+                      <el-tag key="系统领取" effect="plain">系统领取</el-tag>
+                    </div>
                   </span>
                 </div>
               </div>
             </el-tooltip>
           </template>
           <template slot-scope="scope" class="tableRowClass">
-            <el-tag v-if="scope.row.CollectionState == 1" key="未领取" effect="plain" type="danger">未领取</el-tag>
-            <el-tag v-if="scope.row.CollectionState == 2" key="已领取" effect="plain" type="success">已领取</el-tag>
-            <el-tag v-if="scope.row.CollectionState == 3" key="部分领取" effect="plain" type="warning">部分领取</el-tag>
-            <el-tag v-if="scope.row.CollectionState == 4" key="系统领取" effect="plain">系统领取</el-tag>
+            <el-tag
+              v-if="scope.row.CollectionState == 1"
+              key="未领取"
+              effect="plain"
+              type="danger"
+            >未领取</el-tag>
+            <el-tag
+              v-if="scope.row.CollectionState == 2"
+              key="已领取"
+              effect="plain"
+              type="success"
+            >已领取</el-tag>
+            <el-tag
+              v-if="scope.row.CollectionState == 3"
+              key="部分领取"
+              effect="plain"
+              type="warning"
+            >部分领取</el-tag>
+            <el-tag
+              v-if="scope.row.CollectionState == 4"
+              key="系统领取"
+              effect="plain"
+            >系统领取</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="BillingState" label="开票状态" min-width="120">
@@ -496,7 +555,7 @@
                     <div>
                       <i class="dotClass" style="background-color: #ff4949" />{{
                         "\xa0\xa0"
-                      }}未申开<br />
+                      }}未申开<br>
                     </div>
                     <div>
                       <i class="dotClass" style="background-color: #13ce66" />{{
@@ -544,13 +603,23 @@
           width="100"
           show-overflow-tooltip
         />
+        <el-table-column width="150" property="CreateTime" label="创建时间">
+          <template slot-scope="scope">
+            <div v-if="scope.row.CreateTime">
+              <i class="el-icon-time" />
+              <span style="margin-left: 6px">{{
+                dateFormat(scope.row.CreateTime)
+              }}</span>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="OrderAbstract"
           label="摘要"
           show-overflow-tooltip
           min-width="250"
         />
-        <el-table-column
+        <!-- <el-table-column
           prop="SubmitCensorshipTimeStr"
           label="送审时间"
           width="180"
@@ -573,7 +642,7 @@
               }}</span>
             </div>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           v-if="fixedLeftShow"
           label="操作"
@@ -587,14 +656,13 @@
                 type="text"
                 size="mini"
                 @click="showEditDialog(scope.row)"
-                >编辑</el-button
-              >
+              >编辑</el-button>
               <el-button
                 icon="el-icon-delete"
                 type="text"
                 size="mini"
                 @click="deleteDialog(scope.row)"
-                >删除
+              >删除
               </el-button>
             </el-button-group>
           </template>
@@ -607,14 +675,13 @@
                 type="text"
                 size="mini"
                 @click="showEditDialog(scope.row)"
-                >编辑</el-button
-              >
+              >编辑</el-button>
               <el-button
                 icon="el-icon-delete"
                 type="text"
                 size="mini"
                 @click="deleteDialog(scope.row)"
-                >删除
+              >删除
               </el-button>
             </el-button-group>
           </template>
@@ -653,7 +720,14 @@
         label-width="120px"
         class="formClass"
       >
-        <el-form-item label="合同信息" prop="ContractCode">
+        <el-form-item label="合同&供应商">
+          <el-radio-group v-model="CorSradio" @change="CorSradioChange">
+            <el-radio-button label="合同" />
+            <el-radio-button label="供应商" />
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item v-if="IfContract" label="合同信息" prop="ContractCode">
           <el-select
             v-model="addContractOrderForm.ContractCode"
             style="width: 100%"
@@ -676,24 +750,65 @@
               <span
                 v-if="item.StatesName == '过期'"
                 style="float: right; color: #909399; font-size: 13px"
-                >{{ item.StatesName }}</span
-              >
+              >{{ item.StatesName }}</span>
               <span
                 v-else
                 style="float: right; color: #13ce66; font-size: 13px"
-                >{{ item.StatesName }}</span
-              >
+              >{{ item.StatesName }}</span>
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          v-if="!IfContract"
+          label="供应商信息"
+          prop="SupplierContractCode"
+        >
+          <el-select
+            v-model="addContractOrderForm.SupplierContractCode"
+            style="width: 100%"
+            filterable
+            placeholder="合同类型-公司名称-乙方公司名称-合同期"
+            clearable=""
+            remote
+            reserve-keyword
+            :remote-method="remoteMethodSupplier"
+            @visible-change="clearselectCorporationDatasSupplier"
+            @change="addContractCodeChangeSupplier"
+          >
+            <el-option
+              v-for="item in selectCorporationDatasSupplier"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+              <span style="float: left">{{ item.label }}</span>
+              <span
+                v-if="item.StatesName == '过期'"
+                style="float: right; color: #909399; font-size: 13px"
+              >{{ item.StatesName }}</span>
+              <span
+                v-else
+                style="float: right; color: #13ce66; font-size: 13px"
+              >{{ item.StatesName }}</span>
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="付款方名称" prop="CompanyId">
-                    <el-select style="width:100% ;" v-model="addContractOrderForm.CompanyId" filterable
-                        placeholder="付款方名称">
-                        <el-option v-for="item in ComAArray" :class="item.Class" :key="item.ComID"
-                            :label="item.ComName" :value="item.ComID">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+          <el-select
+            v-model="addContractOrderForm.CompanyId"
+            style="width: 100%"
+            filterable
+            placeholder="付款方名称"
+          >
+            <el-option
+              v-for="item in ComAArray"
+              :key="item.ComID"
+              :class="item.Class"
+              :label="item.ComName"
+              :value="item.ComID"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="账单名称" prop="ContractOrderName">
           <el-input
             v-model="addContractOrderForm.ContractOrderName"
@@ -714,72 +829,73 @@
           />
         </el-form-item>
         <!-- 动态增减表单项 -->
-        <el-row
-          v-for="(domain, index) in addContractOrderForm.domains"
-          :key="index"
-        >
-          <el-col :span="12">
-            <el-form-item
-              :key="domain.key"
-              :label="'收款项目' + (index + 1)"
-              :prop="'domains.' + index + '.CustomAmountName'"
-              :rules="{
-                required: true,
-                message: '收款项目不能为空',
-                trigger: 'blur',
-              }"
-            >
-              <el-input v-model="domain.CustomAmountName" clearable />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item
-              :key="domain.key"
-              :label="'金额' + (index + 1)"
-              :prop="'domains.' + index + '.CustomAmount'"
-              :rules="{
-                required: true,
-                pattern:
-                  /^([0-9]\d*(\.\d{1,2})?|([0](\.([0][0-9]|[0-9]\d{0,1}))))$/,
-                message: '金额输入不合法（不能小于0小数位不超过2位）',
-                trigger: 'blur',
-              }"
-            >
-              <el-input
-                v-model="domain.CustomAmount"
-                clearable
-                @input="handleChangeAdd(domain.CustomAmount, index)"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="4" style="line-height: 100%">
-            <el-form-item label-width="0">
-              <el-tag
-                v-if="domain.OrderState == 1"
-                key="未领取"
-                style="margin-left: 10px"
-                :disabled="true"
-                effect="plain"
-                type="danger"
-                >未领取</el-tag
+        <transition-group name="el-zoom-in-top">
+          <el-row
+            v-for="(domain, index) in addContractOrderForm.domains"
+            :key="index"
+            class="transition-box"
+          >
+            <el-col :span="12">
+              <el-form-item
+                :key="domain.key"
+                :label="'收款项目' + (index + 1)"
+                :prop="'domains.' + index + '.CustomAmountName'"
+                :rules="{
+                  required: true,
+                  message: '收款项目不能为空',
+                  trigger: 'blur',
+                }"
               >
-              <el-button
-                style="margin-left: 10px"
-                type="text"
-                icon="el-icon-delete"
-                @click.prevent="removeDomain(domain)"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
+                <el-input v-model="domain.CustomAmountName" clearable />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item
+                :key="domain.key"
+                :label="'金额' + (index + 1)"
+                :prop="'domains.' + index + '.CustomAmount'"
+                :rules="{
+                  required: true,
+                  pattern:
+                    /^([0-9]\d*(\.\d{1,2})?|([0](\.([0][0-9]|[0-9]\d{0,1}))))$/,
+                  message: '金额输入不合法（不能小于0小数位不超过2位）',
+                  trigger: 'blur',
+                }"
+              >
+                <el-input
+                  v-model="domain.CustomAmount"
+                  clearable
+                  @input="handleChangeAdd(domain.CustomAmount, index)"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="4" style="line-height: 100%">
+              <el-form-item label-width="0">
+                <el-tag
+                  v-if="domain.OrderState == 1"
+                  key="未领取"
+                  style="margin-left: 10px"
+                  :disabled="true"
+                  effect="plain"
+                  type="danger"
+                >未领取</el-tag>
+                <el-button
+                  style="margin-left: 10px"
+                  type="text"
+                  icon="el-icon-delete"
+                  @click.prevent="removeDomain(domain)"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </transition-group>
         <el-form-item>
           <el-button
             size="mini"
             icon="el-icon-plus"
             class="addItemClass"
             @click="addDomain"
-            >新增自定义金额</el-button
-          >
+          >新增自定义金额</el-button>
         </el-form-item>
 
         <!-- <el-form-item label="合计" prop="AmountReceived">
@@ -886,14 +1002,13 @@
               icon="el-icon-circle-check"
               :loading="LoadingAdd"
               @click="addOrder"
-              >保 存
+            >保 存
             </el-button>
             <el-button
               icon="el-icon-refresh"
               type="info"
               @click="addDialogVisibleClosed"
-              >重 置</el-button
-            >
+            >重 置</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -916,7 +1031,11 @@
         label-width="120px"
         class="formClass"
       >
-        <el-form-item label="合同信息" prop="ContractCode">
+        <el-form-item
+          v-if="IfContractUpdate"
+          label="合同信息"
+          prop="ContractCode"
+        >
           <el-select
             v-model="updateContractOrderForm.ContractCode"
             disabled=""
@@ -939,24 +1058,67 @@
               <span
                 v-if="item.StatesName == '过期'"
                 style="float: right; color: #909399; font-size: 13px"
-                >{{ item.StatesName }}</span
-              >
+              >{{ item.StatesName }}</span>
               <span
                 v-else
                 style="float: right; color: #13ce66; font-size: 13px"
-                >{{ item.StatesName }}</span
-              >
+              >{{ item.StatesName }}</span>
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          v-if="!IfContractUpdate"
+          label="供应商信息"
+          prop="SupplierContractCode"
+        >
+          <el-select
+            v-model="updateContractOrderForm.SupplierContractCode"
+            style="width: 100%"
+            filterable
+            placeholder="合同类型-公司名称-乙方公司名称-合同期"
+            clearable=""
+            remote
+            disabled=""
+            reserve-keyword
+            :remote-method="remoteMethodSupplier"
+            @visible-change="clearselectCorporationDatasSupplier"
+            @change="addContractCodeChangeSupplier"
+          >
+            <el-option
+              v-for="item in selectCorporationDatasSupplier"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+              <span style="float: left">{{ item.label }}</span>
+              <span
+                v-if="item.StatesName == '过期'"
+                style="float: right; color: #909399; font-size: 13px"
+              >{{ item.StatesName }}</span>
+              <span
+                v-else
+                style="float: right; color: #13ce66; font-size: 13px"
+              >{{ item.StatesName }}</span>
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="付款方名称" prop="CompanyId">
-                    <el-select style="width:100% ;" v-model="updateContractOrderForm.CompanyId" filterable
-                        placeholder="付款方名称" :disabled="!updateShow">
-                        <el-option v-for="item in ComAArray" :class="item.Class" :key="item.ComID"
-                            :label="item.ComName" :value="item.ComID">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+          <el-select
+            v-model="updateContractOrderForm.CompanyId"
+            style="width: 100%"
+            filterable
+            placeholder="付款方名称"
+            :disabled="!updateShow"
+          >
+            <el-option
+              v-for="item in ComAArray"
+              :key="item.ComID"
+              :class="item.Class"
+              :label="item.ComName"
+              :value="item.ComID"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="账单名称" prop="ContractOrderName">
           <el-input
             v-model="updateContractOrderForm.ContractOrderName"
@@ -974,119 +1136,119 @@
         <el-form-item label="账单总金额" prop="AmountReceived">
           <el-input
             v-model="updateContractOrderForm.AmountReceived"
-            :disabled="!updateShow"
+            disabled=""
             placeholder="账单总金额"
           />
         </el-form-item>
         <el-form-item label="回款总金额" prop="AmountTotal">
           <el-input
             v-model="updateContractOrderForm.AmountTotal"
-            :disabled="!updateShow"
+            disabled=""
             placeholder="回款总金额"
           />
         </el-form-item>
         <!-- 动态增减表单项 -->
-        <el-row
-          v-for="(domain, index) in updateContractOrderForm.domains"
-          :key="index"
-        >
-          <el-col :span="8">
-            <el-form-item
-              :key="domain.key"
-              :label="'收款项目' + (index + 1)"
-              :prop="'domains.' + index + '.CustomAmountName'"
-              :rules="{
-                required: true,
-                message: '收款项目不能为空',
-                trigger: 'blur',
-              }"
-            >
-              <el-input
-                v-model="domain.CustomAmountName"
-                :disabled="
-                  !updateShow || (domain.OrderAmount != 0 && !domain.Flag)
-                "
-                clearable
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item
-              :key="domain.key"
-              :label="'金额' + (index + 1)"
-              :prop="'domains.' + index + '.CustomAmount'"
-              :rules="{
-                required: true,
-                pattern:
-                  /^([0-9]\d*(\.\d{1,2})?|([0](\.([0][0-9]|[0-9]\d{0,1}))))$/,
-                message: '金额输入不合法（不能小于0小数位不超过2位）',
-                trigger: 'blur',
-              }"
-            >
-              <el-input
-                v-model="domain.CustomAmount"
-                :disabled="
-                  !updateShow || (domain.OrderAmount != 0 && !domain.Flag)
-                "
-                clearable
-                @input="handleChangeUpdate(domain.CustomAmount, index)"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item
-              :key="domain.key"
-              :label="'回款金额' + (index + 1)"
-              :prop="'domains.' + index + '.OrderAmount'"
-            >
-              <el-input
-                v-model="domain.OrderAmount"
-                :disabled="true"
-                clearable
-                @input="handleChangeUpdate(domain.OrderAmount, index)"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="4" style="line-height: 100%; margin: auto">
-            <el-form-item label-width="0">
-              <el-tag
-                v-if="domain.OrderState == 1"
-                key="未领取"
-                style="margin-left: 10px"
-                :disabled="true"
-                effect="plain"
-                type="danger"
-                >未领取</el-tag
+        <transition-group name="el-zoom-in-top">
+          <el-row
+            v-for="(domain, index) in updateContractOrderForm.domains"
+            :key="index"
+            class="transition-box"
+          >
+            <el-col :span="8">
+              <el-form-item
+                :key="domain.key"
+                :label="'收款项目' + (index + 1)"
+                :prop="'domains.' + index + '.CustomAmountName'"
+                :rules="{
+                  required: true,
+                  message: '收款项目不能为空',
+                  trigger: 'blur',
+                }"
               >
-              <el-tag
-                v-if="domain.OrderState == 2"
-                key="已领取"
-                style="margin-left: 10px"
-                :disabled="true"
-                effect="plain"
-                type="success"
-                >已领取</el-tag
+                <el-input
+                  v-model="domain.CustomAmountName"
+                  :disabled="
+                    !updateShow || (domain.OrderAmount != 0 && !domain.Flag)
+                  "
+                  clearable
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item
+                :key="domain.key"
+                :label="'金额' + (index + 1)"
+                :prop="'domains.' + index + '.CustomAmount'"
+                :rules="{
+                  required: true,
+                  pattern:
+                    /^([0-9]\d*(\.\d{1,2})?|([0](\.([0][0-9]|[0-9]\d{0,1}))))$/,
+                  message: '金额输入不合法（不能小于0小数位不超过2位）',
+                  trigger: 'blur',
+                }"
               >
-              <el-tag
-                v-if="domain.OrderState == 3"
-                key="部分领取"
-                style="margin-left: 10px"
-                :disabled="true"
-                effect="plain"
-                >部分领取</el-tag
+                <el-input
+                  v-model="domain.CustomAmount"
+                  :disabled="
+                    !updateShow || (domain.OrderAmount != 0 && !domain.Flag)
+                  "
+                  clearable
+                  @input="handleChangeUpdate(domain.CustomAmount, index)"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item
+                :key="domain.key"
+                :label="'回款金额' + (index + 1)"
+                :prop="'domains.' + index + '.OrderAmount'"
               >
-              <el-button
-                :disabled="
-                  !updateShow || (domain.OrderAmount != 0 && !domain.Flag)
-                "
-                style="margin-left: 10px"
-                type="text"
-                icon="el-icon-delete"
-                @click.prevent="removeDomainUpdate(domain)"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
+                <el-input
+                  v-model="domain.OrderAmount"
+                  :disabled="true"
+                  clearable
+                  @input="handleChangeUpdate(domain.OrderAmount, index)"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="4" style="line-height: 100%; margin: auto">
+              <el-form-item label-width="0">
+                <el-tag
+                  v-if="domain.OrderState == 1"
+                  key="未领取"
+                  style="margin-left: 10px"
+                  :disabled="true"
+                  effect="plain"
+                  type="danger"
+                >未领取</el-tag>
+                <el-tag
+                  v-if="domain.OrderState == 2"
+                  key="已领取"
+                  style="margin-left: 10px"
+                  :disabled="true"
+                  effect="plain"
+                  type="success"
+                >已领取</el-tag>
+                <el-tag
+                  v-if="domain.OrderState == 3"
+                  key="部分领取"
+                  style="margin-left: 10px"
+                  :disabled="true"
+                  effect="plain"
+                >部分领取</el-tag>
+                <el-button
+                  :disabled="
+                    !updateShow || (domain.OrderAmount != 0 && !domain.Flag)
+                  "
+                  style="margin-left: 10px"
+                  type="text"
+                  icon="el-icon-delete"
+                  @click.prevent="removeDomainUpdate(domain)"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </transition-group>
         <el-form-item>
           <el-button
             size="mini"
@@ -1094,8 +1256,7 @@
             icon="el-icon-plus"
             class="addItemClass"
             @click="addDomainUpdate"
-            >新增自定义金额</el-button
-          >
+          >新增自定义金额</el-button>
         </el-form-item>
         <!-- <el-form-item label="合计" prop="AmountReceived">
                     <el-input placeholder="先添加数据然后再添加自定义金额" v-model="updateContractOrderForm.AmountReceived" readonly>
@@ -1205,7 +1366,7 @@
               icon="el-icon-circle-check"
               :loading="LoadingUpdate"
               @click="saveUpdate"
-              >保 存
+            >保 存
             </el-button>
           </el-col>
         </el-row>
@@ -1325,7 +1486,7 @@
               type="primary"
               :loading="auditStatusCheckLoading"
               @click="saveAuditStatusCheck"
-              >保 存
+            >保 存
             </el-button>
           </el-col>
         </el-row>
@@ -1382,9 +1543,7 @@
           <span style="color: #ff4949; font-weight: bolder">{{
             ClickRow.residueMoney
           }}</span>
-          <el-tag type="success" effect="plain" style="margin-left: 20px"
-            >输入本次发票金额会自动计算临时剩余金额</el-tag
-          >
+          <el-tag type="success" effect="plain" style="margin-left: 20px">输入本次发票金额会自动计算临时剩余金额</el-tag>
         </el-descriptions-item>
       </el-descriptions>
       <el-divider />
@@ -1471,11 +1630,8 @@
               v-if="scope.row.BillingState == 1"
               effect="plain"
               type="danger"
-              >未领取</el-tag
-            >
-            <el-tag v-if="scope.row.BillingState == 3" effect="plain"
-              >部分领取</el-tag
-            >
+            >未领取</el-tag>
+            <el-tag v-if="scope.row.BillingState == 3" effect="plain">部分领取</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -1585,8 +1741,7 @@
                   color: #6959cd;
                   margin-right: 15px;
                 "
-                >选择增值税专用发票上方公司开票信息所有字段不可为空</el-tag
-              >
+              >选择增值税专用发票上方公司开票信息所有字段不可为空</el-tag>
               <el-tag
                 effect="plain"
                 style="
@@ -1594,13 +1749,11 @@
                   color: #6959cd;
                   margin-right: 15px;
                 "
-                >（选择增值税普通发票、增值税电子普通发票）上方公司名称、统一信用代码/税号不可为空</el-tag
-              >
+              >（选择增值税普通发票、增值税电子普通发票）上方公司名称、统一信用代码/税号不可为空</el-tag>
               <el-tag
                 effect="plain"
                 style="border-color: #a29bc4; color: #6959cd"
-                >开票完成后公司信息和开票信息尽量不要更改</el-tag
-              >
+              >开票完成后公司信息和开票信息尽量不要更改</el-tag>
             </el-form-item>
           </el-col>
         </el-row>
@@ -1741,8 +1894,7 @@
               icon="el-icon-position"
               plain
               type="primary"
-              >选取文件</el-button
-            >
+            >选取文件</el-button>
           </el-upload>
           <el-button
             v-if="UploadServerFlag"
@@ -1752,11 +1904,9 @@
             type="success"
             :loading="uploadServerLoading"
             @click="submitUploadUpdate"
-            >上传到服务器</el-button
-          >
+          >上传到服务器</el-button>
           <div slot="tip" class="el-upload__tip">
-            只能上传office文件，且不超过<span style="color: #ff4949">20M</span
-            >，可一次选取多个文件，上传完成请点击上传到服务器。
+            只能上传office文件，且不超过<span style="color: #ff4949">20M</span>，可一次选取多个文件，上传完成请点击上传到服务器。
           </div>
         </el-form-item>
       </el-form>
@@ -1768,8 +1918,7 @@
             :loading="LoadingInvoicing || uploadServerLoading"
             type="primary"
             @click="saveInvoicing"
-            >保 存</el-button
-          >
+          >保 存</el-button>
         </el-col>
       </el-row>
     </el-dialog>
@@ -1792,7 +1941,11 @@ import {
   InvoicingData,
   GetCompanyDataByCodes,
   GetContractType,
+  GetSupplierListSelect,
+  GetCompanyDataByCodesSupplier,
+  DeleteContractOrderMoneyFlag,
 } from "@/api/CollectionMangement";
+import pickerOptions from "@/utils/pickerOptions";
 import {
   GetCompanySystem,
   GetInvoiceAccount,
@@ -1802,7 +1955,7 @@ import {
   UpdateTicket,
 } from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
-import { parseTime, getDateByTimes } from "@/utils"; // 时间日期格式化成字符串
+import { parseTime } from "@/utils"; // 时间日期格式化成字符串
 import moment from "moment"; // 导入模块
 import collapse from "../../assets/js/collapse";
 import { cutOutNum } from "@/utils/decimals";
@@ -1815,6 +1968,11 @@ export default {
   },
   data() {
     return {
+      CorporationDatasSupplier: [],
+      selectCorporationDatasSupplier: [],
+      CorSradio: "合同",
+      IfContract: true,
+      IfContractUpdate: true,
       CollectionState: "",
       BillingState: "",
       ContractType: "",
@@ -1893,94 +2051,13 @@ export default {
       transferProps: { key: "ComID", label: "ComName" },
       connectTitle: "关联公司",
       LoadingAdd: false,
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: "本月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date(new Date().setTime(new Date().setDate(1)));
-              picker.$emit("pick", [start, end]);
-            },
-          },
-          {
-            text: "上月",
-            onClick(picker) {
-              var range = getDateByTimes();
-              const start = range[0];
-              const end = range[1];
-              picker.$emit("pick", [new Date(start), new Date(end)]);
-            },
-          },
-          {
-            text: "本年",
-            onClick(picker) {
-              const end = new Date();
-              var y = end.getFullYear(); // 年
-
-              var startStr = y + "-01-01";
-
-              const start = new Date(startStr);
-              picker.$emit("pick", [start, end]);
-            },
-          },
-          {
-            text: "最近一周",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", [start, end]);
-            },
-          },
-          {
-            text: "最近一个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", [start, end]);
-            },
-          },
-          {
-            text: "最近三个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit("pick", [start, end]);
-            },
-          },
-          {
-            text: "最近半年",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 180);
-              picker.$emit("pick", [start, end]);
-            },
-          },
-          {
-            text: "最近一年",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 360);
-              picker.$emit("pick", [start, end]);
-            },
-          },
-        ],
-      },
+      pickerOptions: pickerOptions,
       ContractCode: "",
       ContractName: "",
       CompanyName: "",
-      ContractType: "",
       BeginTime: "",
       EndTime: "",
-      BeginSignTime: "",
-      EndSignTime: "",
       ApplicationTime: [],
-      entLoading: false,
       // 公司数据返回列表
       CorporationDatas: [],
       // 公司列表下拉数据结果列表
@@ -2000,10 +2077,10 @@ export default {
       updateContractOrderForm: {
         OrderCode: "",
         ContractCode: "",
-         CompanyId: '',
+        CompanyId: "",
         OrderAbstract: "",
         InvoiceAccount: "",
-        InvoiceType: "",
+        InvoiceType: null,
         Applicant: "",
         ApplicationTime: "",
         IsUsed: "",
@@ -2013,6 +2090,7 @@ export default {
         AmountReceived: "",
         ContractOrderName: "",
         AmountTotal: "",
+        SupplierContractCode: "",
       },
       addFilePlatformImage: "",
       updateFilePlatformImage: "",
@@ -2026,10 +2104,10 @@ export default {
       UserList: [],
       addContractOrderForm: {
         ContractCode: "",
-        CompanyId: '',
+        CompanyId: "",
         OrderAbstract: "",
         InvoiceAccount: "",
-        InvoiceType: "",
+        InvoiceType: null,
         Applicant: sessionStorage.getItem("userid"),
         ApplicationTime: new Date(),
         IsUsed: 1,
@@ -2038,6 +2116,7 @@ export default {
         domains: [],
         AmountReceived: "",
         ContractOrderName: "",
+        SupplierContractCode: "",
       },
       // 领取状态
       PaymentCollectionStateArray: [
@@ -2061,7 +2140,7 @@ export default {
           { required: true, message: "请选择合同", trigger: "change" },
         ],
         CompanyId: [
-            { required: true, message: "请选择付款方名称", trigger: "change" },
+          { required: true, message: "请选择付款方名称", trigger: "change" },
         ],
         ContractOrderName: [
           { required: true, message: "请输入账单名称", trigger: "blur" },
@@ -2147,21 +2226,19 @@ export default {
       },
       auditStatusdescription: "",
       auditStatusCheckDialog: false,
-      //领取状态
+      // 领取状态
       CollectionStateArray: [
         { Code: 1, Name: "未领取" },
         { Code: 2, Name: "已领取" },
-        { Code: 3, Name: "部分领取" },
+        // { Code: 3, Name: "部分领取" },
         { Code: 4, Name: "系统领取" },
       ],
-      //开票状态
+      // 开票状态
       BillingStateArray: [
         { Code: 1, Name: "未申开" },
         { Code: 2, Name: "已申开" },
         { Code: 3, Name: "部分申开" },
       ],
-      CollectionState: "",
-      BillingState: "",
     };
   },
   watch: {
@@ -2193,19 +2270,56 @@ export default {
     this.GetInvoiceStatus();
     // 获取乙方公司数据
     this.GetDicCategoryC();
-    //获取合同类型数据
+    // 获取合同类型数据
     this.GetContractTypeList();
   },
   methods: {
-    addContractCodeChange(val){
+    // 列表时间格式化
+    dateFormat(row) {
+      if (row) {
+        return this.$moment(row).format("YYYY-MM-DD HH:mm:ss");
+      } else {
+        return null;
+      }
+    },
+    CorSradioChange(val) {
+      if (val == "合同") {
+        this.IfContract = true;
+      } else {
+        this.IfContract = false;
+      }
+      this.$refs.addContractOrderRef.resetFields();
+    },
+    addContractCodeChange(val) {
+      this.addContractOrderForm.CompanyId = "";
       GetCompanyDataByCodes(val).then((res) => {
         if (res.success) {
           this.ComAArray = res.result;
-          if(this.ComAArray.length!=0)
-            this.addContractOrderForm.CompanyId=res.result1.CompanyId+"";
-
+          if (this.ComAArray.length != 0) {
+            this.addContractOrderForm.CompanyId = res.result1.CompanyId + "";
+          }
         } else {
           this.ComAArray = [];
+        }
+      });
+    },
+    // 供应商根据主键获取公司名称然后再根据公司名称获取合同关联公司主表的公司数据返回和合同保持一致
+    addContractCodeChangeSupplier(val) {
+      this.addContractOrderForm.CompanyId = "";
+      GetCompanyDataByCodesSupplier(val).then((res) => {
+        if (res.success) {
+          this.ComAArray = res.result;
+          if (this.ComAArray.length != 0) {
+            this.addContractOrderForm.CompanyId = res.result[0].ComID + "";
+          }
+        } else {
+          this.ComAArray = [];
+          this.$message({
+            message:
+              "选中供应商中的乙方公司名称在客户管理中未找到，请通过合同录入-客户管理-添加合同-甲方名称字段的右侧添加按钮来添加该公司",
+            type: "error",
+            duration: 10000,
+          });
         }
       });
     },
@@ -2268,7 +2382,7 @@ export default {
       this.uploadServerLoading = true;
       const formData = new FormData();
       this.fileListUpload.forEach((item) => {
-        formData.append("files", item.raw);
+        formData.append("Files", item.raw);
       });
       if (!formData) {
         this.$message.warning("请选择要上传到服务器的文件");
@@ -2276,11 +2390,11 @@ export default {
       this.updateInvoiceFrom.FileList = [];
       Uploads(formData)
         .then((response) => {
-          if (response.success) {
-            for (const index in response.result) {
+          if (response.length > 0) {
+            for (const index in response) {
               var addForm = {
-                AttachmentName: response.result[index].AttachmentName,
-                FileName: response.result[index].FileName,
+                AttachmentName: response[index].attachmentName,
+                FileName: response[index].fileName,
               };
               // 给添加表单的列表赋值
               this.updateInvoiceFrom.FileList.push(addForm);
@@ -2288,7 +2402,7 @@ export default {
             this.UploadServerFlag = false;
             this.$message.success("上传成功");
           } else {
-            this.$message.error(response.resultMessage);
+            this.$message.error("上传失败");
           }
           this.uploadServerLoading = false;
         })
@@ -2334,7 +2448,7 @@ export default {
     },
     AttachmentCodeRemoveUpdate(file, fileList) {
       this.fileListUpload = fileList;
-      let addNew = [];
+      const addNew = [];
       fileList.map((item) => {
         addNew.push(item.name);
       });
@@ -2377,7 +2491,7 @@ export default {
             this.$message.warning("公司统一信用代码/税号不完整，请先添加");
             return;
           }
-          //禁用状态直接返回
+          // 禁用状态直接返回
           if (!this.DicCategoryList.IsUsed) {
             this.LoadingInvoicing = false;
             this.$message({
@@ -2460,8 +2574,8 @@ export default {
             InvoiceHeader: this.updateInvoiceFrom.InvoiceHeader,
             InvoiceAmount: this.updateInvoiceFrom.InvoiceAmount,
             InvoiceType: this.updateInvoiceFrom.InvoiceType,
-            SYear: this.updateInvoiceFrom.SYear,
-            SMonth: this.updateInvoiceFrom.SMonth,
+            SYear: this.updateInvoiceFrom.SYear || null,
+            SMonth: this.updateInvoiceFrom.SMonth || null,
             InvoiceContent: this.updateInvoiceFrom.InvoiceContent,
             InvoiceRemark: this.updateInvoiceFrom.InvoiceRemark,
             InvoiceAccount: this.updateInvoiceFrom.InvoiceAccount,
@@ -2701,6 +2815,7 @@ export default {
             Name: item.Name,
             BillingState: item.BillingState,
             Id: item.Id,
+            SupplierContractCode: item.SupplierContractCode,
           };
           dataArr.push(obj);
         }
@@ -2752,22 +2867,42 @@ export default {
         this.$set(v, "ServReceiveNew", "");
         return v;
       });
-      GetCompanyDataByCodes(dataArr[0].Id).then((res) => {
-        if (res.success) {
-          this.ComAArray = res.result;
-          this.GetCompanySystem(dataArr[0].CompanyId);
-          this.updateInvoicingDialogVisible = true;
-        } else {
-          this.ComAArray = [];
-        }
-        this.connectLoading = false;
-      });
+      // 是合同
+      if (!dataArr[0].SupplierContractCode) {
+        // 根据合同编号获取关联公司列表
+        GetCompanyDataByCodes(dataArr[0].Id).then((res) => {
+          if (res.success) {
+            this.ComAArray = res.result;
+            this.GetCompanySystem(dataArr[0].CompanyId);
+            this.updateInvoicingDialogVisible = true;
+          } else {
+            this.ComAArray = [];
+          }
+          this.connectLoading = false;
+        });
+      } else {
+        // 是供应商
+        GetCompanyDataByCodesSupplier(dataArr[0].SupplierContractCode).then(
+          (res) => {
+            if (res.success) {
+              this.ComAArray = res.result;
+              this.GetCompanySystem(dataArr[0].CompanyId);
+              this.updateInvoicingDialogVisible = true;
+            } else {
+              this.ComAArray = [];
+            }
+            this.connectLoading = false;
+          }
+        );
+      }
+      this.fileListUpload = [];
+      this.updateInvoiceFrom.FileList = [];
     },
-    //公司改变事件
+    // 公司改变事件
     CompanyChange(val) {
       this.GetCompanySystem(val);
     },
-    //根据公司编号获取公司发票信息
+    // 根据公司编号获取公司发票信息
     GetCompanySystem(ComID) {
       // 根据公司编号获取公司发票信息
       GetCompanySystem(
@@ -2877,13 +3012,20 @@ export default {
       });
     },
     removeDomainUpdate(item) {
-      if (this.updateContractOrderForm.domains.length != 0) {
-        var index = this.updateContractOrderForm.domains.indexOf(item);
-        if (index !== -1) {
-          this.updateContractOrderForm.domains.splice(index, 1);
+      DeleteContractOrderMoneyFlag(item.OrderCode).then((res) => {
+        if (res.success) {
+          if (this.updateContractOrderForm.domains.length != 0) {
+            var index = this.updateContractOrderForm.domains.indexOf(item);
+            if (index !== -1) {
+              this.updateContractOrderForm.domains.splice(index, 1);
+            }
+          }
+          this.AmountReceivedUpdateChanged();
+        } else {
+          this.$message.error(res.resultMessage);
         }
-      }
-      this.AmountReceivedUpdateChanged();
+        this.LoadingUpdate = false;
+      });
     },
     // 重置数据
     reseatData() {
@@ -2897,7 +3039,7 @@ export default {
       this.ApplicationTime = [];
       this.ContractType = "";
       this.CollectionState = "";
-       this.BillingState = "";
+      this.BillingState = "";
       this.queryInfo.pagesize = 20;
       this.queryInfo.pagenum = 1;
       this.GetContractOrderList();
@@ -2955,6 +3097,10 @@ export default {
             this.LoadingAdd = false;
             return;
           }
+          this.addContractOrderForm.ContractCode =
+            this.addContractOrderForm.ContractCode || null;
+          this.addContractOrderForm.SupplierContractCode =
+            this.addContractOrderForm.SupplierContractCode || null;
           AddContractOrder(this.addContractOrderForm).then((res) => {
             if (res.success) {
               this.$message.success("操作成功");
@@ -2971,6 +3117,10 @@ export default {
     // 关闭远程搜索下拉时需要清空筛选出来的数据进行重新筛选
     clearselectCorporationDatas(e) {
       this.selectCorporationDatas = [];
+    },
+    // 关闭远程搜索下拉时需要清空筛选出来的数据进行重新筛选
+    clearselectCorporationDatasSupplier(e) {
+      this.selectCorporationDatasSupplier = [];
     },
     // 弹出添加窗口
     ShowContractAddDialog() {
@@ -3036,6 +3186,12 @@ export default {
             this.LoadingUpdate = false;
             return;
           }
+          // InvoiceType这个字段目前不用了，先不需要管
+          this.updateContractOrderForm.InvoiceType = null;
+          this.updateContractOrderForm.ContractCode =
+            this.updateContractOrderForm.ContractCode || null;
+          this.updateContractOrderForm.SupplierContractCode =
+            this.updateContractOrderForm.SupplierContractCode || null;
           UpdateContractOrder(this.updateContractOrderForm).then((res) => {
             if (res.success) {
               this.$message.success("操作成功");
@@ -3065,22 +3221,22 @@ export default {
           "YYYY-MM-DD"
         );
       } else {
-        this.BeginSignTime = "";
-        this.EndSignTime = "";
+        this.ApplicationTimeBegin = "";
+        this.ApplicationTimeEnd = "";
       }
       var parameter = {
         ContractCode: this.ContractCode,
         ContractName: this.ContractName,
         CompanyName: this.CompanyName,
         InvoiceAccount: this.InvoiceAccount,
-        InvoiceType: this.InvoiceType,
+        InvoiceType: this.InvoiceType || null,
         Applicant: this.Applicant,
         ApplicationTimeBegin: this.ApplicationTimeBegin,
         ApplicationTimeEnd: this.ApplicationTimeEnd,
         SecondPartyName: this.SecondPartyName,
         ContractType: this.ContractType,
-        CollectionState: this.CollectionState,
-        BillingState: this.BillingState,
+        CollectionState: this.CollectionState || 0,
+        BillingState: this.BillingState || null,
         PageIndex: this.queryInfo.pagenum,
         PageSize: this.queryInfo.pagesize,
         OrderCode: "",
@@ -3098,19 +3254,41 @@ export default {
     },
     // 编辑获取反填信息
     showEditDialog(item) {
-      this.remoteMethodShow(item.Id);
+      this.updateContractOrderForm.SupplierContractCode =
+        item.SupplierContractCode;
+      // 是合同
+      if (!item.SupplierContractCode) {
+        this.IfContractUpdate = true;
+        this.remoteMethodShow(item.Id);
+        GetCompanyDataByCodes(item.Id).then((res) => {
+          if (res.success) {
+            this.ComAArray = res.result;
+            if (this.ComAArray.length != 0) {
+              this.updateContractOrderForm.CompanyId = item.CompanyId + "";
+            }
+          } else {
+            this.ComAArray = [];
+          }
+        });
+        this.GetCompanyByContractList(item.Id);
+      } else {
+        // 是供应商
+        this.IfContractUpdate = false;
+        this.remoteMethodShowSupplier(item.SupplierContractCode);
+        GetCompanyDataByCodesSupplier(item.SupplierContractCode).then((res) => {
+          if (res.success) {
+            this.ComAArray = res.result;
+            if (this.ComAArray.length != 0) {
+              this.updateContractOrderForm.CompanyId = res.result[0].ComID + "";
+            }
+          } else {
+            this.ComAArray = [];
+          }
+        });
+      }
+
       this.updateContractOrderForm.OrderCode = item.OrderCode;
       this.updateContractOrderForm.ContractCode = item.Id;
-      GetCompanyDataByCodes(item.Id).then((res) => {
-        if (res.success) {
-          this.ComAArray = res.result;
-          if(this.ComAArray.length!=0)
-          this.updateContractOrderForm.CompanyId = item.CompanyId+"";
-        } else {
-          this.ComAArray = [];
-        }
-      });
-      this.GetCompanyByContractList(item.Id);
       this.updateContractOrderForm.OrderAbstract = item.OrderAbstract;
       this.updateContractOrderForm.InvoiceAccount = item.InvoiceAccount;
       this.updateContractOrderForm.AmountReceived = item.AmountReceived;
@@ -3227,11 +3405,9 @@ export default {
     // },
     // 输入过滤
     remoteMethod(query) {
-      if (query !== "") {
-        this.entLoading = true;
+      if (query && query.length > 2) {
         setTimeout(() => {
           GetContractNameList(query, null).then((res) => {
-            this.entLoading = false;
             if (res.success) {
               this.CorporationDatas = [];
               // 公司数据格式化
@@ -3256,15 +3432,45 @@ export default {
         }, 200);
       } else {
         this.selectCorporationDatas = [];
+        return this.$message.warning("至少输入3个关键字以上的内容");
+      }
+    },
+    // 输入过滤（供应商）
+    remoteMethodSupplier(query) {
+      if (query && query.length > 2) {
+        setTimeout(() => {
+          GetSupplierListSelect(query, null).then((res) => {
+            if (res.success) {
+              this.CorporationDatasSupplier = [];
+              // 公司数据格式化
+              this.CorporationDatasSupplier = res.result.map((item) => {
+                return {
+                  value: item.Id,
+                  label: item.ContractName,
+                  StatesName: item.StatesName,
+                };
+              });
+              this.selectCorporationDatasSupplier =
+                this.CorporationDatasSupplier.filter((item) => {
+                  return (
+                    item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
+                  );
+                });
+            } else {
+              this.CorporationDatasSupplier = [];
+            }
+          });
+        }, 200);
+      } else {
+        this.selectCorporationDatasSupplier = [];
+        return this.$message.warning("至少输入3个关键字以上的内容");
       }
     },
     // 反填只显示选中的公司名称
     remoteMethodShow(query) {
       if (query !== "") {
-        this.entLoading = true;
         setTimeout(() => {
           GetContractNameList("", query).then((res) => {
-            this.entLoading = false;
             if (res.success) {
               this.CorporationDatas = [];
               // 公司数据格式化
@@ -3287,6 +3493,34 @@ export default {
         }, 200);
       } else {
         this.selectCorporationDatas = [];
+      }
+    },
+    // 反填只显示选中的公司名称(供应商)
+    remoteMethodShowSupplier(query) {
+      if (query !== "") {
+        setTimeout(() => {
+          GetSupplierListSelect("", query).then((res) => {
+            if (res.success) {
+              this.CorporationDatasSupplier = [];
+              // 公司数据格式化
+              this.CorporationDatasSupplier = res.result.map((item) => {
+                return {
+                  value: item.Id,
+                  label: item.ContractName,
+                  StatesName: item.StatesName,
+                };
+              });
+              this.selectCorporationDatasSupplier =
+                this.CorporationDatasSupplier.filter((item) => {
+                  return item.value == query;
+                });
+            } else {
+              this.CorporationDatasSupplier = [];
+            }
+          });
+        }, 200);
+      } else {
+        this.selectCorporationDatasSupplier = [];
       }
     },
     // 获取发票科目数据
@@ -3365,8 +3599,8 @@ export default {
 }
 
 .addItemClass {
-  color: #000000d9;
-  border-color: #d9d9d9;
+  color: #ffba00;
+  border-color: #ffba00;
   background: #fff;
   border-style: dashed;
 }

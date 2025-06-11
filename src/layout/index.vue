@@ -12,22 +12,22 @@
       </div>
       <app-main style="background-color:#F0F2F5 ;" />
       <!-- 右侧设置 -->
-      <right-panel v-if="showSettings">
+      <!-- <right-panel v-if="showSettings">
         <settings />
-      </right-panel>
+      </right-panel> -->
     </div>
 
     <el-backtop target=".app-wrapper" :bottom="45">
       <el-tooltip placement="top" content="回到顶部">
-        <svg-icon style="color: #1890FF;font-size:medium;" icon-class="BackToTop" />
+        <svg-icon style="color: #1890FF;font-size:small;" icon-class="BackToTop" />
       </el-tooltip>
     </el-backtop>
   </div>
 </template>
 
 <script>
-import RightPanel from '@/components/RightPanel'
-import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
+// import RightPanel from '@/components/RightPanel'
+import { AppMain, Navbar, Sidebar, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
 
@@ -36,8 +36,8 @@ export default {
   components: {
     AppMain,
     Navbar,
-    RightPanel,
-    Settings,
+    // RightPanel,
+    // Settings,
     Sidebar,
     TagsView
   },
@@ -46,7 +46,7 @@ export default {
     ...mapState({
       sidebar: state => state.app.sidebar,
       device: state => state.app.device,
-      showSettings: state => state.settings.showSettings,
+      // showSettings: state => state.settings.showSettings,
       needTagsView: state => state.settings.tagsView,
       fixedHeader: state => state.settings.fixedHeader
     }),

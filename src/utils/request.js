@@ -18,13 +18,12 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['X-Token'] = getToken();
+      const getMyToken = getToken();  // 获取新 token，不依赖旧值
+      config.headers["Authorization"] = "Bearer " + getMyToken;
     }
     return config
   },
   error => {
-    // do something with request error
-    console.log(error) // for debug
     return Promise.reject(error)
   }
 )
@@ -33,7 +32,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   /**
    * If you want to get http information such as headers or status
-   * Please return  response => responsi 
+   * Please return  response => responsi
   */
 
   /**
@@ -41,7 +40,7 @@ service.interceptors.response.use(
    * Here is just an example
    * You can also judge the status by HTTP Status Code
    */
-  response => {
+   async response => {
     const res = response.data;
 
     // if the custom code is not 20000, it is judged as an error.
@@ -67,13 +66,22 @@ service.interceptors.response.use(
     //   }
     //   return Promise.reject(new Error(res.message || 'Error'))
     // }
-    if (res.resultMessage == "登陆超时" || res.resultMessage == "token不可为空") {
-      store.dispatch('user/resetToken');
-      // Message({
-      //   message: "请求超时，请刷新页面重新登陆",
-      //   type: 'error',
-      //   duration: 5 * 1000
-      // })
+    // if (res.resultMessage == "登陆超时" || res.resultMessage == "token不可为空") {
+    //   store.dispatch('user/resetToken');
+    // }
+    if (res.code == "401") {
+      // const newAccessToken = await store.dispatch("user/refreshToken");
+      // response.config.headers.Authorization = `Bearer ${newAccessToken}`;
+      // return service(response.config);
+      const originalConfig = {
+        ...response.config, // 拷贝原配置
+        headers: {
+          ...response.config.headers // 拷贝 headers
+        }
+      };
+      const newAccessToken = await store.dispatch("user/refreshToken");
+      originalConfig.headers.Authorization = `Bearer ${newAccessToken}`;
+      return service(originalConfig); // 用干净的 config 发请求
     }
     return res
     // 这里的所有抛出异常先关闭在各个页面抛出异常（因为要更新实体，所以在此注释）

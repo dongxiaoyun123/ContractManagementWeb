@@ -113,23 +113,18 @@
                           v-if="item.Code == 0"
                           effect="plain"
                           type="danger"
-                          >未开</el-tag
-                        >
+                        >未开</el-tag>
                         <el-tag
                           v-if="item.Code == 1"
                           effect="plain"
                           type="success"
-                          >已开</el-tag
-                        >
-                        <el-tag v-if="item.Code == 5" effect="plain" type="info"
-                          >作废</el-tag
-                        >
+                        >已开</el-tag>
+                        <el-tag v-if="item.Code == 5" effect="plain" type="info">作废</el-tag>
                         <el-tag
                           v-if="item.Code == 7"
                           effect="plain"
                           type="warning"
-                          >退回</el-tag
-                        >
+                        >退回</el-tag>
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -142,8 +137,7 @@
                       style="width: 100%"
                       class="timeClass"
                       placeholder="选择年月"
-                    >
-                    </el-date-picker>
+                    />
                   </el-form-item>
                   <!-- <el-form-item class="whereFormClass" label="应收年份">
                     <el-date-picker v-model="SYear" style="width:100% ;" class="timeClass" type="year"
@@ -186,10 +180,43 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item label="开具时间">
+                    <el-date-picker
+                      v-model="IssuingTime"
+                      class="comentClass"
+                      type="daterange"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
+                      :picker-options="pickerOptions"
+                      clearable=""
+                      @input="datetimeChange"
+                    />
+                  </el-form-item>
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                  <el-form-item label="发票类型">
+                    <el-select
+                      v-model="InvoiceTypes"
+                      class="comentClass"
+                      filterable
+                      placeholder="发票类型"
+                      clearable
+                    >
+                      <el-option
+                        v-for="item in InvoiceTypesList"
+                        :key="item.Code"
+                        :class="item.Class"
+                        :label="item.Name"
+                        :value="item.Code"
+                      />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
               </el-row>
             </div>
           </collapse>
-
           <!-- 分割----------------- -->
           <el-row>
             <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -198,13 +225,20 @@
                   type="primary"
                   icon="el-icon-search"
                   @click="GetInvoiceDataSearch"
-                  >查 询
+                >查 询
                 </el-button>
                 <el-button
                   type="info"
                   icon="el-icon-refresh-left"
                   @click="reseatData"
-                  >重 置
+                >重 置
+                </el-button>
+                <el-button
+                  v-if="UpdateShow"
+                  type="success"
+                  icon="el-icon-edit"
+                  @click="BatchUpdateDialog"
+                >批量修改
                 </el-button>
                 <el-button
                   type="text"
@@ -215,8 +249,7 @@
                       : 'el-icon-arrow-down el-icon--right'
                   "
                   @click="collapseClick"
-                  >{{ isActive ? "收起" : "展开" }}</el-button
-                >
+                >{{ isActive ? "收起" : "展开" }}</el-button>
               </el-button-group>
               <el-tooltip class="item" :content="MaxMoney" placement="bottom">
                 <h5
@@ -239,14 +272,21 @@
     </el-card>
     <el-card class="CardTableClass">
       <el-table
+        ref="multipleTable"
         v-loading="loading"
-        highlight-current-row
+        class="tableCheckClass"
         :data="InvoiceData"
         fit
+        :cell-style="isRed"
+        @selection-change="TableSelect"
+        @row-click="toggleSelection"
       >
-        <!-- <el-table-column type="index" label="#" >
-          </el-table-column> -->
-        <!-- <el-table-column type="selection" width="40"> </el-table-column> -->
+        <el-table-column
+          key="column"
+          type="selection"
+          width="50"
+          fixed="left"
+        />
         <el-table-column
           v-if="fixedLeftShow"
           prop="CompanyName"
@@ -320,17 +360,17 @@
                     <div>
                       <i class="dotClass" style="background-color: #13ce66" />{{
                         "\xa0\xa0"
-                      }}增值税专用发票<br />
+                      }}增值税专用发票<br>
                     </div>
                     <div>
                       <i class="dotClass" style="background-color: #ffba00" />{{
                         "\xa0\xa0"
-                      }}增值税普通发票<br />
+                      }}增值税普通发票<br>
                     </div>
                     <div style="margin-bottom: 0">
                       <i class="dotClass" style="background-color: #ff4949" />{{
                         "\xa0\xa0"
-                      }}增值税电子普通发票<br />
+                      }}增值税电子普通发票<br>
                     </div>
                   </span>
                 </div>
@@ -392,24 +432,16 @@
                     class="SecondPartyNameClass"
                   >
                     <div>
-                      <el-tag key="未开" effect="plain" type="danger"
-                        >未开</el-tag
-                      >
+                      <el-tag key="未开" effect="plain" type="danger">未开</el-tag>
                     </div>
                     <div>
-                      <el-tag key="已开" effect="plain" type="success"
-                        >已开</el-tag
-                      >
+                      <el-tag key="已开" effect="plain" type="success">已开</el-tag>
                     </div>
                     <div>
-                      <el-tag key="作废" effect="plain" type="info"
-                        >作废</el-tag
-                      >
+                      <el-tag key="作废" effect="plain" type="info">作废</el-tag>
                     </div>
                     <div style="margin-bottom: 0">
-                      <el-tag key="退回" effect="plain" type="warning"
-                        >退回</el-tag
-                      >
+                      <el-tag key="退回" effect="plain" type="warning">退回</el-tag>
                     </div>
                   </span>
                 </div>
@@ -417,18 +449,10 @@
             </el-tooltip>
           </template>
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.IvState == 0" effect="plain" type="danger"
-              >未开</el-tag
-            >
-            <el-tag v-if="scope.row.IvState == 1" effect="plain" type="success"
-              >已开</el-tag
-            >
-            <el-tag v-if="scope.row.IvState == 5" effect="plain" type="info"
-              >作废</el-tag
-            >
-            <el-tag v-if="scope.row.IvState == 7" effect="plain" type="warning"
-              >退回</el-tag
-            >
+            <el-tag v-if="scope.row.IvState == 0" effect="plain" type="danger">未开</el-tag>
+            <el-tag v-if="scope.row.IvState == 1" effect="plain" type="success">已开</el-tag>
+            <el-tag v-if="scope.row.IvState == 5" effect="plain" type="info">作废</el-tag>
+            <el-tag v-if="scope.row.IvState == 7" effect="plain" type="warning">退回</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -493,8 +517,7 @@
               type="text"
               size="mini"
               @click="showEditDialog(scope.row)"
-              >编辑</el-button
-            >
+            >编辑</el-button>
           </template>
         </el-table-column>
         <el-table-column v-else label="操作" min-width="80">
@@ -504,8 +527,7 @@
               type="text"
               size="mini"
               @click="showEditDialog(scope.row)"
-              >编辑</el-button
-            >
+            >编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -742,15 +764,13 @@
                 type="text"
                 class="button"
                 @click="clickView(item)"
-                >在线预览</el-button
-              >
+              >在线预览</el-button>
               <el-button
                 icon="el-icon-download"
                 type="text"
                 class="button"
                 @click="downView(item)"
-                >下载</el-button
-              >
+              >下载</el-button>
             </div>
           </div>
           <div v-else>
@@ -792,8 +812,7 @@
               icon="el-icon-position"
               plain
               type="primary"
-              >选取文件</el-button
-            >
+            >选取文件</el-button>
             <el-button
               icon="el-icon-upload2"
               plain
@@ -801,11 +820,9 @@
               type="success"
               :loading="uploadServerLoading"
               @click="submitUploadUpdate"
-              >上传到服务器</el-button
-            >
+            >上传到服务器</el-button>
             <div slot="tip" class="el-upload__tip">
-              只能上传office文件，且不超过<span style="color: #ff4949">20M</span
-              >，可一次选取多个文件，上传完成请点击上传到服务器。
+              只能上传office文件，且不超过<span style="color: #ff4949">20M</span>，可一次选取多个文件，上传完成请点击上传到服务器。
             </div>
           </el-upload>
         </el-form-item>
@@ -881,20 +898,25 @@
           </el-table-column>
         </el-table> -->
         <el-collapse
+          v-if="updateInvoiceFrom.OrderData.length > 0"
           v-model="activeName"
           accordion
-          v-if="updateInvoiceFrom.OrderData.length > 0"
         >
           <el-collapse-item
-            :name="item.name"
             v-for="item in updateInvoiceFrom.OrderData"
+            :key="item.name"
+            :name="item.name"
           >
             <template slot="title">
-              <i class="el-icon-money"></i
-              > {{ "\xa0\xa0" }}{{ item.ContractOrderName }}
+              <i class="el-icon-money" /> {{ "\xa0\xa0"
+              }}{{ item.ContractOrderName }}
             </template>
-            <div v-for="itemChild in item.OrderDetailData" style="padding:5px 0">
-              <el-tag type='info' effect="plain">{{ itemChild }}</el-tag> 
+            <div
+              v-for="itemChild in item.OrderDetailData"
+              :key="itemChild"
+              style="padding: 5px 0"
+            >
+              <el-tag type="info" effect="plain">{{ itemChild }}</el-tag>
             </div>
           </el-collapse-item>
         </el-collapse>
@@ -906,8 +928,7 @@
               type="primary"
               :loading="LoadingUpdate || uploadServerLoading"
               @click="saveUpdate"
-              >保 存</el-button
-            >
+            >保 存</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -925,6 +946,49 @@
         :src="srcDocx"
       />
     </el-dialog>
+    <el-dialog
+      :visible.sync="IvStateVisible"
+      width="30%"
+      top="15vh"
+      @close="IvStateClosed"
+    >
+      <div slot="title" class="dialog-title">
+        <span>编辑发票状态</span>
+      </div>
+      <el-form
+        ref="updateInvoiceRef"
+        :rules="updateContractsRules"
+        label-width="100px"
+        class="formClass"
+      >
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="发票状态" prop="IvState">
+              <el-select v-model="IvStateUpdate" placeholder="发票状态">
+                <el-option
+                  v-for="item in InvoiceStatusList"
+                  :key="item.Code"
+                  :class="item.Class"
+                  :label="item.Name"
+                  :value="item.Code"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-divider />
+        <el-row class="buttonCenter">
+          <el-col>
+            <el-button
+              icon="el-icon-circle-check"
+              type="primary"
+              :loading="LoadingBatchUpdate"
+              @click="BatchUpdate"
+            >保 存</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -935,6 +999,7 @@ import {
   GetInvoiceDataMethod,
   UpdateInvoiceInfo,
   GetPersonInfo,
+  BatchUpdateCommit,
 } from "@/api/CollectionMangement";
 import {
   GetInvoiceAccount,
@@ -946,11 +1011,18 @@ import {
 // import { showLoading, hideLoading } from "@/common/loading";
 import { parseTime } from "@/utils"; // 时间日期格式化成字符串
 import collapse from "../../assets/js/collapse";
+import pickerOptions from "@/utils/pickerOptions";
 export default {
   name: "InvoiceList",
   components: { collapse },
   data() {
     return {
+      LoadingBatchUpdate: false,
+      IvStateUpdate: null,
+      IvStateVisible: false,
+      pickerOptions: pickerOptions,
+      IssuingTime: [],
+      InvoiceTypes: null,
       activeName: "",
       DicCategoryList: null,
       isActive: false,
@@ -1003,63 +1075,17 @@ export default {
         FileList: [],
       },
       loading: false,
-      updateContractsRules: {
-        // CompanyId: [
-        //   { required: true, message: "请选择公司", trigger: "change" },
-        // ],
-        // InvoiceHeader: [
-        //   { required: true, message: "请输入发票抬头", trigger: "blur" },
-        //   {
-        //     min: 1,
-        //     max: 50,
-        //     message: "长度在 1 到 50 个字符内",
-        //     trigger: "blur",
-        //   },
-        // ],
-        // InvoiceAmount: [
-        //   {
-        //     required: false,
-        //     pattern:
-        //       /^([0-9]\d*(\.\d{1,2})?|([0](\.([0][0-9]|[0-9]\d{0,1}))))$/,
-        //     message: "发票金额输入不合法（不能小于0小数位不超过2位）",
-        //     trigger: "blur",
-        //   },
-        // ],
-        // InvoiceType: [
-        //   { required: true, message: "请选择发票类型", trigger: "change" },
-        // ],
-        // IvState: [
-        //   { required: true, message: "请选择发票状态", trigger: "change" },
-        // ],
-        // SYear: [
-        //   { required: true, message: "请选择应收年份", trigger: "change" },
-        // ],
-        // SMonth: [
-        //   { required: true, message: "请选择应收月份", trigger: "change" },
-        // ],
-        // IssuingTime: [
-        //   { required: true, message: "请选择开具时间", trigger: "change" },
-        // ],
-        // ApplyTime: [
-        //   { required: true, message: "请选择申开时间", trigger: "change" },
-        // ],
-        // ApplyPerson: [
-        //   { required: true, message: "请选择/输入申开人", trigger: "blur" },
-        // ],
-        // IssuingPerson: [
-        //   { required: true, message: "请选择/输入开票人", trigger: "blur" },
-        // ],
-      },
+      updateContractsRules: {},
       LoadingUpdateState: false,
       InvoiceStatusList: [],
       InvoiceTypeList: [],
-      CompanyId: null,
+      CompanyId: "",
       InvoiceType: null,
       IvState: null,
-      SYearSMonth: null,
+      SYearSMonth: "",
       // SYear: null,
       // SMonth: null,
-      InvoiceHeader: null,
+      InvoiceHeader: "",
       ApplyPerson: "",
       IssuingPerson: "",
       ApplyPersonList: [],
@@ -1067,6 +1093,10 @@ export default {
       disabledFlag: false,
       MinMoney: "",
       MaxMoney: "",
+      multipleSelection: [],
+      RoleName: sessionStorage.getItem("RoleName"),
+      UpdateShow: false,
+      IdStr: "",
     };
   },
   watch: {
@@ -1077,6 +1107,9 @@ export default {
   created() {},
   // 加载完成后执行获取公司数据接口
   mounted() {
+    if (this.RoleName == "超级管理员" || this.RoleName == "财务") {
+      this.UpdateShow = true;
+    }
     this.fixedShowMethod(document.body.clientWidth);
     // 获取发票类型数据
     this.GetInvoiceType();
@@ -1094,6 +1127,83 @@ export default {
     this.GetDicCategoryC();
   },
   methods: {
+    // 样式
+    isRed({ row }) {
+      var checkIdList = this.multipleSelection.map((item) => item.Id);
+      if (checkIdList.includes(row.Id)) {
+        return {
+          backgroundColor: "#E6F7FF",
+        };
+      } else {
+        return {
+          backgroundColor: "#FFFFFF",
+        };
+      }
+    },
+    // 点击当前行数据进行选中或取消复选框
+    toggleSelection(row, column, event) {
+      if (column.label != "操作") {
+        // 通过ref绑定后这里使用$refs.table来操作bom元素
+        this.$refs.multipleTable.toggleRowSelection(row);
+      }
+    },
+    // 复选框选中事件
+    TableSelect(selection) {
+      this.multipleSelection = selection;
+      if (selection.length != 0) {
+        this.IdStr = "";
+        selection.forEach((element) => {
+          this.IdStr += element.Id + ",";
+        });
+        this.IdStr = this.IdStr.substring(0, this.IdStr.lastIndexOf(","));
+      } else {
+        this.IdStr = "";
+      }
+    },
+    IvStateClosed() {
+      this.IvStateUpdate = null;
+      this.IvStateVisible = false;
+    },
+    BatchUpdateDialog() {
+      if (!this.IdStr) {
+        this.$message.warning("请勾选要批量修改的发票");
+        return;
+      }
+      this.IvStateVisible = true;
+    },
+    // 批量修改
+    BatchUpdate() {
+      if (!this.IvStateUpdate) {
+        this.$message.warning("请选择发票状态");
+        return;
+      }
+      const parameter = {
+        IdStr: this.IdStr,
+        IvState: this.IvStateUpdate,
+      };
+      this.LoadingBatchUpdate = true;
+      BatchUpdateCommit(parameter).then((res) => {
+        if (res.success) {
+          this.IvStateVisible = false;
+          this.$message({
+            message:
+              "操作成功！（此页面根据发票状态排序修改后的发票可能在此页面查询不到，请搜索查看）",
+            type: "success",
+            duration: 8000,
+          });
+          this.GetInvoiceData();
+        } else {
+          return this.$message.error(res.resultMessage);
+        }
+        setTimeout(() => {
+          this.LoadingBatchUpdate = false;
+        }, 300);
+      });
+    },
+    datetimeChange(time) {
+      // 强制刷新
+      this.$forceUpdate();
+    },
     collapseClick() {
       this.isActive = !this.isActive;
     },
@@ -1118,7 +1228,7 @@ export default {
       this.uploadServerLoading = true;
       const formData = new FormData();
       this.fileListUpload.forEach((item) => {
-        formData.append("files", item.raw);
+        formData.append("Files", item.raw);
       });
       if (!formData) {
         this.$message.warning("请选择要上传到服务器的文件");
@@ -1126,18 +1236,18 @@ export default {
       this.updateInvoiceFrom.FileList = [];
       Uploads(formData)
         .then((response) => {
-          if (response.success) {
-            for (const index in response.result) {
+          if (response.length > 0) {
+            for (const index in response) {
               var addForm = {
-                AttachmentName: response.result[index].AttachmentName,
-                FileName: response.result[index].FileName,
+                AttachmentName: response[index].attachmentName,
+                FileName: response[index].fileName,
               };
               // 给添加表单的列表赋值
               this.updateInvoiceFrom.FileList.push(addForm);
             }
             this.$message.success("上传成功");
           } else {
-            this.$message.error(response.resultMessage);
+            this.$message.error("上传失败");
           }
           this.uploadServerLoading = false;
         })
@@ -1212,15 +1322,17 @@ export default {
 
     reseatData() {
       this.SecondPartyName = "";
-      this.CompanyId = null;
+      this.CompanyId = "";
       this.InvoiceType = null;
-      this.IvState = null;
-      this.SYearSMonth = null;
+      this.IvState = "";
+      this.SYearSMonth = "";
       // this.SYear = null;
       // this.SMonth = null;
-      this.InvoiceHeader = null;
+      this.InvoiceHeader = "";
       this.ApplyPerson = "";
       this.IssuingPerson = "";
+      this.IssuingTime = [];
+      this.InvoiceTypes = null;
       this.queryInfo.pagesize = 20;
       this.queryInfo.pagenum = 1;
       this.GetInvoiceData();
@@ -1242,7 +1354,6 @@ export default {
     detailUpdateDialogVisibleClosed() {
       this.activeName = "";
       this.$refs.updateInvoiceRef.resetFields();
-      this.fileListUpload = [];
     },
     // 监听 pagesize改变的事件
     handleSizeChange(newSize) {
@@ -1256,12 +1367,15 @@ export default {
     },
     // 编辑获取反填信息
     showEditDialog(item) {
+      this.fileListUpload = [];
+      this.updateInvoiceFrom.FileList = [];
       this.remoteMethodShow(item.CompanyId);
       // this.updateInvoiceFrom = item;
       this.disabledFlag = item.IvState != 0;
-      //超级管理员可以进行回车操作（别的角色当发票状态是已开时不能再进行修改操作）
-      if (sessionStorage.getItem("RoleName") == "超级管理员")
+      // 超级管理员可以进行回车操作（别的角色当发票状态是已开时不能再进行修改操作）
+      if (sessionStorage.getItem("RoleName") == "超级管理员") {
         this.disabledFlag = false;
+      }
       this.updateInvoiceFrom.InvoiceType = item.InvoiceType + "";
       this.updateInvoiceFrom.IvState = item.IvState + "";
       this.updateInvoiceFrom.IssuingTime = item.IssuingTime
@@ -1295,7 +1409,6 @@ export default {
         1,
         100000
       ).then((res) => {
-        debugger;
         if (res.success) {
           this.DicCategoryList = res.result.list[0];
         } else {
@@ -1366,6 +1479,8 @@ export default {
               }
             }
           }
+          this.updateInvoiceFrom.SYear = this.updateInvoiceFrom.SYear || null;
+          this.updateInvoiceFrom.SMonth = this.updateInvoiceFrom.SMonth || null;
           UpdateInvoiceInfo(this.updateInvoiceFrom).then((res) => {
             if (res.success) {
               this.$message.success("操作成功");
@@ -1392,19 +1507,37 @@ export default {
       if (this.SYearSMonth) {
         this.SYearSMonth = parseTime(new Date(this.SYearSMonth), "{y}-{m}");
       }
-      GetInvoiceDataMethod(
-        this.CompanyId,
-        this.InvoiceType,
-        this.IvState,
-        this.SYearSMonth,
-        this.InvoiceHeader,
-        this.ApplyPerson,
-        this.IssuingPerson,
-        false,
-        this.SecondPartyName,
-        this.queryInfo.pagenum,
-        this.queryInfo.pagesize
-      ).then((res) => {
+      let IssuingTimeBegin = "";
+      let IssuingTimeEnd = "";
+      if (this.IssuingTime && this.IssuingTime.length > 0) {
+        IssuingTimeBegin = this.$moment(this.IssuingTime[0]).format(
+          "YYYY-MM-DD"
+        );
+        IssuingTimeEnd = this.$moment(this.IssuingTime[1]).format("YYYY-MM-DD");
+      } else {
+        this.IssuingTimeBegin = "";
+        this.IssuingTimeEnd = "";
+      }
+      var parameters = {
+        CompanyId: this.CompanyId,
+        InvoiceType:
+          this.InvoiceType === ""
+            ? null
+            : parseInt(this.InvoiceType, 10) || null,
+        IvState: this.IvState === "" ? null : parseInt(this.IvState, 10),
+        SYearSMonth: this.SYearSMonth,
+        InvoiceHeader: this.InvoiceHeader,
+        ApplyPerson: this.ApplyPerson,
+        IssuingPerson: this.IssuingPerson,
+        Flag: false,
+        SecondPartyName: this.SecondPartyName,
+        IssuingTimeBegin: IssuingTimeBegin,
+        IssuingTimeEnd: IssuingTimeEnd,
+        InvoiceTypes: this.InvoiceTypes || null,
+        PageIndex: this.queryInfo.pagenum,
+        PageSize: this.queryInfo.pagesize,
+      };
+      GetInvoiceDataMethod(parameters).then((res) => {
         if (res.success) {
           var wei = res.result.list.filter((item) => {
             return item.IvState == 0;
@@ -1578,5 +1711,8 @@ export default {
 
 .button {
   margin-left: 1rem;
+}
+.comentClass {
+  width: 100%;
 }
 </style>

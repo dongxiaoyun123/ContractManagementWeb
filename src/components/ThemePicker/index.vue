@@ -33,8 +33,6 @@ export default {
       if (typeof val !== 'string') return
       const themeCluster = this.getThemeCluster(val.replace('#', ''))
       const originalCluster = this.getThemeCluster(oldVal.replace('#', ''))
-      console.log(themeCluster, originalCluster)
-
       const $message = this.$message({
         message: '编写主题中.....',
         customClass: 'theme-message',

@@ -38,3 +38,13 @@
     }
     return realVal
   }
+
+  export function checkValue(value) {
+    if (value === null || value === '' || value === undefined) {
+      return null;
+    } else if (value === '0') {
+      return '0';
+    } else {
+      return value;
+    }
+  }

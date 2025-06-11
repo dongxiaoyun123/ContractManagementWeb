@@ -201,7 +201,7 @@ export default {
                 this.$emit('checked-change', val);
                 this.checkChangeByUser = true;
             }
-            console.log('end2', Date.now() - start2);
+             console.log('end2', Date.now() - start2);
         },
 
         data() {

@@ -1,0 +1,22 @@
+// src/utils/columnVisibilityMap.js
+export const MenuToPropertyMap = {
+  乙方合同编号: "ifSecondContractNumberPrefix",
+  审核状态: "ifAuditStatusName",
+  归档类型: "ifArchivedType",
+  合同名称: "ifContractNameStr",
+  甲方名称: "ifCompanyName",
+  合同类型: "ifName",
+  合同状态: "ifConStateName",
+  有无关联合同: "ifParentContractCode",
+  开始时间: "ifBeginTimeString",
+  结束时间: "ifEndTimeString",
+  提成占比: "ifPercentage",
+  销售人员: "ifSaleName",
+  缴费方式: "ifPaymentMethodString",
+  合同金额: "ifContractAmount",
+  乙方名称: "ifSecondPartyName",
+  添加人: "ifCreateUserName",
+  添加时间: "ifCreationTimeString",
+  送审时间: "ifSubmitCensorshipTimeStr",
+  审核时间: "ifExamineTimeStr",
+};

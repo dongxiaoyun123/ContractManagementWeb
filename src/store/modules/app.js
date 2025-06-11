@@ -47,7 +47,7 @@ const actions = {
   },
   setSize({ commit }, size) {
     UserButttonSet(size).then((response) => {
-      const { result } = response;
+      // const { result } = response;
       if (response.success) {
         commit("SET_SIZE", size);
         this.$message.success("设置成功");

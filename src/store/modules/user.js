@@ -1,11 +1,18 @@
 // import { login, logout, getInfo } from '@/api/user'
-import { adminLogin, GetUserInfo } from "@/api/login";
-import { getToken, setToken, removeToken } from "@/utils/auth";
+import { adminLogin, GetUserInfo, Refresh } from "@/api/login";
+import {
+  getToken,
+  getrefreshToken,
+  setToken,
+  setrefreshToken,
+  removeToken,
+} from "@/utils/auth";
 import router, { resetRouter } from "@/router";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 // import md5 from "js-md5";
 const state = {
   token: getToken(),
+  refreshtoken: getrefreshToken(),
   name: "",
   avatar: "",
   introduction: "",
@@ -54,15 +61,17 @@ const actions = {
           const { result } = response;
           if (response.success) {
             // 登录存储token信息
-            commit("SET_TOKEN", result.access_token);
-            setToken(result.access_token);
-            sessionStorage.setItem("token", result.access_token);
-            // 角色编号，固定就好
-            sessionStorage.setItem("RoleCode", result.RoleCode);
-            sessionStorage.setItem("RoleName", result.RoleName);
-            // sessionStorage.setItem("loginName", result.loginName);
-            sessionStorage.setItem("userid", result.userid);
-            sessionStorage.setItem("User_RealName", result.User_RealName);
+            commit("SET_TOKEN", result.assessToken);
+            commit("SET_REFRESHTOKEN", result.refreshToken);
+            setToken(result.assessToken);
+            setrefreshToken(result.refreshToken);
+            // sessionStorage.setItem("token", result.access_token);
+            // // 角色编号，固定就好
+            // sessionStorage.setItem("RoleCode", result.RoleCode);
+            // sessionStorage.setItem("RoleName", result.RoleName);
+            // // sessionStorage.setItem("loginName", result.loginName);
+            // sessionStorage.setItem("userid", result.userid);
+            // sessionStorage.setItem("User_RealName", result.User_RealName);
           }
           // 返回值
           resolve(response);
@@ -80,11 +89,9 @@ const actions = {
         if (response.result) {
           const {
             RoleCode,
-            UserAccess_token,
             User_RealName,
             User_ID,
             RoleName,
-            ButtonSize,
           } = response.result;
           // const { roles } = result
           // const { roles, name, avatar, introduction } = result
@@ -105,18 +112,17 @@ const actions = {
           // commit('SET_AVATAR', "SET_AVATAR")
           // commit('SET_INTRODUCTION', "SET_INTRODUCTION")
           // 重新存储一下token，防止刷新页面token丢失
-          commit("SET_TOKEN", UserAccess_token);
+          // commit("SET_TOKEN", UserAccess_token);
           // commit('SET_MenuPermissions', MenuPermissions)
           if (roleArray.length != 0) {
             resolve(roleArray);
           }
           sessionStorage.setItem("RoleName", RoleName);
-          sessionStorage.setItem("token", UserAccess_token);
+          // sessionStorage.setItem("token", UserAccess_token);
           sessionStorage.setItem("RoleCode", RoleCode);
           // sessionStorage.setItem("loginName", result.loginName);
           sessionStorage.setItem("userid", User_ID);
           sessionStorage.setItem("User_RealName", User_RealName);
-          // debugger
           // Cookies.set("size", ButtonSize || "mini");
           // this.$store.dispatch('app/setSize', size)
         } else {
@@ -154,6 +160,20 @@ const actions = {
       removeToken();
       resetRouter();
       resolve();
+    });
+  },
+
+  refreshToken({ commit }) {
+    return new Promise((resolve) => {
+      Refresh(getToken()).then((response) => {
+        if ((response.code == "200")) {
+          commit("SET_TOKEN", response.data.newAccessToken);
+          commit("SET_REFRESHTOKEN", response.data.refreshToken);
+          setToken(response.data.newAccessToken);
+          setrefreshToken(response.data.refreshToken);
+        }
+        resolve(response.data.newAccessToken);
+      });
     });
   },
 

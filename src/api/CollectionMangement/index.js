@@ -45,12 +45,14 @@ export function UpdateDataRemark(InsProductPayCode, Remark) {
 }
 
 // 根据回款公司名称获取账单(客服)
-export function GetCollectionOrderNyName(EnterPriseName) {
+export function GetCollectionOrderNyName(
+  EnterPriseName,
+  CustomerInsProductPayCode
+) {
   return request({
-    url:
-      "/CollectionMangement/GetCollectionOrderNyName?EnterPriseName=" +
-      EnterPriseName,
+    url: "/CollectionMangement/GetCollectionOrderNyName",
     method: "post",
+    params: { EnterPriseName, CustomerInsProductPayCode },
   });
 }
 
@@ -379,103 +381,19 @@ export function GetCustomAmountByOrder(OrderCode) {
 }
 
 // 获取供应商列表
-export function GetSupplierData(
-  ContractCode,
-  ContractName,
-  ComName,
-  ContractType,
-  BeginTime,
-  EndTime,
-  BeginSignTime,
-  EndSignTime,
-  CreateUserId,
-  AuditStatus,
-  ArchivedType,
-  SupplierCmpanyBCode,
-  PageIndex,
-  PageSize
-) {
-  BeginTime = !BeginTime ? "" : BeginTime;
-  EndTime = !EndTime ? "" : EndTime;
+export function GetSupplierData(model) {
   return request({
-    url:
-      "/CollectionMangement/GetSupplierData?ContractCode=" +
-      ContractCode +
-      "&ContractName=" +
-      ContractName +
-      "&ComName=" +
-      ComName +
-      "&ContractType=" +
-      ContractType +
-      "&BeginTime=" +
-      BeginTime +
-      "&EndTime=" +
-      EndTime +
-      "&BeginSignTime=" +
-      BeginSignTime +
-      "&EndSignTime=" +
-      EndSignTime +
-      "&CreateUserId=" +
-      CreateUserId +
-      "&AuditStatus=" +
-      AuditStatus +
-      "&ArchivedType=" +
-      ArchivedType +
-      "&SupplierCmpanyBCode=" +
-      SupplierCmpanyBCode +
-      "&PageIndex=" +
-      PageIndex +
-      "&PageSize=" +
-      PageSize,
+    url: "/CollectionMangement/GetSupplierData",
     method: "post",
+    data: model,
   });
 }
 // 导出供应商
-export function GetSupplierDataExport(
-  ContractCode,
-  ContractName,
-  ComName,
-  ContractType,
-  BeginSignTime,
-  EndSignTime,
-  CreateUserId,
-  AuditStatus,
-  BeginTime,
-  EndTime,
-  ArchivedType,
-  SupplierCmpanyBCode
-) {
-  BeginTime = !BeginTime ? "" : BeginTime;
-  EndTime = !EndTime ? "" : EndTime;
+export function GetSupplierDataExport(model) {
   return request({
-    url:
-      "/CollectionMangement/GetSupplierDataExport?ContractCode=" +
-      ContractCode +
-      "&ContractName=" +
-      ContractName +
-      "&ComName=" +
-      ComName +
-      "&ContractType=" +
-      ContractType +
-      "&BeginTime=" +
-      BeginTime +
-      "&EndTime=" +
-      EndTime +
-      "&BeginSignTime=" +
-      BeginSignTime +
-      "&EndSignTime=" +
-      EndSignTime +
-      "&CreateUserId=" +
-      CreateUserId +
-      "&AuditStatus=" +
-      AuditStatus +
-      "&ArchivedType=" +
-      ArchivedType +
-      "&SupplierCmpanyBCode=" +
-      SupplierCmpanyBCode +
-      "&PageIndex=1" +
-      "&PageSize=100000",
+    url: "/CollectionMangement/GetSupplierDataExport",
     method: "post",
+    data: model,
   });
 }
 // 添加供应商
@@ -573,6 +491,15 @@ export function GetCollectionOrderNyId(InsProductPayCode) {
     method: "post",
   });
 }
+export function GetCollectionOrderNyIdOld(InsProductPayCode) {
+  return request({
+    url:
+      "/CollectionMangement/GetCollectionOrderNyIdOld?InsProductPayCode=" +
+      InsProductPayCode,
+    method: "post",
+  });
+}
+
 export function GetOtherOrderById(InsProductPayCode) {
   return request({
     url:
@@ -581,7 +508,7 @@ export function GetOtherOrderById(InsProductPayCode) {
     method: "post",
   });
 }
-export function UpdateDataCancel(InsProductPayCode) {
+export function UpdateDataCancelColl(InsProductPayCode) {
   return request({
     url:
       "/CollectionMangement/UpdateDataCancelColl?InsProductPayCode=" +
@@ -589,6 +516,23 @@ export function UpdateDataCancel(InsProductPayCode) {
     method: "post",
   });
 }
+export function UpdateDataCancelCollOld(InsProductPayCode) {
+  return request({
+    url:
+      "/CollectionMangement/UpdateDataCancelCollOld?InsProductPayCode=" +
+      InsProductPayCode,
+    method: "post",
+  });
+}
+export function IfCollectionCustomer(InsProductPayCode) {
+  return request({
+    url:
+      "/CollectionMangement/IfCollectionCustomer?InsProductPayCode=" +
+      InsProductPayCode,
+    method: "post",
+  });
+}
+
 export function UpdateDataOtherCancel(InsProductPayCode) {
   return request({
     url:
@@ -709,5 +653,34 @@ export function RefundData(
       "&RefundAmount=" +
       RefundAmount,
     method: "post",
+  });
+}
+// 修改来源说明
+export function SaveDataSourceEdit(InsProductPayCode, DataSource) {
+  return request({
+    url: "/CollectionMangement/SaveDataSourceEdit",
+    method: "post",
+    params: { InsProductPayCode, DataSource },
+  });
+}
+export function BatchUpdateCommit(model) {
+  return request({
+    url: "/CollectionMangement/BatchUpdate",
+    method: "post",
+    data: model,
+  });
+}
+export function GetCustomerCollectionData(model) {
+  return request({
+    url: "/CollectionMangement/GetCustomerCollectionData",
+    method: "post",
+    data: model,
+  });
+}
+export function ExportCustomerCollectionData(model) {
+  return request({
+    url: "/CollectionMangement/ExportCustomerCollectionData",
+    method: "post",
+    data: model,
   });
 }

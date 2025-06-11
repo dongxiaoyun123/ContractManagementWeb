@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 8px;">
+  <div style="padding: 8px">
     <el-card>
       <el-form label-width="60px">
         <!-- 合同信息 -->
@@ -10,42 +10,90 @@
           <el-row>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item :style="formShow" label="姓名">
-                <el-input v-model="User_RealName" class="FormClass" placeholder="真实姓名" clearable="" />
+                <el-input
+                  v-model="User_RealName"
+                  class="FormClass"
+                  placeholder="真实姓名"
+                  clearable=""
+                />
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item label="角色">
-                <el-select v-model="RoleCode" class="FormClass" filterable placeholder="请选择" clearable="">
-                  <el-option v-for="item in RoleDatas" :key="item.RoleCode" :label="item.RoleName" :value="item.RoleCode"
-                             :disabled="item.Disabled"
+                <el-select
+                  v-model="RoleCode"
+                  class="FormClass"
+                  filterable
+                  placeholder="请选择"
+                  clearable=""
+                >
+                  <el-option
+                    v-for="item in RoleDatas"
+                    :key="item.RoleCode"
+                    :label="item.RoleName"
+                    :value="item.RoleCode"
+                    :disabled="item.Disabled"
                   />
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item :style="formShow" label="部门">
-                <el-select v-model="DepartmentCode" class="FormClass" filterable placeholder="部门名称" clearable="">
-                  <el-option v-for="item in DepartmentList" :key="item.DepartmentCode" :label="item.DepartmentName"
-                             :value="item.DepartmentCode"
+                <el-select
+                  v-model="DepartmentCode"
+                  class="FormClass"
+                  filterable
+                  placeholder="部门名称"
+                  clearable=""
+                >
+                  <el-option
+                    v-for="item in DepartmentList"
+                    :key="item.DepartmentCode"
+                    :label="item.DepartmentName"
+                    :value="item.DepartmentCode"
                   />
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
               <el-form-item :style="formShow" label="状态">
-                <el-select v-model="PositionStatus" class="FormClass" filterable placeholder="状态" clearable="">
+                <el-select
+                  v-model="PositionStatus"
+                  class="FormClass"
+                  filterable
+                  placeholder="状态"
+                  clearable=""
+                >
                   <el-option key="0" label="在职" value="0" />
                   <el-option key="1" label="离职" value="1" />
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-              <el-button-group style="margin-left:1rem ;">
-                <el-button type="primary" icon="el-icon-search" @click="GetAdmin_UserSearch">查 询
+              <el-button-group style="margin-left: 1rem">
+                <el-button
+                  type="primary"
+                  icon="el-icon-search"
+                  @click="GetAdmin_UserSearch"
+                >查 询
                 </el-button>
-                <el-button type="success" icon="el-icon-circle-plus-outline" @click="AddAdminUser">添 加
+                <el-button
+                  type="success"
+                  icon="el-icon-circle-plus-outline"
+                  @click="AddAdminUser"
+                >添 加
                 </el-button>
-                <el-button type="warning" icon="el-icon-download" @click="showManagementExportDialog">合同导出权限
+                <el-button
+                  type="warning"
+                  icon="el-icon-download"
+                  @click="showManagementExportDialog(1)"
+                >合同导出权限
+                </el-button>
+                <el-button
+                  type="danger"
+                  icon="el-icon-circle-check"
+                  @click="showManagementExportDialog(2)"
+                >业务渠道权限
                 </el-button>
               </el-button-group>
             </el-col>
@@ -54,37 +102,98 @@
       </el-form>
     </el-card>
     <el-card class="CardTableClass">
-      <el-table v-loading="loading" highlight-current-row :data="Admin_UserDatas" default-expand-all:true
-                :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" row-key="User_ID"
+      <el-table
+        v-loading="loading"
+        highlight-current-row
+        :data="Admin_UserDatas"
+        default-expand-all:true
+        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+        row-key="User_ID"
       >
-        <el-table-column sortable prop="User_Account" label="登录名" show-overflow-tooltip min-width="120" />
-        <el-table-column prop="User_RealName" label="真实姓名" min-width="120" />
-        <el-table-column sortable prop="RoleName" label="角色名称" min-width="120" />
-        <el-table-column sortable prop="DepartmentName" label="部门名称" min-width="180" show-overflow-tooltip />
-        <el-table-column sortable prop="User_Post" label="职务" min-width="120" show-overflow-tooltip />
+        <el-table-column
+          sortable
+          prop="User_Account"
+          label="登录名"
+          show-overflow-tooltip
+          min-width="120"
+        />
+        <el-table-column
+          prop="User_RealName"
+          label="真实姓名"
+          min-width="120"
+        />
+        <el-table-column
+          sortable
+          prop="RoleName"
+          label="角色名称"
+          min-width="120"
+        />
+        <el-table-column
+          sortable
+          prop="DepartmentName"
+          label="部门名称"
+          min-width="180"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          sortable
+          prop="User_Post"
+          label="职务"
+          min-width="120"
+          show-overflow-tooltip
+        />
         <el-table-column sortable prop="Phone" label="电话" min-width="120" />
-        <el-table-column sortable prop="PositionStatusName" label="状态" min-width="100" />
-        <el-table-column prop="UpdateUserName" label="修改人" min-width="150" show-overflow-tooltip />
-        <el-table-column prop="modified_timeStr" label="修改时间" min-width="170">
+        <el-table-column
+          sortable
+          prop="PositionStatusName"
+          label="状态"
+          min-width="100"
+        />
+        <el-table-column
+          prop="UpdateUserName"
+          label="修改人"
+          min-width="150"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="modified_timeStr"
+          label="修改时间"
+          min-width="170"
+        >
           <template slot-scope="scope">
             <div v-if="scope.row.modified_timeStr">
               <i class="el-icon-time" />
-              <span style="margin-left: 6px">{{ scope.row.modified_timeStr }}</span>
+              <span style="margin-left: 6px">{{
+                scope.row.modified_timeStr
+              }}</span>
             </div>
           </template>
         </el-table-column>
-        <el-table-column v-if="fixedLeftShow" label="操作" width="250" fixed="right">
+        <el-table-column
+          v-if="fixedLeftShow"
+          label="操作"
+          width="250"
+          fixed="right"
+        >
           <template slot-scope="scope">
-            <el-button icon="el-icon-edit" type="text" size="mini"
-                       @click="showEditDialog(scope.row.User_ID)"
+            <el-button
+              icon="el-icon-edit"
+              type="text"
+              size="mini"
+              @click="showEditDialog(scope.row.User_ID)"
             >编辑</el-button>
-            <el-button icon="el-icon-delete" type="text" size="mini"
-                       @click="deleteDialog(scope.row.User_ID)"
+            <el-button
+              icon="el-icon-delete"
+              type="text"
+              size="mini"
+              @click="deleteDialog(scope.row.User_ID)"
             >删除</el-button>
-            <el-dropdown @command="(command) => {
-              handleCommand(command, scope.row.User_ID);
-            }
-            "
+            <el-dropdown
+              @command="
+                (command) => {
+                  handleCommand(command, scope.row.User_ID);
+                }
+              "
             >
               <el-button type="text" size="mini">
                 更多操作<i class="el-icon-arrow-down el-icon--right" />
@@ -99,16 +208,24 @@
         </el-table-column>
         <el-table-column v-else label="操作" width="250">
           <template slot-scope="scope">
-            <el-button icon="el-icon-edit" type="text" size="mini"
-                       @click="showEditDialog(scope.row.User_ID)"
+            <el-button
+              icon="el-icon-edit"
+              type="text"
+              size="mini"
+              @click="showEditDialog(scope.row.User_ID)"
             >编辑</el-button>
-            <el-button icon="el-icon-delete" type="text" size="mini"
-                       @click="deleteDialog(scope.row.User_ID)"
+            <el-button
+              icon="el-icon-delete"
+              type="text"
+              size="mini"
+              @click="deleteDialog(scope.row.User_ID)"
             >删除</el-button>
-            <el-dropdown @command="(command) => {
-              handleCommand(command, scope.row.User_ID);
-            }
-            "
+            <el-dropdown
+              @command="
+                (command) => {
+                  handleCommand(command, scope.row.User_ID);
+                }
+              "
             >
               <el-button type="text" size="mini">
                 更多操作<i class="el-icon-arrow-down el-icon--right" />
@@ -123,14 +240,25 @@
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
-                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      <el-pagination
+        background
+        :current-page="queryInfo.pagenum"
+        :page-sizes="[20, 50, 100]"
+        :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
       />
     </el-card>
 
     <el-dialog title="添加用户" :visible.sync="addDialogVisible" width="50%">
-      <el-form ref="addRef" :model="AddAdmin_UserFrom" :rules="AddAdmin_UserFromRules" label-width="120px">
+      <el-form
+        ref="addRef"
+        :model="AddAdmin_UserFrom"
+        :rules="AddAdmin_UserFromRules"
+        label-width="120px"
+      >
         <el-form-item label="登录名" prop="User_Account">
           <el-input v-model="AddAdmin_UserFrom.User_Account" />
         </el-form-item>
@@ -142,18 +270,35 @@
           <el-input v-model="AddAdmin_UserFrom.User_Pwd" show-password />
         </el-form-item>
         <el-form-item label="角色" prop="RoleCode">
-          <el-select v-model="AddAdmin_UserFrom.RoleCode" filterable placeholder="请选择" clearable="" style="width: 50%">
-            <el-option v-for="item in RoleDatas" :key="item.RoleCode" :label="item.RoleName" :value="item.RoleCode"
-                       :disabled="item.Disabled"
+          <el-select
+            v-model="AddAdmin_UserFrom.RoleCode"
+            filterable
+            placeholder="请选择"
+            clearable=""
+            style="width: 50%"
+          >
+            <el-option
+              v-for="item in RoleDatas"
+              :key="item.RoleCode"
+              :label="item.RoleName"
+              :value="item.RoleCode"
+              :disabled="item.Disabled"
             />
           </el-select>
         </el-form-item>
         <el-form-item label="部门" prop="DepartmentCode">
-          <el-select v-model="AddAdmin_UserFrom.DepartmentCode" filterable placeholder="请选择" clearable=""
-                     style="width: 50%"
+          <el-select
+            v-model="AddAdmin_UserFrom.DepartmentCode"
+            filterable
+            placeholder="请选择"
+            clearable=""
+            style="width: 50%"
           >
-            <el-option v-for="item in DepartmentList" :key="item.DepartmentCode" :label="item.DepartmentName"
-                       :value="item.DepartmentCode"
+            <el-option
+              v-for="item in DepartmentList"
+              :key="item.DepartmentCode"
+              :label="item.DepartmentName"
+              :value="item.DepartmentCode"
             />
           </el-select>
         </el-form-item>
@@ -172,8 +317,11 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button v-loading.fullscreen.lock="LoadingAdd" icon="el-icon-circle-check" type="primary"
-                       @click="saveAdd"
+            <el-button
+              v-loading.fullscreen.lock="LoadingAdd"
+              icon="el-icon-circle-check"
+              type="primary"
+              @click="saveAdd"
             >保 存
             </el-button>
           </el-col>
@@ -187,11 +335,15 @@
         <div style="font-size: 13px; display: inline">
           <span>添加人:{{ CreateUserName }}</span>&#12288;&#12288;&#12288;&#12288;
           <span>添加时间:{{ CreateTime }}</span>&#12288;&#12288;&#12288;&#12288;
-          <span>修改人:{{ UpdateUserName }}</span>&#12288;&#12288; <span>修改时间:{{ UpdateTime
-          }}</span>&#12288;&#12288;&#12288;&#12288;
+          <span>修改人:{{ UpdateUserName }}</span>&#12288;&#12288; <span>修改时间:{{ UpdateTime }}</span>&#12288;&#12288;&#12288;&#12288;
         </div>
       </div>
-      <el-form ref="updateRef" :model="UpdateAdmin_UserFrom" :rules="updateImageTypeFromRules" label-width="120px">
+      <el-form
+        ref="updateRef"
+        :model="UpdateAdmin_UserFrom"
+        :rules="updateImageTypeFromRules"
+        label-width="120px"
+      >
         <el-form-item label="登录名" prop="User_Account">
           <el-input v-model="UpdateAdmin_UserFrom.User_Account" />
         </el-form-item>
@@ -199,18 +351,35 @@
           <el-input v-model="UpdateAdmin_UserFrom.User_RealName" />
         </el-form-item>
         <el-form-item label="角色" prop="RoleCode">
-          <el-select v-model="UpdateAdmin_UserFrom.RoleCode" filterable placeholder="请选择" clearable="" style="width: 50%">
-            <el-option v-for="item in RoleDatas" :key="item.RoleCode" :label="item.RoleName" :value="item.RoleCode"
-                       :disabled="item.Disabled"
+          <el-select
+            v-model="UpdateAdmin_UserFrom.RoleCode"
+            filterable
+            placeholder="请选择"
+            clearable=""
+            style="width: 50%"
+          >
+            <el-option
+              v-for="item in RoleDatas"
+              :key="item.RoleCode"
+              :label="item.RoleName"
+              :value="item.RoleCode"
+              :disabled="item.Disabled"
             />
           </el-select>
         </el-form-item>
         <el-form-item label="部门" prop="DepartmentCode">
-          <el-select v-model="UpdateAdmin_UserFrom.DepartmentCode" filterable placeholder="请选择" clearable=""
-                     style="width: 50%"
+          <el-select
+            v-model="UpdateAdmin_UserFrom.DepartmentCode"
+            filterable
+            placeholder="请选择"
+            clearable=""
+            style="width: 50%"
           >
-            <el-option v-for="item in DepartmentList" :key="item.DepartmentCode" :label="item.DepartmentName"
-                       :value="item.DepartmentCode"
+            <el-option
+              v-for="item in DepartmentList"
+              :key="item.DepartmentCode"
+              :label="item.DepartmentName"
+              :value="item.DepartmentCode"
             />
           </el-select>
         </el-form-item>
@@ -229,8 +398,11 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button v-loading.fullscreen.lock="LoadingUpdate" icon="el-icon-circle-check" type="primary"
-                       @click="saveUpdate"
+            <el-button
+              v-loading.fullscreen.lock="LoadingUpdate"
+              icon="el-icon-circle-check"
+              type="primary"
+              @click="saveUpdate"
             >保 存
             </el-button>
           </el-col>
@@ -238,21 +410,36 @@
       </el-form>
     </el-dialog>
     <!-- 修改密码对话框 -->
-    <el-dialog title="修改密码" :visible.sync="updatePasswordVisible" width="30%">
+    <el-dialog
+      title="修改密码"
+      :visible.sync="updatePasswordVisible"
+      width="30%"
+    >
       <!-- 内容主体 -->
-      <el-form ref="updatePasswordRef" :model="updatePassword" :rules="updatePasswordRules" label-width="100px">
+      <el-form
+        ref="updatePasswordRef"
+        :model="updatePassword"
+        :rules="updatePasswordRules"
+        label-width="100px"
+      >
         <el-form-item label="新密码" prop="User_Pwd">
           <el-input v-model="updatePassword.User_Pwd" show-password />
         </el-form-item>
         <el-form-item label="确认密码" prop="confirmLogin_password">
-          <el-input v-model="updatePassword.confirmLogin_password" show-password />
+          <el-input
+            v-model="updatePassword.confirmLogin_password"
+            show-password
+          />
         </el-form-item>
       </el-form>
       <el-divider />
       <el-row class="buttonCenter">
         <el-col>
-          <el-button v-loading.fullscreen.lock="UpdatePasswordLoading" icon="el-icon-circle-check" type="primary"
-                     @click="updatePasswordCommitClick"
+          <el-button
+            v-loading.fullscreen.lock="UpdatePasswordLoading"
+            icon="el-icon-circle-check"
+            type="primary"
+            @click="updatePasswordCommitClick"
           >保 存
           </el-button>
         </el-col>
@@ -273,13 +460,24 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>选择合同类型进行关联</span>
-          <el-button icon="el-icon-link" style="float: right;" type="primary" :loading="LoadingRoleUpdate"
-                     @click="saveUserUpdate"
+          <el-button
+            icon="el-icon-link"
+            style="float: right"
+            type="primary"
+            :loading="LoadingRoleUpdate"
+            @click="saveUserUpdate"
           >关 联
           </el-button>
         </div>
-        <el-tree ref="tree1" style="height: calc(100vh - 350px); overflow-y: scroll" :data="permissionTree"
-                 show-checkbox:true show-checkbox default-expand-all node-key="id" highlight-current
+        <el-tree
+          ref="tree1"
+          style="height: calc(100vh - 350px); overflow-y: scroll"
+          :data="permissionTree"
+          show-checkbox:true
+          show-checkbox
+          default-expand-all
+          node-key="id"
+          highlight-current
         />
       </el-card>
     </el-dialog>
@@ -291,49 +489,95 @@
       <el-card class="box-card">
         <el-row>
           <el-col :span="16">
-            <el-input v-model="filterText" placeholder="输入用户进行过滤" clearable="" />
+            <el-input
+              v-model="filterText"
+              placeholder="输入用户进行过滤"
+              clearable=""
+            />
           </el-col>
-          <el-col :span="8" style="text-align:right">
+          <el-col :span="8" style="text-align: right">
             <!-- <el-switch v-model="PositionStatusFlag" style="margin-top: 7px;margin-right: 40px;" active-color="#13ce66"
               inactive-color="#ff4949" active-text="在职" inactive-text="离职" @change="changePositionStatus" /> -->
-            <el-checkbox v-model="PositionStatusFlag" style="margin-top: 7px;margin-right: 40px;" @change="changePositionStatus">在职</el-checkbox>
-            <el-button icon="el-icon-link" style="float: right;" type="primary" :loading="LoadingRoleUpdate1"
-                       @click="saveUserUpdate1"
+            <el-checkbox
+              v-model="PositionStatusFlag"
+              style="margin-top: 7px; margin-right: 40px"
+              @change="changePositionStatus"
+            >在职</el-checkbox>
+            <el-button
+              icon="el-icon-link"
+              style="float: right"
+              type="primary"
+              :loading="LoadingRoleUpdate1"
+              @click="saveUserUpdate1"
             >关 联
             </el-button>
           </el-col>
         </el-row>
-        <el-tree ref="tree2" style="height: calc(100vh - 300px); overflow-y: scroll;margin-top: 20px;"
-                 :data="permissionTree" show-checkbox:true show-checkbox node-key="id" highlight-current
-                 :filter-node-method="filterNode" accordion
+        <el-tree
+          ref="tree2"
+          style="
+            height: calc(100vh - 300px);
+            overflow-y: scroll;
+            margin-top: 20px;
+          "
+          :data="permissionTree"
+          show-checkbox:true
+          show-checkbox
+          node-key="id"
+          highlight-current
+          :filter-node-method="filterNode"
+          accordion
         />
       </el-card>
     </el-dialog>
     <!-- 绑定导出权限 -->
     <el-dialog :visible.sync="updateRoleDialogVisible2" top="5vh" width="50%">
       <div slot="title" class="dialog-title">
-        <span>用户管理</span>
+        <span>{{ DialogTitle }}</span>
       </div>
       <el-card class="box-card">
         <el-row>
           <el-col :span="16">
-            <el-input v-model="filterTextExport" placeholder="输入用户进行过滤" clearable="" />
+            <el-input
+              v-model="filterTextExport"
+              placeholder="输入用户进行过滤"
+              clearable=""
+            />
           </el-col>
-          <el-col :span="8" style="text-align:right">
+          <el-col :span="8" style="text-align: right">
             <!-- <el-switch v-model="PositionStatusFlag" style="margin-top: 7px;margin-right: 40px;" active-color="#13ce66"
               inactive-color="#ff4949" active-text="在职" inactive-text="离职" @change="changePositionStatusExport" /> -->
 
-            <el-checkbox v-model="PositionStatusFlag" style="margin-top: 7px;margin-right: 40px;" @change="changePositionStatusExport">在职</el-checkbox>
+            <el-checkbox
+              v-model="PositionStatusFlag"
+              style="margin-top: 7px; margin-right: 40px"
+              @change="changePositionStatusExport"
+            >在职</el-checkbox>
 
-            <el-button icon="el-icon-link" style="float: right;" type="primary" :loading="LoadingRoleUpdate2"
-                       @click="saveUserUpdateExport"
+            <el-button
+              icon="el-icon-link"
+              style="float: right"
+              type="primary"
+              :loading="LoadingRoleUpdate2"
+              @click="saveUserUpdateExport"
             >关 联
             </el-button>
           </el-col>
         </el-row>
-        <el-tree ref="treeExport" style="height: calc(100vh - 300px); overflow-y: scroll;margin-top: 20px;"
-                 :data="permissionTreeExport" show-checkbox:true show-checkbox node-key="id" highlight-current
-                 :filter-node-method="filterNode" accordion
+        <el-tree
+          ref="treeExport"
+          style="
+            height: calc(100vh - 300px);
+            overflow-y: scroll;
+            margin-top: 20px;
+          "
+          :data="permissionTreeExport"
+          show-checkbox:true
+          show-checkbox
+          node-key="id"
+          highlight-current
+          :filter-node-method="filterNode"
+          accordion
         />
       </el-card>
     </el-dialog>
@@ -362,7 +606,7 @@ import {
 import { showLoading, hideLoading } from "@/common/loading";
 const moment = require("moment");
 export default {
-  name: 'UserManagement',
+  name: "UserManagement",
   data() {
     // 自定义手机号规则
     var checkMobile = (rule, value, callback) => {
@@ -374,8 +618,8 @@ export default {
       callback(new Error("请输入合法的手机号码"));
     };
     return {
-      filterTextExport: '',
-      formShow: '',
+      filterTextExport: "",
+      formShow: "",
       fixedLeftShow: true,
       UserAllListExport: [],
       PositionStatusFlag: true,
@@ -560,6 +804,8 @@ export default {
       },
       filterText: "",
       updateRoleDialogVisible2: false,
+      ButtonVal: null,
+      DialogTitle: "",
     };
   },
   watch: {
@@ -574,7 +820,7 @@ export default {
     filterTextExport(val) {
       this.$refs.treeExport.filter(val);
     },
-    '$store.getters.clientWidth'(newVal, oldVal) {
+    "$store.getters.clientWidth"(newVal, oldVal) {
       this.fixedShowMethod(newVal);
     },
   },
@@ -643,10 +889,16 @@ export default {
     // 绑定合同导出权限
     saveUserUpdateExport() {
       this.LoadingRoleUpdate2 = true;
-      this.bingdArray1.PermissionsArray = this.$refs.treeExport.getCheckedKeys();
-      BindUserExport(this.bingdArray1).then((res) => {
+      this.bingdArray1.PermissionsArray =
+        this.$refs.treeExport.getCheckedKeys();
+      var parameter = {
+        RoleCode: this.bingdArray1.RoleCode,
+        PermissionsArray: this.bingdArray1.PermissionsArray,
+        RelationType: this.ButtonVal,
+      };
+      BindUserExport(parameter).then((res) => {
         if (res.success) {
-          this.saveUserUpdateExport = false;
+          this.PositionStatusFlag = false;
           this.updateRoleDialogVisible2 = false;
           this.$message.success("操作成功");
           this.GetAdmin_User();
@@ -667,7 +919,7 @@ export default {
               this.$refs.tree2.setCheckedKeys(res.result);
             }
           });
-          this.filterText = '';
+          this.filterText = "";
           this.PositionStatusFlag = true;
           this.updateRoleDialogVisible1 = true;
         } else {
@@ -676,17 +928,19 @@ export default {
       });
     },
     // 绑定导出权限
-    showManagementExportDialog() {
+    showManagementExportDialog(val) {
+      this.DialogTitle = val == 1 ? "合同导出权限" : "业务渠道权限";
+      this.ButtonVal = val;
       GetUserAllList(0).then((res) => {
         if (res.success) {
           this.permissionTreeExport = res.result.data;
           this.UserAllListExport = res.result.getDataList;
-          GetExportUser().then((res) => {
+          GetExportUser(val).then((res) => {
             if (res.success) {
               this.$refs.treeExport.setCheckedKeys(res.result);
             }
           });
-          this.filterTextExport = '';
+          this.filterTextExport = "";
           this.PositionStatusFlag = true;
           this.updateRoleDialogVisible2 = true;
         } else {
@@ -893,7 +1147,7 @@ export default {
     },
     // 筛选部门信息
     changePositionStatus() {
-      this.filterText = '';
+      this.filterText = "";
       GetUserAllList(this.PositionStatusFlag == true ? 0 : 1).then((res) => {
         if (res.success) {
           this.permissionTree = res.result.data;
@@ -905,7 +1159,7 @@ export default {
     },
     // 筛选部门信息
     changePositionStatusExport() {
-      this.filterTextExport = '';
+      this.filterTextExport = "";
       GetUserAllList(this.PositionStatusFlag == true ? 0 : 1).then((res) => {
         if (res.success) {
           this.permissionTreeExport = res.result.data;
@@ -919,16 +1173,16 @@ export default {
     fixedShowMethod(newVal) {
       // 上方表单距下方间距
       if (newVal < 1200) {
-        this.formShow = 'margin-bottom: 18px;';
+        this.formShow = "margin-bottom: 18px;";
       } else {
-        this.formShow = 'margin-bottom: 0;';
+        this.formShow = "margin-bottom: 0;";
       }
       if (newVal < 768) {
         this.fixedLeftShow = false;
       } else {
         this.fixedLeftShow = true;
       }
-    }
+    },
   },
 };
 </script>
@@ -954,4 +1208,5 @@ export default {
 
 .FormClass {
   width: 100%;
-}</style>
+}
+</style>

@@ -221,8 +221,6 @@ export default {
           this.LoadingUpdate = false;
           return;
         }
-        console.log(this.UpdateDicCategoryCFrom);
-        debugger
         UpdateDicCategoryC(this.UpdateDicCategoryCFrom).then((res) => {
           if (res.success) {
             this.updateDialogVisible = false;

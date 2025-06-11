@@ -192,7 +192,6 @@ export default {
     sig.updateString(newStr)
     // 加密后的16进制转成base64，这就是签名了
     this.sign = jsrsasign.hextob64(sig.sign());
-    // console.log(this.sign);
   },
   methods: {
     //     checkSHA(){

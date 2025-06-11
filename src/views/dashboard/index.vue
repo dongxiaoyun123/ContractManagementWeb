@@ -31,13 +31,11 @@
                     <span
                       v-if="data.PositionStatus == 0"
                       style="float: right; color: #13ce66"
-                      >在职</span
-                    >
+                    >在职</span>
                     <span
                       v-if="data.PositionStatus == 1"
                       style="float: right; color: #909399"
-                      >离职</span
-                    >
+                    >离职</span>
                   </template>
                 </el-cascader>
                 <el-divider v-if="RoleName != '财务'" direction="vertical" />
@@ -45,14 +43,13 @@
                   v-if="RoleName != '财务'"
                   v-model="PositionStatus"
                   @change="PositionStatusChange"
-                  >在职</el-checkbox
-                >
+                >在职</el-checkbox>
                 <el-divider direction="vertical" />
                 <el-button
                   type="primary"
                   icon="el-icon-search"
                   @click="GetAdmin_UserSearch"
-                  >查 询
+                >查 询
                 </el-button>
               </el-form-item>
             </el-col>
@@ -161,13 +158,13 @@
     <!-- 综合哪个角色都能看到 -->
     <el-row :gutter="16">
       <el-col :xs="24" :sm="24" :lg="24" :xl="12">
-          <CommonSuggestions />
+        <CommonSuggestions />
       </el-col>
       <el-col :xs="24" :sm="24" :lg="24" :xl="12">
-          <CommonOperationLog
-            :key="datekey"
-            :where-parameter="WhereParameter"
-          />
+        <CommonOperationLog
+          :key="datekey"
+          :where-parameter="WhereParameter"
+        />
       </el-col>
     </el-row>
     <el-backtop target=".dashboardCalss" :bottom="45">
@@ -256,7 +253,7 @@ export default {
     //   }
     //   return true;
     // },
-    //如果用户初次登陆，那么提示一下新增信息
+    // 如果用户初次登陆，那么提示一下新增信息
     CheckUserLogin() {
       CheckUserLoginStatus().then((res) => {
         if (res.success) {

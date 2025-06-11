@@ -34,6 +34,9 @@ export function updateRulesSupplementRules() {
     PaymentMethod: [
       { required: true, message: "请选择缴费方式", trigger: "change" },
     ],
+    YearBatch: [
+      { required: true, message: "请输入年签批次", trigger: "blur" },
+    ],
     BeginTime: [
       {
         required: true,

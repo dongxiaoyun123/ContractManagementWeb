@@ -555,9 +555,9 @@ export function GetBindUser(User_ID) {
   });
 }
 // 获取有导出权限用户的编号
-export function GetExportUser() {
+export function GetExportUser(RelationType) {
   return request({
-    url: "/SystemManagement/GetExportUser",
+    url: "/SystemManagement/GetExportUser?RelationType=" + RelationType,
     method: "post",
   });
 }
@@ -818,9 +818,9 @@ export function DeleteSupplierCmpanyB(SupplierCmpanyBCode) {
   });
 }
 
-export function IfExistsExportUser() {
+export function IfExistsExportUser(RelationType) {
   return request({
-    url: "/SystemManagement/IfExistsExportUser",
+    url: "/SystemManagement/IfExistsExportUser?RelationType=" + RelationType,
     method: "post",
   });
 }
@@ -874,7 +874,9 @@ export function UpdateUserLoginStatus() {
 
 export function GetSupplierCmpanyById(SupplierCmpanyBCode) {
   return request({
-    url: "/SystemManagement/GetSupplierCmpanyById?SupplierCmpanyBCode=" + SupplierCmpanyBCode,
+    url:
+      "/SystemManagement/GetSupplierCmpanyById?SupplierCmpanyBCode=" +
+      SupplierCmpanyBCode,
     method: "post",
   });
 }

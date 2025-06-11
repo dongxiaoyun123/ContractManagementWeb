@@ -192,7 +192,7 @@ export default {
         // set page title
         this.setPageTitle()
       }).catch(err => {
-        console.log(err)
+        console.log(err);
       })
     },
     setTagsViewTitle() {

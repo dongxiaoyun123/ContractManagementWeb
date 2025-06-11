@@ -139,7 +139,7 @@
 
 <script>
 import {
-  GetAdmin_Permission,
+  GetAdmin_PermissionSys,
   GetParentAdmin_Permission,
   AddPermission,
   GetPermissionFirst,
@@ -236,7 +236,7 @@ export default {
     // },
   },
   created() {
-    this.GetAdmin_Permission();
+    this.GetAdmin_PermissionSys();
   },
   methods: {
     // 父子级切换事件
@@ -247,12 +247,12 @@ export default {
     // 监听 pagesize改变的事件
     handleSizeChange(newSize) {
       this.queryInfo.pagesize = newSize;
-      this.GetAdmin_Permission();
+      this.GetAdmin_PermissionSys();
     },
     // 监听 页码值 改变事件
     handleCurrentChange(newSize) {
       this.queryInfo.pagenum = newSize;
-      this.GetAdmin_Permission();
+      this.GetAdmin_PermissionSys();
     },
     // 添加模块
     AddPermission() {
@@ -285,7 +285,7 @@ export default {
           if (res.success) {
             this.addDialogVisible = false;
             this.$message.success("操作成功");
-            this.GetAdmin_Permission();
+            this.GetAdmin_PermissionSys();
           } else {
             this.$message.error(res.resultMessage);
           }
@@ -304,7 +304,7 @@ export default {
           if (res.success) {
             this.updateDialogVisible = false;
             this.$message.success("操作成功");
-            this.GetAdmin_Permission();
+            this.GetAdmin_PermissionSys();
           } else {
             this.$message.error(res.resultMessage);
           }
@@ -313,9 +313,9 @@ export default {
       });
     },
     // 获取数据
-    GetAdmin_Permission() {
+    GetAdmin_PermissionSys() {
       this.loading = true;
-      GetAdmin_Permission(this.queryInfo.pagenum, this.queryInfo.pagesize).then(
+      GetAdmin_PermissionSys(this.queryInfo.pagenum, this.queryInfo.pagesize).then(
         (res) => {
           if (res.success) {
             this.imageTypeDatas = res.result.list;
@@ -349,7 +349,7 @@ export default {
       DeletePermission(PermissionCode).then((res) => {
         if (res.success) {
           this.$message.success("操作成功！");
-          this.GetAdmin_Permission();
+          this.GetAdmin_PermissionSys();
         } else {
           hideLoading();
           return this.$message.error(res.resultMessage);
