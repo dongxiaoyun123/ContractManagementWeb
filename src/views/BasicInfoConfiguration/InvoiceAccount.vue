@@ -1,43 +1,93 @@
 <template>
-  <div style="padding: 8px;">
+  <div style="padding: 8px">
     <el-card>
       <el-row>
         <el-col :xs="16" :sm="5" :md="5" :lg="5" :xl="5">
-          <el-input v-model="Name" placeholder="发票科目名称" class="input-with-select" clearable="">
-            <el-button slot="append" icon="el-icon-search" @click="_GetInvoiceAccountSearch" />
+          <el-input
+            v-model="Name"
+            placeholder="发票科目名称"
+            class="input-with-select"
+            clearable=""
+          >
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+              @click="_GetInvoiceAccountSearch"
+            />
           </el-input>
         </el-col>
         <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-          <el-button type="primary" style="margin-left: 8px" icon="el-icon-circle-plus-outline"
-                     @click="_AddInvoiceAccount"
+          <el-button
+            type="primary"
+            style="margin-left: 8px"
+            icon="el-icon-circle-plus-outline"
+            @click="_AddInvoiceAccount"
           >添 加</el-button>
         </el-col>
       </el-row>
     </el-card>
     <el-card class="CardTableClass">
-      <el-table v-loading="loading" highlight-current-row :data="InvoiceAccountList" row-key="id">
-        <el-table-column prop="InvoiceAccountCode" label="发票科目编号" width="320" />
-        <el-table-column prop="InvoiceAccountName" label="发票科目名称" width="200" />
+      <el-table
+        v-loading="loading"
+        highlight-current-row
+        :data="InvoiceAccountList"
+        row-key="id"
+      >
+        <el-table-column
+          prop="InvoiceAccountCode"
+          label="发票科目编号"
+          width="320"
+        />
+        <el-table-column
+          prop="InvoiceAccountName"
+          label="发票科目名称"
+          width="200"
+        />
         <el-table-column prop="Sort" label="排序" width="100" sortable />
         <el-table-column label="操作" min-width="150">
           <template slot-scope="scope">
-            <el-button icon="el-icon-edit" type="text" size="mini"
-                       @click="showEditDialog(scope.row.InvoiceAccountCode)"
+            <el-button
+              :disabled="!scope.row.IfUpdate"
+              icon="el-icon-edit"
+              type="text"
+              size="mini"
+              @click="showEditDialog(scope.row.InvoiceAccountCode)"
             >编辑</el-button>
-            <el-button v-if="flagDelete == '超级管理员'" icon="el-icon-delete" type="text" size="mini"
-                       @click="deleteDialog(scope.row.InvoiceAccountCode)"
+            <el-button
+              v-if="flagDelete == '超级管理员'"
+              :disabled="!scope.row.IfUpdate"
+              icon="el-icon-delete"
+              type="text"
+              size="mini"
+              @click="deleteDialog(scope.row.InvoiceAccountCode)"
             >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination background :current-page="queryInfo.pagenum" :page-sizes="[20, 50, 100]"
-                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                     @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      <el-pagination
+        background
+        :current-page="queryInfo.pagenum"
+        :page-sizes="[20, 50, 100]"
+        :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
       />
     </el-card>
-    <el-dialog title="添加发票科目" :visible.sync="addDialogVisible" width="30%" @close="addClosed">
-      <el-form ref="addRef" :model="AddInvoiceAccountFrom" :rules="AddInvoiceAccountRules" label-width="120px">
+    <el-dialog
+      title="添加发票科目"
+      :visible.sync="addDialogVisible"
+      width="30%"
+      @close="addClosed"
+    >
+      <el-form
+        ref="addRef"
+        :model="AddInvoiceAccountFrom"
+        :rules="AddInvoiceAccountRules"
+        label-width="120px"
+      >
         <el-form-item label="发票科目名称" prop="InvoiceAccountName">
           <el-input v-model="AddInvoiceAccountFrom.InvoiceAccountName" />
         </el-form-item>
@@ -47,19 +97,31 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button v-loading.fullscreen.lock="LoadingAdd" icon="el-icon-circle-check" type="primary"
-                       @click="saveAdd"
+            <el-button
+              v-loading.fullscreen.lock="LoadingAdd"
+              icon="el-icon-circle-check"
+              type="primary"
+              @click="saveAdd"
             >保 存
             </el-button>
           </el-col>
         </el-row>
       </el-form>
     </el-dialog>
-    <el-dialog :visible.sync="updateDialogVisible" width="30%" @close="updateClosed">
+    <el-dialog
+      :visible.sync="updateDialogVisible"
+      width="30%"
+      @close="updateClosed"
+    >
       <div slot="title" class="dialog-title">
         <span>编辑发票科目</span>
       </div>
-      <el-form ref="updateRef" :model="UpdateInvoiceAccountCFrom" :rules="UpdateDicCategoryCRules" label-width="120px">
+      <el-form
+        ref="updateRef"
+        :model="UpdateInvoiceAccountCFrom"
+        :rules="UpdateDicCategoryCRules"
+        label-width="120px"
+      >
         <el-form-item label="发票科目名称" prop="InvoiceAccountName">
           <el-input v-model="UpdateInvoiceAccountCFrom.InvoiceAccountName" />
         </el-form-item>
@@ -69,8 +131,11 @@
         <el-divider />
         <el-row class="buttonCenter">
           <el-col>
-            <el-button v-loading.fullscreen.lock="LoadingUpdate" icon="el-icon-circle-check" type="primary"
-                       @click="saveUpdate"
+            <el-button
+              v-loading.fullscreen.lock="LoadingUpdate"
+              icon="el-icon-circle-check"
+              type="primary"
+              @click="saveUpdate"
             >保 存
             </el-button>
           </el-col>
@@ -90,10 +155,10 @@ import {
 } from "@/api/SystemManagement";
 import { showLoading, hideLoading } from "@/common/loading";
 export default {
-  name: 'InvoiceAccount',
+  name: "InvoiceAccount",
   data() {
     return {
-      flagDelete: sessionStorage.getItem("RoleName"),
+      flagDelete: "",
       Name: "",
       LoadingUpdate: false,
       LoadingAdd: false,
@@ -145,6 +210,7 @@ export default {
   watch: {},
   created() {
     this._GetInvoiceAccount();
+    this.flagDelete = sessionStorage.getItem("RoleName");
   },
   methods: {
     addClosed() {

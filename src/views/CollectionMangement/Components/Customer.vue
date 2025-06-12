@@ -1,5 +1,11 @@
 <template>
-  <el-dialog :visible.sync="ChildVisible" top="5vh" fullscreen @close="cancel">
+  <el-dialog
+    v-dialog-drag-toggle-fullscreen
+    :visible.sync="ChildVisible"
+    fullscreen
+    :close-on-click-modal="false"
+    @close="cancel"
+  >
     <template #title>
       <span>详情</span>
       <el-tag
@@ -53,36 +59,41 @@
       :data="CollectionOrderData"
       border
       :cell-style="showCollection"
-      height="calc(100vh - 315px)"
+      height="calc(100vh - 285px)"
       row-key="ID"
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       default-expand-all
     >
-      <el-table-column label="通道名称" prop="ChName" width="150" />
+      <el-table-column label="通道名称" prop="ChName" width="120" />
       <el-table-column
         label="合同方名称"
         prop="ConName"
         show-overflow-tooltip
-        min-width="90"
+        min-width="190"
       />
       <el-table-column
         label="付款方名称"
         prop="CorpName"
         show-overflow-tooltip
-        min-width="90"
+        min-width="190"
       />
       <el-table-column
         label="方案名称"
         prop="PlanName"
         show-overflow-tooltip
-        min-width="90"
+        min-width="150"
       >
         <template slot-scope="scope">
-          <span v-if="scope.row.PlanName == '......'"><i class="el-icon-notebook-2" /></span>
+          <span v-if="scope.row.PlanName == '......'">
+            <svg-icon
+              style="color: inherit; font-size: 11px"
+              icon-class="ExpandDetail"
+            />
+          </span>
           <span v-else>{{ scope.row.PlanName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="账单年月" prop="OrderDateStr" width="80" />
+      <el-table-column label="账单年月" prop="OrderDateStr" width="85" />
       <el-table-column
         label="账单应收"
         prop="ShouldInAmt"
@@ -124,8 +135,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-divider />
-    <el-form ref="updateRef" label-width="40px">
+    <el-form ref="updateRef" label-width="40px" style="margin-top: 1rem">
       <el-form-item label="备注">
         <el-input
           v-if="clickRow"
@@ -141,7 +151,6 @@
         </el-input>
       </el-form-item>
     </el-form>
-    <el-divider />
     <el-row v-if="CancelShow" style="text-align: center">
       <el-col :span="24">
         <el-button

@@ -1,5 +1,11 @@
 <template>
-  <el-dialog :visible.sync="ChildVisible" top="5vh" fullscreen @close="cancel">
+  <el-dialog
+    v-dialog-drag-toggle-fullscreen
+    :visible.sync="ChildVisible"
+    fullscreen
+    :close-on-click-modal="false"
+    @close="cancel"
+  >
     <template #title>
       <span>详情</span>
       <el-tag
@@ -53,7 +59,7 @@
       :data="CollectionOrderData"
       border
       :span-method="rowSpanMethod"
-      height="calc(100vh - 315px)"
+      height="calc(100vh - 285px)"
     >
       <el-table-column type="index" width="50" />
       <el-table-column
@@ -113,8 +119,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-divider />
-    <el-form ref="updateRef" label-width="40px">
+    <el-form ref="updateRef" label-width="40px" style="margin-top: 1rem">
       <el-form-item label="备注">
         <el-input
           v-if="clickRow"
@@ -130,7 +135,6 @@
         </el-input>
       </el-form-item>
     </el-form>
-    <el-divider />
     <el-row v-if="CancelShow" style="text-align: center">
       <el-col :span="24">
         <el-button

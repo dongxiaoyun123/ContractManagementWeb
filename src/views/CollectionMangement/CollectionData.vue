@@ -743,10 +743,10 @@
       />
     </el-card>
     <el-dialog
+      v-dialog-drag-toggle-fullscreen
       :visible.sync="updateDialogVisible"
-      top="5vh"
-      width="75%"
       fullscreen
+      :close-on-click-modal="false"
       @close="CustomerChange"
     >
       <template #title>
@@ -834,51 +834,67 @@
         :data="CollectionOrderData"
         border
         :cell-style="showCollection"
-        height="calc(100vh - 315px)"
+        height="calc(100vh - 285px)"
         row-key="ID"
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         @cell-click="CollectionOrderClick"
       >
-        <el-table-column label="通道名称" prop="ChName" width="150" />
+        <el-table-column
+          label="通道名称"
+          prop="ChName"
+          width="120"
+          show-overflow-tooltip
+        />
         <el-table-column
           label="合同方名称"
           prop="ConName"
           show-overflow-tooltip
-          min-width="250"
+          min-width="190"
+          :filters="entNameList"
+          :filter-method="filterEntNameList"
+          filter-placement="bottom-start"
         />
         <el-table-column
           label="付款方名称"
           prop="CorpName"
           show-overflow-tooltip
-          min-width="250"
+          min-width="190"
           :filters="childEntNameList"
           :filter-method="filterChildEntName"
+          filter-placement="bottom-start"
         />
         <el-table-column
           label="方案名称"
           prop="PlanName"
           show-overflow-tooltip
-          min-width="120"
+          min-width="150"
           :filters="planNameList"
           :filter-method="filterPlanName"
+          filter-placement="bottom-start"
         >
           <template slot-scope="scope">
-            <span v-if="scope.row.PlanName == '......'"><i class="el-icon-notebook-2" /></span>
+            <span v-if="scope.row.PlanName == '......'">
+              <svg-icon
+                style="color: inherit; font-size: 11px"
+                icon-class="ExpandDetail"
+              />
+            </span>
             <span v-else>{{ scope.row.PlanName }}</span>
           </template>
         </el-table-column>
         <el-table-column
           label="账单年月"
           prop="OrderDateStr"
-          min-width="100"
+          width="85"
           show-overflow-tooltip
           :filters="yearMonthList"
           :filter-method="filterYearMonth"
+          filter-placement="bottom-end"
         />
         <el-table-column
           label="账单应收"
           prop="ShouldInAmt"
-          width="120"
+          width="100"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
@@ -888,7 +904,7 @@
         <el-table-column
           label="实际应缴"
           prop="ServShouldIn"
-          width="120"
+          width="100"
           show-overflow-tooltip
         >
           <template slot="header" slot-scope="{}">
@@ -918,7 +934,7 @@
         <el-table-column
           label="回款金额"
           prop="ServReceive"
-          width="120"
+          width="100"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
@@ -928,7 +944,7 @@
         <el-table-column
           label="本次回款金额"
           prop="ServReceiveNew"
-          width="120"
+          width="100"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
@@ -944,9 +960,10 @@
         <el-table-column
           label="回款状态"
           prop="ReceiveState"
-          width="120"
+          width="100"
           :filters="receiveStateList"
           :filter-method="filterReceiveState"
+          filter-placement="bottom-end"
         >
           <template slot-scope="scope">
             <el-tag
@@ -969,8 +986,13 @@
           show-overflow-tooltip
         /> -->
       </el-table>
-      <el-divider />
-      <el-form ref="updateRef" :model="updateCollectionFrom" label-width="40px">
+      <!-- <el-divider /> -->
+      <el-form
+        ref="updateRef"
+        :model="updateCollectionFrom"
+        label-width="40px"
+        style="margin-top: 1rem"
+      >
         <el-form-item label="备注">
           <el-input
             v-model="updateCollectionFrom.Remark"
@@ -981,7 +1003,7 @@
           />
         </el-form-item>
       </el-form>
-      <el-divider />
+      <!-- <el-divider /> -->
       <el-row style="text-align: center">
         <el-col :span="24">
           <el-button
@@ -999,10 +1021,10 @@
       </el-row>
     </el-dialog>
     <el-dialog
+      v-dialog-drag-toggle-fullscreen
       :visible.sync="updateDialogOtherVisible"
-      top="5vh"
-      width="75%"
       fullscreen
+      :close-on-click-modal="false"
     >
       <template #title>
         <span>其它角色回款</span>
@@ -1074,7 +1096,7 @@
         border
         :span-method="rowSpanMethodOther"
         :cell-style="showCollectionOther"
-        height="calc(100vh - 320px)"
+        height="calc(100vh - 285px)"
         @cell-click="CollectionOrderClickOther"
       >
         <el-table-column type="index" width="50" />
@@ -1175,8 +1197,12 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-divider />
-      <el-form ref="updateRef" :model="updateCollectionFrom" label-width="40px">
+      <el-form
+        ref="updateRef"
+        :model="updateCollectionFrom"
+        label-width="40px"
+        style="margin-top: 1rem"
+      >
         <el-form-item label="备注">
           <el-input
             v-model="updateCollectionFrom.Remark"
@@ -1187,7 +1213,6 @@
           />
         </el-form-item>
       </el-form>
-      <el-divider />
       <el-row style="text-align: center">
         <el-col :span="24">
           <el-button
@@ -1568,6 +1593,7 @@ export default {
       planNameList: [],
       yearMonthList: [],
       receiveStateList: [],
+      entNameList: [],
     };
   },
   watch: {
@@ -1626,6 +1652,13 @@ export default {
     },
     clearFilter() {
       this.$refs.filterTable.clearFilter();
+    },
+    filterEntNameList(value, row, column) {
+      if (row.children && row.children.some((c) => c.ConName === value)) {
+        return true;
+      } else {
+        row.ConName === value;
+      }
     },
     filterChildEntName(value, row, column) {
       if (row.children && row.children.some((c) => c.CorpName === value)) {
@@ -2536,6 +2569,7 @@ export default {
         this.planNameList = resCollectionOrder.result3;
         this.yearMonthList = resCollectionOrder.result4;
         this.receiveStateList = resCollectionOrder.result5;
+        this.entNameList = resCollectionOrder.result6;
       } else {
         this.CollectionOrderData = [];
         this.Count_billlistplan = [];
@@ -2612,6 +2646,7 @@ export default {
           this.planNameList = res.result3;
           this.yearMonthList = res.result4;
           this.receiveStateList = res.result5;
+          this.entNameList = res.result6;
         } else {
           this.CollectionOrderData = [];
           this.Count_billlistplan = [];

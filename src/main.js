@@ -63,11 +63,15 @@ Vue.use(BaiduMap, {
 })
 
 import { RecycleScroller } from 'vue-virtual-scroller';// 穿梭框提高效率
+Vue.component('RecycleScroller', RecycleScroller);
+
 import ElVirtualTransfer from '../src/layout/components/transfer';// 穿梭框提高效率
+Vue.use(ElVirtualTransfer);
 
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';// 穿梭框样式
-Vue.component('RecycleScroller', RecycleScroller);
-Vue.use(ElVirtualTransfer);
+
+import DialogDragToggleFullscreen from '../src/layout/components/dialog';
+Vue.directive('dialog-drag-toggle-fullscreen', DialogDragToggleFullscreen);
 
 // import 'element-ui/lib/theme-chalk/index.css';
 
